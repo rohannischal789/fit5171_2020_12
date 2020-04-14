@@ -10,6 +10,8 @@ public class MusicalInstrument extends Entity {
 
 
     public MusicalInstrument(String name) {
+        notNull(name);
+        notBlank(name);
         this.name = name;
     }
 
@@ -17,7 +19,10 @@ public class MusicalInstrument extends Entity {
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name)
+    {
+        notNull(name);
+        notBlank(name);
         this.name = name;
     }
 
