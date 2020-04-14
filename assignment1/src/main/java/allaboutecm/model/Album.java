@@ -75,6 +75,7 @@ public class Album extends Entity {
     }
 
     public void setInstruments(Set<MusicianInstrument> instruments) {
+        notNull(instruments);
         this.instruments = instruments;
     }
 
@@ -101,7 +102,11 @@ public class Album extends Entity {
     }
 
     public void setReleaseYear(int releaseYear) {
-        this.releaseYear = releaseYear;
+        if (releaseYear == 0){
+            throw new IllegalArgumentException();
+        } else {
+            this.releaseYear = releaseYear;
+        }
     }
 
     public String getAlbumName() {

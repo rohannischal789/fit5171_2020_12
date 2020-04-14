@@ -1,5 +1,6 @@
 package allaboutecm.model;
 
+import org.apache.commons.lang3.ObjectUtils;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -8,10 +9,7 @@ import org.junit.jupiter.params.provider.ValueSource;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Arrays;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -134,4 +132,27 @@ class AlbumUnitTest {
         URL url1 = new URL("https://www.google.com/");
         assertEquals(album.getAlbumURL(), url1);
     }
+    @Test
+    @DisplayName("Non Empty Instruments List")
+    public void instrumentListNonEmpty(){
+        assertThrows(NullPointerException.class, () -> album.setInstruments(null));
+    }
+
+
+
+    @Test
+    @DisplayName("Check featured musicians get correctly")
+    public void albumFeaturedMusiciansCorrectlyRead(){
+        ArrayList<Musician> myArray = new ArrayList<Musician>();
+        myArray.add(new Musician("Frank Frank"));
+        myArray.add(new Musician("Adam Adam"));
+        myArray.add(new Musician("Annie Annie"));
+
+        Set<Musician> musiciansList = new HashSet<>(myArray);
+        album.setFeaturedMusicians(musiciansList);
+        assertEquals(album.getFeaturedMusicians(), musiciansList);
+    }
+
+
+
 }
