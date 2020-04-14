@@ -1,6 +1,7 @@
 package allaboutecm.model;
 
 import com.google.common.collect.Sets;
+import org.apache.commons.lang3.ObjectUtils;
 
 import java.net.URL;
 import java.util.Objects;
@@ -22,7 +23,12 @@ public class Musician extends Entity {
     private Set<Album> albums;
 
     public Musician(String name) {
-        this.name = name;
+        if (name == null){
+            throw new NullPointerException();
+        }else{
+            this.name = name;
+        }
+
         this.musicianUrl = null;
 
         albums = Sets.newLinkedHashSet();
