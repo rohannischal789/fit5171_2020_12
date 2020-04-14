@@ -66,6 +66,7 @@ public class Album extends Entity {
     }
 
     public void setFeaturedMusicians(Set<Musician> featuredMusicians) {
+        notNull(featuredMusicians);
         this.featuredMusicians = featuredMusicians;
     }
 
@@ -82,6 +83,7 @@ public class Album extends Entity {
     }
 
     public void setAlbumURL(URL albumURL) {
+        notNull(albumURL);
         this.albumURL = albumURL;
     }
 
@@ -90,6 +92,7 @@ public class Album extends Entity {
     }
 
     public void setTracks(List<String> tracks) {
+        notNull(tracks);
         this.tracks = tracks;
     }
 
