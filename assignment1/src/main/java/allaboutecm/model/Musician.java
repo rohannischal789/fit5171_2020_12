@@ -45,7 +45,7 @@ public class Musician extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Musician that = (Musician) o;
-        return Objects.equals(name, that.name);
+        return Objects.equals(name, that.name); //Delete later?
     }
 
     @Override
