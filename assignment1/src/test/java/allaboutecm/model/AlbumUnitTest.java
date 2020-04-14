@@ -72,7 +72,7 @@ class AlbumUnitTest {
         assertEquals(album.getRecordNumber(),"ECM 1064/65");
     }
 
-
+    @Test
     @DisplayName("Album release Year cannot be empty or zero")
     public void releaseYearCannotBeEmptyOrZero() {
         int arg=0;
