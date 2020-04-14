@@ -23,12 +23,21 @@ public class Musician extends Entity {
     private Set<Album> albums;
 
     public Musician(String name) {
-        if (name == null){
+
+        if (name == null) {
             throw new NullPointerException();
-        }else{
-            this.name = name;
         }
 
+        else {
+
+            notBlank(name);
+            String[] substring = name.split(" ");
+            if(substring.length==1)
+            {
+               throw new IllegalArgumentException();
+            }
+            this.name = name;
+        }
         this.musicianUrl = null;
 
         albums = Sets.newLinkedHashSet();
@@ -43,7 +52,11 @@ public class Musician extends Entity {
     }
 
     public void setAlbums(Set<Album> albums) {
-        this.albums = albums;
+        if (albums == null) {
+            throw new NullPointerException();
+        } else {
+            this.albums = albums;
+        }
     }
 
     @Override
@@ -51,7 +64,7 @@ public class Musician extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Musician that = (Musician) o;
-        return Objects.equals(name, that.name); //Delete later?
+        return (Objects.equals(name, that.name) & Objects.equals(musicianUrl, that.getMusicianUrl()) & Objects.equals(albums, that.getAlbums())); //Delete later?
     }
 
     @Override

@@ -12,24 +12,25 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Arrays;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
-//nupur is here
 class AlbumUnitTest {
-    //Ben was here
     private Album album;
 
     @BeforeEach
-    public void setUp() throws MalformedURLException {
+    public void setUp(){
         album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         List<MusicianInstrument> trackList = Arrays.asList(
-                new MusicianInstrument(new Musician("Frank"),new MusicalInstrument("Ukele")),
-                new MusicianInstrument(new Musician("Adam"),new MusicalInstrument("Guitar")),
-                new MusicianInstrument(new Musician("Annie"),new MusicalInstrument("Violin")));
+                new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
+                new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
+                new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
         album.getInstruments().addAll(new HashSet<MusicianInstrument>(trackList));
-        album.getTracks().addAll(Arrays.asList("Track1","Track2","Track3","Track4"));
-        album.setAlbumURL(new URL("https://www.google.com/"));
+        album.getTracks().addAll(Arrays.asList("Track1", "Track2", "Track3", "Track4"));
+        List<Musician> musician = Arrays.asList(new Musician("Keith Jarrett"));
+        Set<Musician> musicianSet = musician.stream().collect(Collectors.toSet());
     }
 
     @Test
@@ -43,6 +44,46 @@ class AlbumUnitTest {
     @DisplayName("Album name cannot be empty or blank")
     public void albumNameCannotBeEmptyOrBlank(String arg) {
         assertThrows(IllegalArgumentException.class, () -> album.setAlbumName(arg));
+    }
+
+    @Test
+    @DisplayName("album Name cannot be different")
+    public void albumNameSameOrNot(){
+        assertEquals(album.getAlbumName(),"The Köln Concert");
+    }
+
+
+    @Test
+    @DisplayName("Album Record Number cannot be null")
+    public void recordNumberCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setRecordNumber(null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    \t"})
+    @DisplayName("Album Record Number cannot be empty or blank")
+    public void recordNumberCannotBeEmptyOrBlank(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(arg));
+    }
+
+    @Test
+    @DisplayName("record Number cannot be different")
+    public void recordNumberSameOrNot(){
+        assertEquals(album.getRecordNumber(),"ECM 1064/65");
+    }
+
+
+    @ParameterizedTest
+    @DisplayName("Album release Year cannot be empty or zero")
+    public void releaseYearCannotBeEmptyOrZero() {
+        int arg=0;
+        assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(arg));
+    }
+
+    @Test
+    @DisplayName("record Number cannot be different")
+    public void releaseYearSameOrNot(){
+        assertEquals(album.getReleaseYear(),1975);
     }
 
     @Test
@@ -73,9 +114,9 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album instruments cannot be different")
     public void albumInstrumentsCannotBeDifferent() {
-        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank"),new MusicalInstrument("Ukele")),
-                new MusicianInstrument(new Musician("Adam"),new MusicalInstrument("Guitar")),
-                new MusicianInstrument(new Musician("Annie"),new MusicalInstrument("Violin")));
+        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"),new MusicalInstrument("Ukele")),
+                new MusicianInstrument(new Musician("Adam Adam"),new MusicalInstrument("Guitar")),
+                new MusicianInstrument(new Musician("Annie Annie"),new MusicalInstrument("Violin")));
         Set<MusicianInstrument> musicianInstrument1 = new HashSet<MusicianInstrument>(list);
         assertEquals(album.getInstruments(), musicianInstrument1);
     }
@@ -90,6 +131,7 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album URL cannot be different")
     public void albumURLCannotBeDifferent() throws MalformedURLException {
+        album.setAlbumURL(new URL("https://www.google.com/"));
         URL url1 = new URL("https://www.google.com/");
         assertEquals(album.getAlbumURL(), url1);
     }

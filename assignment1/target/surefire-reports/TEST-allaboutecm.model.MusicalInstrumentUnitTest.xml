@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="allaboutecm.model.MusicalInstrumentUnitTest" time="0.047" tests="8" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report-3.0.xsd" version="3.0" name="allaboutecm.model.MusicalInstrumentUnitTest" time="0.029" tests="8" errors="0" skipped="0" failures="0">
   <properties>
     <property name="sun.desktop" value="windows"/>
     <property name="awt.toolkit" value="sun.awt.windows.WToolkit"/>
@@ -17,7 +17,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="IN"/>
     <property name="sun.boot.library.path" value="D:\Program Files\JetBrains\IntelliJ IDEA 2019.3.4\jbr\bin"/>
-    <property name="sun.java.command" value="C:\Users\Rohan Nischal\AppData\Local\Temp\surefire3162432607639821448\surefirebooter17729521940219064621.jar C:\Users\Rohan Nischal\AppData\Local\Temp\surefire3162432607639821448 2020-04-14T14-01-15_342-jvmRun1 surefire14932458495808696899tmp surefire_06987351260702355262tmp"/>
+    <property name="sun.java.command" value="C:\Users\Rohan Nischal\AppData\Local\Temp\surefire8671293929411680402\surefirebooter16406735403048919308.jar C:\Users\Rohan Nischal\AppData\Local\Temp\surefire8671293929411680402 2020-04-14T14-17-49_734-jvmRun1 surefire2821154270866166454tmp surefire_05999146331579014411tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\Rohan Nischal\Documents\FIT5171\FIT5171\assignment1\target\test-classes;C:\Users\Rohan Nischal\Documents\FIT5171\FIT5171\assignment1\target\classes;C:\Users\Rohan Nischal\.m2\repository\org\junit\jupiter\junit-jupiter-engine\5.6.0\junit-jupiter-engine-5.6.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\apiguardian\apiguardian-api\1.1.0\apiguardian-api-1.1.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\junit\platform\junit-platform-engine\1.6.0\junit-platform-engine-1.6.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\opentest4j\opentest4j\1.2.0\opentest4j-1.2.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\junit\platform\junit-platform-commons\1.6.0\junit-platform-commons-1.6.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\junit\jupiter\junit-jupiter-api\5.6.0\junit-jupiter-api-5.6.0.jar;C:\Users\Rohan Nischal\.m2\repository\org\junit\jupiter\junit-jupiter-params\5.6.0\junit-jupiter-params-5.6.0.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\guava\guava\28.2-jre\guava-28.2-jre.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\guava\failureaccess\1.0.1\failureaccess-1.0.1.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\guava\listenablefuture\9999.0-empty-to-avoid-conflict-with-guava\listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\code\findbugs\jsr305\3.0.2\jsr305-3.0.2.jar;C:\Users\Rohan Nischal\.m2\repository\org\checkerframework\checker-qual\2.10.0\checker-qual-2.10.0.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\errorprone\error_prone_annotations\2.3.4\error_prone_annotations-2.3.4.jar;C:\Users\Rohan Nischal\.m2\repository\com\google\j2objc\j2objc-annotations\1.3\j2objc-annotations-1.3.jar;C:\Users\Rohan Nischal\.m2\repository\org\apache\commons\commons-lang3\3.10\commons-lang3-3.10.jar;C:\Users\Rohan Nischal\.m2\repository\org\apache\commons\commons-csv\1.8\commons-csv-1.8.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -33,7 +33,7 @@
     <property name="java.specification.name" value="Java Platform API Specification"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.awt.graphicsenv" value="sun.awt.Win32GraphicsEnvironment"/>
-    <property name="surefire.real.class.path" value="C:\Users\Rohan Nischal\AppData\Local\Temp\surefire3162432607639821448\surefirebooter17729521940219064621.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\Rohan Nischal\AppData\Local\Temp\surefire8671293929411680402\surefirebooter16406735403048919308.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="11.0.6+8-b520.43"/>
@@ -60,12 +60,12 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="55.0"/>
   </properties>
-  <testcase name="musicalInstrumentCannotBeEmptyOrBlank(String)[1]" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.005"/>
-  <testcase name="musicalInstrumentCannotBeEmptyOrBlank(String)[2]" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.003"/>
+  <testcase name="musicalInstrumentCannotBeEmptyOrBlank(String)[1]" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
+  <testcase name="musicalInstrumentCannotBeEmptyOrBlank(String)[2]" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
   <testcase name="musicalInstrumentCannotBeEmptyOrBlank(String)[3]" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.003"/>
-  <testcase name="musicalInstrumentCannotBeNull" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.004"/>
-  <testcase name="musicalInstrumentHashcodesEqualOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.001"/>
+  <testcase name="musicalInstrumentCannotBeNull" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.001"/>
+  <testcase name="musicalInstrumentHashcodesEqualOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
   <testcase name="musicalInstrumentObjectsqualOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
-  <testcase name="musicalInstrumentNameSameOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.001"/>
-  <testcase name="musicalInstrumentEqualOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
+  <testcase name="musicalInstrumentNameSameOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.002"/>
+  <testcase name="musicalInstrumentEqualOrNot" classname="allaboutecm.model.MusicalInstrumentUnitTest" time="0.001"/>
 </testsuite>
