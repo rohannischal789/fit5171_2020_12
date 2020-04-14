@@ -153,6 +153,35 @@ class AlbumUnitTest {
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
 
+    @Test
+    @DisplayName("Constructor can't set 0 release year")
+    public void constructorReleaseYearZeroValidate() {
+        assertThrows(IllegalArgumentException.class, () -> new Album(0, "ECM 1064/65", "The Köln Concert"));
+    }
 
+    @Test
+    @DisplayName("Constructor can't set null record number")
+    public void constructorRecordNumberNullValidate() {
+        assertThrows(NullPointerException.class, () -> new Album(1975, null, "The Köln Concert"));
+    }
 
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    \t"})
+    @DisplayName("Constructor can't set empty record number")
+    public void constructorRecordNumberEmptyValidate(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> new Album(1975, arg, "The Köln Concert"));
+    }
+
+    @Test
+    @DisplayName("Constructor can't set null album name")
+    public void constructorAlbumNameNullValidate() {
+        assertThrows(NullPointerException.class, () -> new Album(1975, "ECM 1064/65", null));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    \t"})
+    @DisplayName("Constructor can't set empty album name")
+    public void constructorAlbumNameEmptyValidate(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> new Album(1975, "ECM 1064/65", arg));
+    }
 }

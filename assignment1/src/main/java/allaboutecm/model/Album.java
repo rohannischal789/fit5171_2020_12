@@ -39,15 +39,20 @@ public class Album extends Entity {
         notBlank(recordNumber);
         notBlank(albumName);
 
-        this.releaseYear = releaseYear;
-        this.recordNumber = recordNumber;
-        this.albumName = albumName;
+        if (releaseYear == 0){
+            throw new IllegalArgumentException();
+        } else {
 
-        this.albumURL = null;
+            this.releaseYear = releaseYear;
+            this.recordNumber = recordNumber;
+            this.albumName = albumName;
 
-        featuredMusicians = Sets.newHashSet();
-        instruments = Sets.newHashSet();
-        tracks = Lists.newArrayList();
+            this.albumURL = null;
+
+            featuredMusicians = Sets.newHashSet();
+            instruments = Sets.newHashSet();
+            tracks = Lists.newArrayList();
+        }
     }
 
     public String getRecordNumber() {
