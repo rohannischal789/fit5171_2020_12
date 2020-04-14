@@ -73,7 +73,6 @@ class AlbumUnitTest {
     }
 
 
-    @ParameterizedTest
     @DisplayName("Album release Year cannot be empty or zero")
     public void releaseYearCannotBeEmptyOrZero() {
         int arg=0;
