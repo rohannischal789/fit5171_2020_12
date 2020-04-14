@@ -1,5 +1,6 @@
 package allaboutecm.model;
 
+import jdk.nashorn.internal.runtime.ECMAException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -83,7 +84,7 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("Musicians Exactly match")
+    @DisplayName("Musicians Exactly match case = URL")
     public void equalsmusicianNameExactlyMatch(){
         try
         {
@@ -96,6 +97,45 @@ public class MusicianUnitTest {
 
         }
     }
+
+    @Test
+    @DisplayName("Musicians Exactly match case = Album Set")
+    public void equalsmusicianNameExactlyMatchAlbum() {
+
+        Musician musician5 = new Musician("anything name");
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album albs[] = {album1};
+        Set<Album> albumSet = new HashSet<>(Arrays.asList(albs));
+        musician5.setAlbums(albumSet);
+        assertEquals(musician.equals(musician5), false);
+    }
+
+    @Test
+    @DisplayName("URL correctly sets")
+    public void URLSetTest(){
+        try {
+            URL theURL = new URL("https://www.google.com");
+            musician.setMusicianUrl(theURL);
+            assertEquals(musician.getMusicianUrl(), theURL);
+        } catch (Exception e){
+            //This will never throw because the URL is static and correct.
+        }
+        }
+
+        //We had planned to write tests for the form of the URL, that it should start with http://, https:// or www. and that it should end with .XXX, .XXX.XX or .XX, where X is some character.
+        //The URL class handles all of these behviours and does not require us to test, it is not possible for us to create a malformed URL to pass to the SetURL method.
+    /*
+    public void MalformedURLTest(){
+        try {
+            URL theURL = new URL("https://www.google.com");
+            musician.setMusicianUrl(theURL);
+            assertEquals(musician.getMusicianUrl(), theURL);
+        } catch (Exception e){
+            //This will never throw because the URL is static and correct.
+            //This will never throw because the URL is static and correct.
+        }
+    }
+    */
 
 
 }
