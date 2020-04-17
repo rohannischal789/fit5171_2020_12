@@ -1,6 +1,5 @@
 package allaboutecm.model;
 
-import jdk.nashorn.internal.runtime.ECMAException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -120,7 +119,7 @@ public class MusicianUnitTest {
         } catch (Exception e){
             //This will never throw because the URL is static and correct.
         }
-        }
+    }
 
         //We had planned to write tests for the form of the URL, that it should start with http://, https:// or www. and that it should end with .XXX, .XXX.XX or .XX, where X is some character.
         //The URL class handles all of these behviours and does not require us to test, it is not possible for us to create a malformed URL to pass to the SetURL method.

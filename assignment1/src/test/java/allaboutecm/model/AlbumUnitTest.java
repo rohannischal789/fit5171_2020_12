@@ -1,6 +1,7 @@
 package allaboutecm.model;
 
 import org.apache.commons.lang3.ObjectUtils;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,6 +31,7 @@ class AlbumUnitTest {
         List<Musician> musician = Arrays.asList(new Musician("Keith Jarrett"));
         Set<Musician> musicianSet = musician.stream().collect(Collectors.toSet());
     }
+
 
     @Test
     @DisplayName("Album name cannot be null")
@@ -71,10 +73,33 @@ class AlbumUnitTest {
     }
 
     @Test
-    @DisplayName("Album release Year cannot be empty or zero")
-    public void releaseYearCannotBeEmptyOrZero() {
-        int arg=0;
+    @DisplayName("Album Release Year May be 1969 or greater")
+    public void releaseYearMayBe1969orGreater(){
+        album.setReleaseYear(1969);
+        album.setReleaseYear(1970);
+    }
+
+
+    @Test
+    @DisplayName("Album release Year cannot before 1969")
+    public void releaseYearCannotBeBefore1969() {
+        int arg=1968;
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(arg));
+    }
+
+    @Test
+    @DisplayName("Album release Year may be current year or earlier")
+    public void releaseYearMayBeCurrentYearOrEarlier() {
+        int curYear = Calendar.getInstance().get(Calendar.YEAR);
+        album.setReleaseYear(curYear);
+        album.setReleaseYear(curYear - 1);
+    }
+
+    @Test
+    @DisplayName("Album release Year cannot be after current year")
+    public void releaseYearCannotBePastCurrentYear() {
+        int year = Calendar.getInstance().get(Calendar.YEAR) + 1;
+        assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(year));
     }
 
     @Test
@@ -141,7 +166,7 @@ class AlbumUnitTest {
 
 
     @Test
-    @DisplayName("Check featured musicians get correctly")
+    @DisplayName("Featured Musicians was not correctly set or read back")
     public void albumFeaturedMusiciansCorrectlyRead(){
         ArrayList<Musician> myArray = new ArrayList<Musician>();
         myArray.add(new Musician("Frank Frank"));
@@ -152,12 +177,34 @@ class AlbumUnitTest {
         album.setFeaturedMusicians(musiciansList);
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
+    @Test
+    @DisplayName("Constructor should be able to set a post-1969 release year")
+    public void constructorReleaseYearNotEarlyValidate() {
+        album.setReleaseYear(1969);
+        album.setReleaseYear(1970);
+    }
 
     @Test
-    @DisplayName("Constructor can't set 0 release year")
-    public void constructorReleaseYearZeroValidate() {
+    @DisplayName("Constructor can't set pre-1969 release year")
+    public void constructorReleaseYearEarlyValidate() {
         assertThrows(IllegalArgumentException.class, () -> new Album(0, "ECM 1064/65", "The Köln Concert"));
     }
+
+    @Test
+    @DisplayName("Constructor should be able to set release date of this year or before")
+    public void constructorReleaseYearNotLateValidate() {
+        int curYear = Calendar.getInstance().get(Calendar.YEAR);
+        album.setReleaseYear(curYear);
+        album.setReleaseYear(curYear - 1);
+    }
+
+    @Test
+    @DisplayName("Constructor should not be able to set a release year after the current year")
+    public void constructorReleaseYearLateValidate() {
+        int curYear = Calendar.getInstance().get(Calendar.YEAR);
+        assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(curYear + 1));
+    }
+
 
     @Test
     @DisplayName("Constructor can't set null record number")

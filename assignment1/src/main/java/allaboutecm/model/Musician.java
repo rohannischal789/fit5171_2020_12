@@ -23,21 +23,16 @@ public class Musician extends Entity {
     private Set<Album> albums;
 
     public Musician(String name) {
+        notNull(name);
+        notBlank(name);
 
-        if (name == null) {
-            throw new NullPointerException();
+        String[] substring = name.split(" ");
+        if(substring.length==1)
+        {
+           throw new IllegalArgumentException();
         }
 
-        else {
-
-            notBlank(name);
-            String[] substring = name.split(" ");
-            if(substring.length==1)
-            {
-               throw new IllegalArgumentException();
-            }
-            this.name = name;
-        }
+        this.name = name;
         this.musicianUrl = null;
 
         albums = Sets.newLinkedHashSet();
