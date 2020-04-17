@@ -24,13 +24,13 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("Correctly match Musician name")
+    @DisplayName("Musician Name does not set/get correctly")
     public void matchMusicianName(){
         assertEquals(musician.getName(), "anything name");
     }
 
     @Test
-    @DisplayName("Non-null name")
+    @DisplayName("Musician Name is Null")
     public void nullMusicianNameError(){
         assertThrows(NullPointerException.class, () -> new Musician(null));
     }
@@ -43,15 +43,15 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("firstname lastname")
+    @DisplayName("Name must match the form xxx xxx")
     public void substringTest(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("Ben"));
     }
 
 
     @Test
-    @DisplayName("album set test")
-    public void albumsetTest(){
+    @DisplayName("Musician Albums does not set/get correctly")
+    public void albumSetTest(){
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Album album2 = new Album(1976, "ECM 1063/66", "The Köln Concert1");
         Album album3 = new Album(1977, "ECM 1065/67", "The Köln Concert2");
@@ -69,21 +69,21 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("Names do match")
+    @DisplayName("Musician equals does not correctly match")
     public void equalsmusicianNameMatch(){
         Musician musician2 = musician;
         assertEquals(musician.equals(musician2), true);
     }
 
     @Test
-    @DisplayName("Names Do not match")
+    @DisplayName("Musician equals reports a false true when Musician names do not match")
     public void equalsmusicianNameDoesNotMatch(){
         Musician musician3 = new  Musician("Nupur Ben");
         assertEquals(musician.equals(musician3), false);
     }
 
     @Test
-    @DisplayName("Musicians Exactly match case = URL")
+    @DisplayName("Musician equals reports a false true when URLs do not match")
     public void equalsmusicianNameExactlyMatch(){
         try
         {
@@ -98,7 +98,7 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("Musicians Exactly match case = Album Set")
+    @DisplayName("Musician equals reports a false true when Album Sets do not match")
     public void equalsmusicianNameExactlyMatchAlbum() {
 
         Musician musician5 = new Musician("anything name");
@@ -110,7 +110,7 @@ public class MusicianUnitTest {
     }
 
     @Test
-    @DisplayName("URL correctly sets")
+    @DisplayName("URL did not correctly set.")
     public void URLSetTest(){
         try {
             URL theURL = new URL("https://www.google.com");
