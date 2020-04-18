@@ -177,6 +177,9 @@ class AlbumUnitTest {
         album.setFeaturedMusicians(musiciansList);
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
+
+
+
     @Test
     @DisplayName("Constructor should be able to set a post-1969 release year")
     public void constructorReleaseYearNotEarlyValidate() {
@@ -231,4 +234,5 @@ class AlbumUnitTest {
     public void constructorAlbumNameEmptyValidate(String arg) {
         assertThrows(IllegalArgumentException.class, () -> new Album(1975, "ECM 1064/65", arg));
     }
+
 }

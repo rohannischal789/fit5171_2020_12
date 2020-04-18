@@ -64,27 +64,27 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Non-null albumSet")
-    public void nullalbumSetError(){
+    public void nullAlbumSetError(){
         assertThrows(NullPointerException.class, () ->  musician.setAlbums(null));
     }
 
     @Test
     @DisplayName("Musician equals does not correctly match")
-    public void equalsmusicianNameMatch(){
+    public void equalsMusicianNameMatch(){
         Musician musician2 = musician;
         assertEquals(musician.equals(musician2), true);
     }
 
     @Test
     @DisplayName("Musician equals reports a false true when Musician names do not match")
-    public void equalsmusicianNameDoesNotMatch(){
+    public void equalsMusicianNameDoesNotMatch(){
         Musician musician3 = new  Musician("Nupur Ben");
         assertEquals(musician.equals(musician3), false);
     }
 
     @Test
     @DisplayName("Musician equals reports a false true when URLs do not match")
-    public void equalsmusicianNameExactlyMatch(){
+    public void equalsMusicianNameExactlyMatch(){
         try
         {
             Musician musician4 = new Musician("anything name");
@@ -120,6 +120,9 @@ public class MusicianUnitTest {
             //This will never throw because the URL is static and correct.
         }
     }
+    //TODO new constraint on URL must be patterned correctly for ECM
+    //TODO length check for name
+    //TODO new attributes bio, artist external site, wikipage.
 
         //We had planned to write tests for the form of the URL, that it should start with http://, https:// or www. and that it should end with .XXX, .XXX.XX or .XX, where X is some character.
         //The URL class handles all of these behviours and does not require us to test, it is not possible for us to create a malformed URL to pass to the SetURL method.

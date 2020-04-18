@@ -47,6 +47,7 @@ public class Musician extends Entity {
     }
 
     public void setAlbums(Set<Album> albums) {
+        //TODO Check for empty Set and write test
         if (albums == null) {
             throw new NullPointerException();
         } else {
@@ -72,6 +73,7 @@ public class Musician extends Entity {
     }
 
     public void setMusicianUrl(URL musicianUrl) {
+        //TODO Check not blank and test
         this.musicianUrl = musicianUrl;
     }
 }
