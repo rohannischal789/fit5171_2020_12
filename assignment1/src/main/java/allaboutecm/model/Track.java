@@ -1,5 +1,7 @@
 package allaboutecm.model;
 
+import com.google.common.collect.Lists;
+
 import java.util.List;
 import java.util.Objects;
 
@@ -10,7 +12,7 @@ public class Track extends Entity {
 
     private String name;
 
-    private double duration;
+    private String duration;
 
     private String genre;
 
@@ -20,16 +22,25 @@ public class Track extends Entity {
 
     private double rating;
 
-    public Track(String name, double duration, String genre, int trackNumber) {
+    public Track(String name, String duration, String genre, int trackNumber) {
         notNull(name);
+        notNull(duration);
         notNull(genre);
 
         notBlank(name);
+        notBlank(duration);
         notBlank(genre);
+
+        if(trackNumber <= 0)
+        {
+            throw new IllegalArgumentException();
+        }
+
         this.name = name;
         this.duration = duration;
         this.genre = genre;
         this.trackNumber = trackNumber;
+        this.reviews = Lists.newArrayList();
     }
 
     public String getName() {
@@ -42,11 +53,13 @@ public class Track extends Entity {
         this.name = name;
     }
 
-    public double getDuration() {
+    public String getDuration() {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    public void setDuration(String duration) {
+        notNull(duration);
+        notBlank(duration);
         this.duration = duration;
     }
 
@@ -65,6 +78,10 @@ public class Track extends Entity {
     }
 
     public void setTrackNumber(int trackNumber) {
+        if(trackNumber <= 0)
+        {
+            throw new IllegalArgumentException();
+        }
         this.trackNumber = trackNumber;
     }
 
@@ -73,6 +90,7 @@ public class Track extends Entity {
     }
 
     public void setReviews(List<String> reviews) {
+        notNull(reviews);
         this.reviews = reviews;
     }
 

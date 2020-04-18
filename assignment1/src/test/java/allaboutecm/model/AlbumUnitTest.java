@@ -22,16 +22,7 @@ class AlbumUnitTest {
     @BeforeEach
     public void setUp() {
         album = new Album(1975, "ECM 1064/65", "The Köln Concert");
-        List<MusicianInstrument> trackList = Arrays.asList(
-                new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
-                new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
-                new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
-        album.getInstruments().addAll(new HashSet<MusicianInstrument>(trackList));
-        album.getTracks().addAll(Arrays.asList("Track1", "Track2", "Track3", "Track4"));
-        List<Musician> musician = Arrays.asList(new Musician("Keith Jarrett"));
-        Set<Musician> musicianSet = musician.stream().collect(Collectors.toSet());
     }
-
 
     @Test
     @DisplayName("Album name cannot be null")
@@ -139,14 +130,16 @@ class AlbumUnitTest {
         List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
                 new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
                 new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
-        Set<MusicianInstrument> musicianInstrument1 = new HashSet<MusicianInstrument>(list);
-        assertEquals(album.getInstruments(), musicianInstrument1);
+        Set<MusicianInstrument> musicianInstrumentList = new HashSet<>(list);
+        album.getInstruments().addAll(new HashSet<MusicianInstrument>(musicianInstrumentList));
+        assertEquals(album.getInstruments(), musicianInstrumentList);
     }
 
     @Test
     @DisplayName("Album tracks cannot be different")
     public void albumTracksCannotBeDifferent() {
         List<String> trackList = Arrays.asList("Track1", "Track2", "Track3", "Track4");
+        album.getTracks().addAll(trackList);
         assertEquals(album.getTracks(), trackList);
     }
 
