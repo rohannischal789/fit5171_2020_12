@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-import java.util.Arrays;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -18,7 +18,6 @@ public class TrackUnitTest {
     @BeforeEach
     public void setUp() {
         track = new Track("Track 1", "4:11", "Jazz",1);
-        track.getReviews().addAll(Arrays.asList("Nice song" , "Brilliant track"));
     }
 
     @Test
@@ -38,6 +37,13 @@ public class TrackUnitTest {
     @DisplayName("track name cannot be different")
     public void trackNameSameOrNot() {
         assertEquals(track.getName(), "Track 1");
+    }
+
+    @Test
+    @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
+    //Musicians names must be permitted to be 100 characters long, but no longer
+    public void validButLongNameTest(){
+        track.setName("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test
@@ -73,8 +79,64 @@ public class TrackUnitTest {
     }
 
     @Test
-    @DisplayName("track genre cannot be different")
+    @DisplayName("track duration cannot be different")
     public void trackDurationSameOrNot() {
         assertEquals(track.getDuration(), "4:11");
+    }
+
+    @Test
+    @DisplayName("track number cannot be less than one")
+    public void trackNumberCannotBeLessThanOne() {
+        assertThrows(IllegalArgumentException.class, () -> track.setTrackNumber(0));
+    }
+
+    @Test
+    @DisplayName("track number cannot be greater than five hundred")
+    public void trackNumberCannotBeGreaterThan500() {
+        assertThrows(IllegalArgumentException.class, () -> track.setTrackNumber(501));
+    }
+
+    @Test
+    @DisplayName("track number cannot be different")
+    public void trackNumberSameOrNot() {
+        assertEquals(track.getTrackNumber(), 1);
+    }
+
+    @Test
+    @DisplayName("Track reviews cannot be null")
+    public void trackReviewsCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> track.setReviews(null));
+    }
+
+    @Test
+    @DisplayName("Track reviews was not correctly set or read back")
+    //Featured musicians set and get methods must match input and output
+    public void trackReviewsSameOrNot() {
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.getReviews().addAll(list);
+        assertEquals(track.getReviews(), list);
+    }
+
+    @Test
+    @DisplayName("None of the track reviews can be null")
+    //No element of what is passed to setFeaturedMusicians() may be null.
+    public void nullTrackReviewsTest() {
+        List<String> list = Arrays.asList(null , null);
+        track.getReviews().addAll(list);
+        assertThrows(NullPointerException.class, () -> track.setReviews(list));
+    }
+
+    @Test
+    @DisplayName("Track objects cannot be different")
+    public void tracksEqualOrNot() {
+        Track track1 = new Track("Track 1", "4:11", "Jazz",1);
+        assertEquals(track, track1);
+    }
+
+    @Test
+    @DisplayName("track hashcodes cannot be different")
+    public void trackHashcodesEqualOrNot() {
+        int trackHashCode = Objects.hash("Track 1", "4:11", "Jazz", 1);
+        assertEquals(track.hashCode(), trackHashCode);
     }
 }

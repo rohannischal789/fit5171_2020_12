@@ -2,6 +2,7 @@ package allaboutecm.model;
 
 import com.google.common.collect.Lists;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,8 +21,6 @@ public class Track extends Entity {
 
     private List<String> reviews;
 
-    private double rating;
-
     public Track(String name, String duration, String genre, int trackNumber) {
         notNull(name);
         notNull(duration);
@@ -31,8 +30,12 @@ public class Track extends Entity {
         notBlank(duration);
         notBlank(genre);
 
-        if(trackNumber <= 0)
+        if(trackNumber <= 0 || trackNumber >= 500)
         {
+            throw new IllegalArgumentException();
+        }
+
+        if (name.length() > 100){
             throw new IllegalArgumentException();
         }
 
@@ -50,6 +53,9 @@ public class Track extends Entity {
     public void setName(String name) {
         notNull(name);
         notBlank(name);
+        if (name.length() > 100){
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
@@ -78,7 +84,7 @@ public class Track extends Entity {
     }
 
     public void setTrackNumber(int trackNumber) {
-        if(trackNumber <= 0)
+        if(trackNumber <= 0 || trackNumber >= 500)
         {
             throw new IllegalArgumentException();
         }
@@ -91,15 +97,11 @@ public class Track extends Entity {
 
     public void setReviews(List<String> reviews) {
         notNull(reviews);
+        Iterator<String> itr = reviews.iterator();
+        while(itr.hasNext()){
+            notNull(itr.next());
+        }
         this.reviews = reviews;
-    }
-
-    public double getRating() {
-        return rating;
-    }
-
-    public void setRating(double rating) {
-        this.rating = rating;
     }
 
     @Override
@@ -115,7 +117,7 @@ public class Track extends Entity {
 
     @Override
     public int hashCode() {
-        return Objects.hash(name, duration, trackNumber, genre);
+        return Objects.hash(name, duration, genre, trackNumber);
     }
 
 }

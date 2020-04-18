@@ -1,7 +1,5 @@
 package allaboutecm.model;
 
-import org.apache.commons.lang3.ObjectUtils;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -11,10 +9,8 @@ import org.junit.jupiter.params.provider.ValueSource;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.stream.Collectors;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 class AlbumUnitTest {
     private Album album;
@@ -43,7 +39,6 @@ class AlbumUnitTest {
         assertEquals(album.getAlbumName(), "The Köln Concert");
     }
 
-
     @Test
     @DisplayName("Album Record Number cannot be null")
     public void recordNumberCannotBeNull() {
@@ -69,7 +64,6 @@ class AlbumUnitTest {
         album.setReleaseYear(1969);
         album.setReleaseYear(1970);
     }
-
 
     @Test
     @DisplayName("Album release Year cannot before 1969")
@@ -100,28 +94,9 @@ class AlbumUnitTest {
     }
 
     @Test
-    public void sameNameAndNumberMeansSameAlbum() {
-        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
-
-        assertEquals(album, album1);
-    }
-
-    @Test
-    @DisplayName("Album musicians cannot be null")
-    public void albumMusiciansCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(null));
-    }
-
-    @Test
-    @DisplayName("Album tracks cannot be null")
-    public void albumTracksCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> album.setTracks(null));
-    }
-
-    @Test
-    @DisplayName("Album url cannot be null")
-    public void albumURLCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> album.setAlbumURL(null));
+    @DisplayName("Album instruments cannot be null")
+    public void albumInstrumentsCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setInstruments(null));
     }
 
     @Test
@@ -136,27 +111,19 @@ class AlbumUnitTest {
     }
 
     @Test
-    @DisplayName("Album tracks cannot be different")
-    public void albumTracksCannotBeDifferent() {
-        List<String> trackList = Arrays.asList("Track1", "Track2", "Track3", "Track4");
-        album.getTracks().addAll(trackList);
-        assertEquals(album.getTracks(), trackList);
+    @DisplayName("None of the MusicianInstruments can be null")
+    //No element of what is passed to setInstruments may be null.
+    public void nullMusicianInstrumentTest() {
+        MusicianInstrument[] blankArray = {null, null};
+        Set<MusicianInstrument> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(NullPointerException.class, () -> album.setInstruments(emptyItems));
     }
 
     @Test
-    @DisplayName("Album URL cannot be different")
-    public void albumURLCannotBeDifferent() throws MalformedURLException {
-        album.setAlbumURL(new URL("https://www.google.com/"));
-        URL url1 = new URL("https://www.google.com/");
-        assertEquals(album.getAlbumURL(), url1);
+    @DisplayName("Album musicians cannot be null")
+    public void albumMusiciansCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(null));
     }
-
-    @Test
-    @DisplayName("Non Empty Instruments List")
-    public void instrumentListNonEmpty() {
-        assertThrows(NullPointerException.class, () -> album.setInstruments(null));
-    }
-
 
     @Test
     @DisplayName("Featured Musicians was not correctly set or read back")
@@ -172,6 +139,42 @@ class AlbumUnitTest {
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
 
+    @Test
+    @DisplayName("None of the musicians can be null")
+    //No element of what is passed to setFeaturedMusicians() may be null.
+    public void nullMusicianTest() {
+        Musician[] blankArray = {null, null};
+        Set<Musician> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(emptyItems));
+    }
+
+    @Test
+    @DisplayName("Album tracks cannot be null")
+    public void albumTracksCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setTracks(null));
+    }
+
+    @Test
+    @DisplayName("Album tracks cannot be different")
+    public void albumTracksCannotBeDifferent() {
+        List<String> trackList = Arrays.asList("Track1", "Track2", "Track3", "Track4");
+        album.getTracks().addAll(trackList);
+        assertEquals(album.getTracks(), trackList);
+    }
+
+    @Test
+    @DisplayName("Album url cannot be null")
+    public void albumURLCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setAlbumURL(null));
+    }
+
+    @Test
+    @DisplayName("Album URL cannot be different")
+    public void albumURLCannotBeDifferent() throws MalformedURLException {
+        album.setAlbumURL(new URL("https://www.google.com/"));
+        URL url1 = new URL("https://www.google.com/");
+        assertEquals(album.getAlbumURL(), url1);
+    }
 
     @Test
     @DisplayName("Constructor should be able to set a post-1969 release year")
@@ -205,7 +208,6 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(curYear + 1));
     }
 
-
     @Test
     @DisplayName("Constructor can't set null record number")
     //Constructor must not be able to set a null record number, similar to setRecordNumber() above
@@ -237,23 +239,17 @@ class AlbumUnitTest {
     }
 
     @Test
-    @DisplayName("Musician Entry cannot be null")
-    //No element of what is passed to setFeaturedMusicians() may be null.
-    public void nullMusicianTest() {
-        Musician[] blankArray = {null, null};
-        Set<Musician> emptyItems = new HashSet<>(Arrays.asList(blankArray));
-        assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(emptyItems));
+    @DisplayName("Album objects cannot be different")
+    public void sameNameAndNumberMeansSameAlbum() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        assertEquals(album, album1);
     }
 
     @Test
-    @DisplayName("MusicianInstrument Entry cannot be null")
-    //No element of what is passed to setInstruments may be null.
-    public void nullMusicianInstrumentTest() {
-        MusicianInstrument[] blankArray = {null, null};
-        Set<MusicianInstrument> emptyItems = new HashSet<>(Arrays.asList(blankArray));
-        assertThrows(NullPointerException.class, () -> album.setInstruments(emptyItems));
+    @DisplayName("Album hashcodes cannot be different")
+    public void albumHashcodesEqualOrNot() {
+        int albumHashCode = Objects.hash(1975, "ECM 1064/65", "The Köln Concert");
+        assertEquals(album.hashCode(), albumHashCode);
     }
-
-
 
 }
