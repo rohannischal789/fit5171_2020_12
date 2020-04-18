@@ -113,7 +113,18 @@ public class Musician extends Entity {
     public String getBio(){return this.bio;}
     //personalSite is a URL attribute with set get methods representing the personal website of the band.
     //personalSite has the constraint that it may not begin with the substrings https://www.ecm.com/ or http://xx.wikipedia.org/wiki/
-    public void setPersonalSite(URL site){
+    public void setPersonalSite(URL site) {
+        String siteString = site.toString();
+        if (siteString.length() >= 19){
+            if (siteString.substring(0,20).equals("https://www.ecm.com/")) {
+                throw new IllegalArgumentException();
+            }
+        }
+        if (siteString.length() >= 23) {
+            if (siteString.substring(11, 24).equals("wikipedia.org")) {
+                throw new IllegalArgumentException();
+            }
+        }
         this.personalSite = site;
     }
 
@@ -121,6 +132,12 @@ public class Musician extends Entity {
     //wikiPage is a URL attribute with set get methods representing the wikipedia page of the band.
     //wikiPage has the constraint that it must begin with a substring following the format http://xx.wikipedia.org/wiki/
     public void setWikiPage (URL wikiPage){
+        String siteString = wikiPage.toString();
+        if (siteString.length() >= 23) {
+            if (!siteString.substring(11, 24).equals("wikipedia.org")) {
+                throw new IllegalArgumentException();
+            }
+        }
         this.wikiPage = wikiPage;
     }
 

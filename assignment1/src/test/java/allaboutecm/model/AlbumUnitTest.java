@@ -153,8 +153,9 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album URL cannot be different")
     public void albumURLCannotBeDifferent() throws MalformedURLException {
-        album.setAlbumURL(new URL("https://www.google.com/"));
-        URL url1 = new URL("https://www.google.com/");
+        URL notInline = new URL("https://www.ecm.com/something_band");
+        album.setAlbumURL(notInline);
+        URL url1 = new URL("https://www.ecm.com/something_band");
         assertEquals(album.getAlbumURL(), url1);
     }
 
@@ -261,6 +262,17 @@ class AlbumUnitTest {
         assertThrows(NullPointerException.class, () -> album.setInstruments(emptyItems));
     }
 
+    @Test
+    @DisplayName("URL must be on the ECM domain")
+    //Test that URL may only be on the ECM domain
+    public void URLvalidationTest(){
+        try {
+            URL theURL = new URL("https://www.google.com");
+            assertThrows(IllegalArgumentException.class, () -> album.setAlbumURL(theURL));
+        } catch (Exception e){
+
+        }
+    }
 
 
 }

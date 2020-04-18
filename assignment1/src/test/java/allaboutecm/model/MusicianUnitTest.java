@@ -192,8 +192,8 @@ public class MusicianUnitTest {
     //Simple check that we can actually set and retrieve wiki pages
     public void wikiSetGetCheck() throws MalformedURLException{
         URL myWikiPage = new URL("https://en.wikipedia.org/wiki/Linkin_Park");
-        musician.setPersonalSite(myWikiPage);
-        assertEquals(musician.getPersonalSite(), myWikiPage);
+        musician.setWikiPage(myWikiPage);
+        assertEquals(musician.getWikiPage(), myWikiPage);
     }
 
     @ParameterizedTest
@@ -222,12 +222,21 @@ public class MusicianUnitTest {
     //Checking outside our upper boundary for biography word length
     public void bioBoundaryTestInvalid(){
         String invalidBio = "";
-        //Create a string of 500 a's followed by trailing spaces.
+        //Create a string of 501 a's followed by trailing spaces.
         for (int i= 0; i < 501; i++){
             invalidBio += "a ";
         }
         final String inBio = invalidBio;
         assertThrows(IllegalArgumentException.class, () -> musician.setBio(inBio));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"https://www.ecm.com/BandPage", "https://en.wikipedia.org/wiki/Linkin_Park"})
+    @DisplayName("Personal site must not be ecm or wiki")
+    //Personal site cannot be on ECM or wikipedia.
+    public void personalSiteExternalCheck(String arg) throws MalformedURLException{
+        URL theURL = new URL(arg);
+        assertThrows(IllegalArgumentException.class, () -> musician.setPersonalSite(theURL));
     }
 
 }
