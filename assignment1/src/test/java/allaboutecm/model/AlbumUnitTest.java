@@ -128,7 +128,7 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Featured Musicians was not correctly set or read back")
     //Featured musicians set and get methods must match input and output
-    public void albumFeaturedMusiciansCorrectlyRead() {
+    public void albumFeaturedMusiciansCannotBeDifferent() {
         ArrayList<Musician> myArray = new ArrayList<Musician>();
         myArray.add(new Musician("Frank Frank"));
         myArray.add(new Musician("Adam Adam"));
@@ -182,8 +182,8 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album URL cannot be different")
     public void albumURLCannotBeDifferent() throws MalformedURLException {
-        album.setAlbumURL(new URL("https://www.google.com/"));
-        URL url1 = new URL("https://www.google.com/");
+        album.setAlbumURL(new URL("https://www.ecm.com/"));
+        URL url1 = new URL("https://www.ecm.com/");
         assertEquals(album.getAlbumURL(), url1);
     }
 
@@ -254,6 +254,13 @@ class AlbumUnitTest {
     public void sameNameAndNumberMeansSameAlbum() {
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
         assertEquals(album, album1);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false when there are different values in objects")
+    public void albumEqualsShouldBeFalse(){
+        Album album1 = new Album(1970, "ECM 1064/65", "The Köln Concert");
+        assertEquals(album.equals(album1), false);
     }
 
     @Test

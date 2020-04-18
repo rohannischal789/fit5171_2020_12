@@ -128,9 +128,16 @@ public class TrackUnitTest {
 
     @Test
     @DisplayName("Track objects cannot be different")
-    public void tracksEqualOrNot() {
+    public void tracksSameOrNot() {
         Track track1 = new Track("Track 1", "4:11", "Jazz",1);
         assertEquals(track, track1);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false when there are different values in objects")
+    public void trackEqualsShouldBeFalse(){
+        Track track1 = new Track("Track 9", "4:11", "Jazz",1);
+        assertEquals(track.equals(track1), false);
     }
 
     @Test
