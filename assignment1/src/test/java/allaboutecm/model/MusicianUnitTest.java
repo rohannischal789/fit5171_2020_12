@@ -48,6 +48,12 @@ public class MusicianUnitTest {
         assertThrows(IllegalArgumentException.class, () -> new Musician("Ben"));
     }
 
+    @Test
+    @DisplayName("Names are capped to 100 characters")
+    public void nameLengthTest(){
+        assertThrows(IllegalArgumentException.class, () -> new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    }
+
 
     @Test
     @DisplayName("Musician Albums does not set/get correctly")
@@ -120,6 +126,16 @@ public class MusicianUnitTest {
             //This will never throw because the URL is static and correct.
         }
     }
+
+    @Test
+    @DisplayName("Album Entry cannot be null")
+    public void nullAlbumsTest() {
+        Album[] blankArray = {null, null};
+        Set<Album> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(IllegalArgumentException.class, () -> musician.setAlbums(emptyItems));
+    }
+
+
     //TODO new constraint on URL must be patterned correctly for ECM
     //TODO length check for name
     //TODO new attributes bio, artist external site, wikipage.

@@ -20,7 +20,7 @@ class AlbumUnitTest {
     private Album album;
 
     @BeforeEach
-    public void setUp(){
+    public void setUp() {
         album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         List<MusicianInstrument> trackList = Arrays.asList(
                 new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
@@ -48,8 +48,8 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("album Name cannot be different")
-    public void albumNameSameOrNot(){
-        assertEquals(album.getAlbumName(),"The Köln Concert");
+    public void albumNameSameOrNot() {
+        assertEquals(album.getAlbumName(), "The Köln Concert");
     }
 
 
@@ -68,13 +68,13 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("record Number cannot be different")
-    public void recordNumberSameOrNot(){
-        assertEquals(album.getRecordNumber(),"ECM 1064/65");
+    public void recordNumberSameOrNot() {
+        assertEquals(album.getRecordNumber(), "ECM 1064/65");
     }
 
     @Test
     @DisplayName("Album Release Year May be 1969 or greater")
-    public void releaseYearMayBe1969orGreater(){
+    public void releaseYearMayBe1969orGreater() {
         album.setReleaseYear(1969);
         album.setReleaseYear(1970);
     }
@@ -83,7 +83,7 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album release Year cannot before 1969")
     public void releaseYearCannotBeBefore1969() {
-        int arg=1968;
+        int arg = 1968;
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(arg));
     }
 
@@ -104,8 +104,8 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("record Number cannot be different")
-    public void releaseYearSameOrNot(){
-        assertEquals(album.getReleaseYear(),1975);
+    public void releaseYearSameOrNot() {
+        assertEquals(album.getReleaseYear(), 1975);
     }
 
     @Test
@@ -136,9 +136,9 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album instruments cannot be different")
     public void albumInstrumentsCannotBeDifferent() {
-        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"),new MusicalInstrument("Ukele")),
-                new MusicianInstrument(new Musician("Adam Adam"),new MusicalInstrument("Guitar")),
-                new MusicianInstrument(new Musician("Annie Annie"),new MusicalInstrument("Violin")));
+        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
+                new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
+                new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
         Set<MusicianInstrument> musicianInstrument1 = new HashSet<MusicianInstrument>(list);
         assertEquals(album.getInstruments(), musicianInstrument1);
     }
@@ -146,7 +146,7 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album tracks cannot be different")
     public void albumTracksCannotBeDifferent() {
-        List<String> trackList = Arrays.asList("Track1","Track2","Track3","Track4");
+        List<String> trackList = Arrays.asList("Track1", "Track2", "Track3", "Track4");
         assertEquals(album.getTracks(), trackList);
     }
 
@@ -157,17 +157,17 @@ class AlbumUnitTest {
         URL url1 = new URL("https://www.google.com/");
         assertEquals(album.getAlbumURL(), url1);
     }
+
     @Test
     @DisplayName("Non Empty Instruments List")
-    public void instrumentListNonEmpty(){
+    public void instrumentListNonEmpty() {
         assertThrows(NullPointerException.class, () -> album.setInstruments(null));
     }
 
 
-
     @Test
     @DisplayName("Featured Musicians was not correctly set or read back")
-    public void albumFeaturedMusiciansCorrectlyRead(){
+    public void albumFeaturedMusiciansCorrectlyRead() {
         ArrayList<Musician> myArray = new ArrayList<Musician>();
         myArray.add(new Musician("Frank Frank"));
         myArray.add(new Musician("Adam Adam"));
@@ -177,7 +177,6 @@ class AlbumUnitTest {
         album.setFeaturedMusicians(musiciansList);
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
-
 
 
     @Test
@@ -235,4 +234,19 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> new Album(1975, "ECM 1064/65", arg));
     }
 
+    @Test
+    @DisplayName("Musician Entry cannot be null")
+    public void nullMusicianTest() {
+        Musician[] blankArray = {null, null};
+        Set<Musician> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(emptyItems));
+    }
+
+    @Test
+    @DisplayName("MusicianInstrument Entry cannot be null")
+    public void nullMusicianInstrumentTest() {
+        MusicianInstrument[] blankArray = {null, null};
+        Set<MusicianInstrument> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(NullPointerException.class, () -> album.setInstruments(emptyItems));
+    }
 }

@@ -4,10 +4,7 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 import java.net.URL;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
+import java.util.*;
 
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
@@ -73,6 +70,10 @@ public class Album extends Entity {
 
     public void setFeaturedMusicians(Set<Musician> featuredMusicians) {
         notNull(featuredMusicians);
+        Iterator<Musician> itr = featuredMusicians.iterator();
+        while(itr.hasNext()){
+            notNull(itr.next());
+        }
         this.featuredMusicians = featuredMusicians;
     }
 
@@ -82,6 +83,10 @@ public class Album extends Entity {
 
     public void setInstruments(Set<MusicianInstrument> instruments) {
         notNull(instruments);
+        Iterator<MusicianInstrument> itr = instruments.iterator();
+        while(itr.hasNext()){
+            notNull(itr.next());
+        }
         this.instruments = instruments;
     }
 
