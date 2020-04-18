@@ -46,13 +46,6 @@ public class MusicianInstrumentUnitTest {
 
     @Test
     @DisplayName("Musician Instruments objects cannot be different")
-    public void musicianInstrumentObjectsEqualOrNot() {
-        MusicianInstrument musicianInstrument1 = new MusicianInstrument(new Musician("Keith Jarrett"), new MusicalInstrument("Piano"));
-        assertEquals(musicianInstrument, musicianInstrument1);
-    }
-
-    @Test
-    @DisplayName("Musician Instruments objects cannot be different")
     public void musicianInstrumentEqualOrNot() {
         MusicianInstrument musicianInstrument1 = new MusicianInstrument(new Musician("Keith Jarrett"), new MusicalInstrument("Piano"));
         assertTrue(musicianInstrument.equals(musicianInstrument1));

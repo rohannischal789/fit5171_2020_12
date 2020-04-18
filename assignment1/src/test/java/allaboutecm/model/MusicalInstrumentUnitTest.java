@@ -58,4 +58,18 @@ public class MusicalInstrumentUnitTest {
         int musicalInstrument1 = Objects.hash("Piano");
         assertEquals(musicalInstrument.hashCode(), musicalInstrument1);
     }
+
+    @Test
+    @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
+    //Musical Instrument names must be permitted to be 100 characters long, but no longer
+    public void validButLongNameTest(){
+        musicalInstrument.setName("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
+
+    @Test
+    @DisplayName("Names are capped to 100 characters")
+    //Musical Instrument name may not be longer than 100 characters. The tested string is 101 characters.
+    public void nameLengthTest(){
+        assertThrows(IllegalArgumentException.class, () -> new MusicalInstrument("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    }
 }

@@ -157,9 +157,20 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album tracks cannot be different")
     public void albumTracksCannotBeDifferent() {
-        List<String> trackList = Arrays.asList("Track1", "Track2", "Track3", "Track4");
+        List<Track> trackList = Arrays.asList( new Track("Track 1", "4:11", "Jazz", 1),
+                new Track("Track 2", "3:05", "Jazz", 2),
+                new Track("Track 3", "5:24", "Rock", 3),
+                new Track("Track 4", "4:14", "Jazz", 4));
         album.getTracks().addAll(trackList);
         assertEquals(album.getTracks(), trackList);
+    }
+
+    @Test
+    @DisplayName("None of the tracks can be null")
+    //No element of what is passed to setTracks() may be null.
+    public void nullTracksTest() {
+        List<Track> emptyItems = Arrays.asList(null,null);
+        assertThrows(NullPointerException.class, () -> album.setTracks(emptyItems));
     }
 
     @Test

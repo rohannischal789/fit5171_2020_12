@@ -12,6 +12,9 @@ public class MusicalInstrument extends Entity {
     public MusicalInstrument(String name) {
         notNull(name);
         notBlank(name);
+        if (name.length() > 100){
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
@@ -23,6 +26,9 @@ public class MusicalInstrument extends Entity {
     {
         notNull(name);
         notBlank(name);
+        if (name.length() > 100){
+            throw new IllegalArgumentException();
+        }
         this.name = name;
     }
 
