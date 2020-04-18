@@ -25,12 +25,14 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Musician Name does not set/get correctly")
+    //We must be able to retrieve and match the name attribute.
     public void matchMusicianName(){
         assertEquals(musician.getName(), "anything name");
     }
 
     @Test
     @DisplayName("Musician Name is Null")
+    //We must not be able to set a null name
     public void nullMusicianNameError(){
         assertThrows(NullPointerException.class, () -> new Musician(null));
     }
@@ -38,25 +40,36 @@ public class MusicianUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Musician name cannot be empty or blank")
+    //We must not be able to set an empty string or otherwise blank name. These strings taken from AlbumUnitTest
     public void MusicianNameCannotBeEmptyOrBlank(String arg) {
         assertThrows(IllegalArgumentException.class, () -> new Musician(arg));
     }
 
     @Test
     @DisplayName("Name must match the form xxx xxx")
+    //Musician must have a name which consists of at least two strings of characters separated by a space
     public void substringTest(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("Ben"));
     }
 
     @Test
+    @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
+    //Musicians names must be permitted to be 100 characters long, but no longer
+    public void validButLongNameTest(){
+        new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
+
+    @Test
     @DisplayName("Names are capped to 100 characters")
+    //Musician name may not be longer than 100 characters. The tested string is 101 characters.
     public void nameLengthTest(){
-        assertThrows(IllegalArgumentException.class, () -> new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+        assertThrows(IllegalArgumentException.class, () -> new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
     }
 
 
     @Test
     @DisplayName("Musician Albums does not set/get correctly")
+    //The list of albums retrieved by getAlbum must match the input given to setAlbum.
     public void albumSetTest(){
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Album album2 = new Album(1976, "ECM 1063/66", "The Köln Concert1");
@@ -70,12 +83,14 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Non-null albumSet")
+    //The set of albums must not be equal to null
     public void nullAlbumSetError(){
         assertThrows(NullPointerException.class, () ->  musician.setAlbums(null));
     }
 
     @Test
     @DisplayName("Musician equals does not correctly match")
+    //This is the base case for matching using .equals, two musicians with matching details must register as equal.
     public void equalsMusicianNameMatch(){
         Musician musician2 = musician;
         assertEquals(musician.equals(musician2), true);
@@ -83,6 +98,7 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Musician equals reports a false true when Musician names do not match")
+    //Equals must report false when the Musician names do not match
     public void equalsMusicianNameDoesNotMatch(){
         Musician musician3 = new  Musician("Nupur Ben");
         assertEquals(musician.equals(musician3), false);
@@ -90,11 +106,12 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Musician equals reports a false true when URLs do not match")
-    public void equalsMusicianNameExactlyMatch(){
+    //Equals must be false when the URLs of the Musicians do not match
+    public void equalsMusicianExactlyMatchURL(){
         try
         {
             Musician musician4 = new Musician("anything name");
-            musician4.setMusicianUrl(new URL("https://google.com"));
+            musician4.setMusicianUrl(new URL("https://www.ecm.com/something_band"));
             assertEquals(musician.equals(musician4), false);
         }
         catch(Exception e)
@@ -105,7 +122,8 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("Musician equals reports a false true when Album Sets do not match")
-    public void equalsmusicianNameExactlyMatchAlbum() {
+    //Equals must be false when albums do not match
+    public void equalsMusicianExactlyMatchAlbum() {
 
         Musician musician5 = new Musician("anything name");
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -117,9 +135,10 @@ public class MusicianUnitTest {
 
     @Test
     @DisplayName("URL did not correctly set.")
+    //Test that URL sets successfully
     public void URLSetTest(){
         try {
-            URL theURL = new URL("https://www.google.com");
+            URL theURL = new URL("https://www.ecm.com/something_band");
             musician.setMusicianUrl(theURL);
             assertEquals(musician.getMusicianUrl(), theURL);
         } catch (Exception e){
@@ -128,32 +147,28 @@ public class MusicianUnitTest {
     }
 
     @Test
+    @DisplayName("URL must be on the ECM domain")
+    //Test that URL may only be on the ECM domain
+    public void URLvalidationTest(){
+        try {
+            URL theURL = new URL("https://www.google.com");
+            assertThrows(IllegalArgumentException.class, () -> musician.setMusicianUrl(theURL));
+        } catch (Exception e){
+
+        }
+    }
+
+    @Test
     @DisplayName("Album Entry cannot be null")
+    //Items in the list of albums may not be null
     public void nullAlbumsTest() {
         Album[] blankArray = {null, null};
         Set<Album> emptyItems = new HashSet<>(Arrays.asList(blankArray));
-        assertThrows(IllegalArgumentException.class, () -> musician.setAlbums(emptyItems));
+        assertThrows(NullPointerException.class, () -> musician.setAlbums(emptyItems));
     }
 
-
-    //TODO new constraint on URL must be patterned correctly for ECM
-    //TODO length check for name
     //TODO new attributes bio, artist external site, wikipage.
 
-        //We had planned to write tests for the form of the URL, that it should start with http://, https:// or www. and that it should end with .XXX, .XXX.XX or .XX, where X is some character.
-        //The URL class handles all of these behviours and does not require us to test, it is not possible for us to create a malformed URL to pass to the SetURL method.
-    /*
-    public void MalformedURLTest(){
-        try {
-            URL theURL = new URL("https://www.google.com");
-            musician.setMusicianUrl(theURL);
-            assertEquals(musician.getMusicianUrl(), theURL);
-        } catch (Exception e){
-            //This will never throw because the URL is static and correct.
-            //This will never throw because the URL is static and correct.
-        }
-    }
-    */
 
 
 }

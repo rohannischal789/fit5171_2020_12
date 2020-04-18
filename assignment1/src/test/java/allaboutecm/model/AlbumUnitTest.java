@@ -167,6 +167,7 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("Featured Musicians was not correctly set or read back")
+    //Featured musicians set and get methods must match input and output
     public void albumFeaturedMusiciansCorrectlyRead() {
         ArrayList<Musician> myArray = new ArrayList<Musician>();
         myArray.add(new Musician("Frank Frank"));
@@ -181,6 +182,7 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("Constructor should be able to set a post-1969 release year")
+    //The checks the inside of the lower bound of our 1969-current year release year constraint.
     public void constructorReleaseYearNotEarlyValidate() {
         album.setReleaseYear(1969);
         album.setReleaseYear(1970);
@@ -188,12 +190,14 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("Constructor can't set pre-1969 release year")
+    //The checks the outside of the lower bound of our 1969-current year release year constraint.
     public void constructorReleaseYearEarlyValidate() {
         assertThrows(IllegalArgumentException.class, () -> new Album(0, "ECM 1064/65", "The Köln Concert"));
     }
 
     @Test
     @DisplayName("Constructor should be able to set release date of this year or before")
+    //The checks the inside of the upper bound of our 1969-current year release year constraint.
     public void constructorReleaseYearNotLateValidate() {
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         album.setReleaseYear(curYear);
@@ -202,6 +206,7 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("Constructor should not be able to set a release year after the current year")
+    //The checks the outside of the upper bound of our 1969-current year release year constraint.
     public void constructorReleaseYearLateValidate() {
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(curYear + 1));
@@ -210,6 +215,7 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("Constructor can't set null record number")
+    //Constructor must not be able to set a null record number, similar to setRecordNumber() above
     public void constructorRecordNumberNullValidate() {
         assertThrows(NullPointerException.class, () -> new Album(1975, null, "The Köln Concert"));
     }
@@ -217,12 +223,14 @@ class AlbumUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Constructor can't set empty record number")
+    //Constructor must not be able to set an empty record number, similar to setRecordNumber() above
     public void constructorRecordNumberEmptyValidate(String arg) {
         assertThrows(IllegalArgumentException.class, () -> new Album(1975, arg, "The Köln Concert"));
     }
 
     @Test
     @DisplayName("Constructor can't set null album name")
+    //Constructor must not be able to set a null album name, similar to setAlbumName() above
     public void constructorAlbumNameNullValidate() {
         assertThrows(NullPointerException.class, () -> new Album(1975, "ECM 1064/65", null));
     }
@@ -230,12 +238,14 @@ class AlbumUnitTest {
     @ParameterizedTest
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Constructor can't set empty album name")
+    //Constructor must not be able to set an empty album name, similar to setAlbumName() above
     public void constructorAlbumNameEmptyValidate(String arg) {
         assertThrows(IllegalArgumentException.class, () -> new Album(1975, "ECM 1064/65", arg));
     }
 
     @Test
     @DisplayName("Musician Entry cannot be null")
+    //No element of what is passed to setFeaturedMusicians() may be null.
     public void nullMusicianTest() {
         Musician[] blankArray = {null, null};
         Set<Musician> emptyItems = new HashSet<>(Arrays.asList(blankArray));
@@ -244,9 +254,13 @@ class AlbumUnitTest {
 
     @Test
     @DisplayName("MusicianInstrument Entry cannot be null")
+    //No element of what is passed to setInstruments may be null.
     public void nullMusicianInstrumentTest() {
         MusicianInstrument[] blankArray = {null, null};
         Set<MusicianInstrument> emptyItems = new HashSet<>(Arrays.asList(blankArray));
         assertThrows(NullPointerException.class, () -> album.setInstruments(emptyItems));
     }
+
+
+
 }
