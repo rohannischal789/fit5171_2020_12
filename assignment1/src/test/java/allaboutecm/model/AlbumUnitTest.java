@@ -27,7 +27,7 @@ class AlbumUnitTest {
                 new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
                 new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
         album.getInstruments().addAll(new HashSet<MusicianInstrument>(trackList));
-        album.getTracks().addAll(Arrays.asList("Track1", "Track2", "Track3", "Track4"));
+        //album.getTracks().addAll(Arrays.asList("Track1", "Track2", "Track3", "Track4"));
         List<Musician> musician = Arrays.asList(new Musician("Keith Jarrett"));
         Set<Musician> musicianSet = musician.stream().collect(Collectors.toSet());
     }
