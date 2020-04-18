@@ -55,6 +55,15 @@ public class Musician extends Entity {
         return name;
     }
 
+    public void setName(String name) {
+        notNull(name);
+        notBlank(name);
+        if (name.length() > 100){
+            throw new IllegalArgumentException();
+        }
+        this.name = name;
+    }
+
     public Set<Album> getAlbums() {
         return albums;
     }
