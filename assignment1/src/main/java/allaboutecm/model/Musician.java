@@ -23,6 +23,14 @@ public class Musician extends Entity {
 
     private Set<Album> albums;
 
+    //Extension
+
+    private String bio;
+
+    private URL personalSite;
+
+    private URL wikiPage;
+
     public Musician(String name) {
         //When we make a Musician is the only time we set the name and it must be not null and not blank
         notNull(name);
@@ -91,6 +99,31 @@ public class Musician extends Entity {
 
 
     //Extension functionality
+    //bio is a string attribute with set get methods. This is intended to represent a short biography of the band,
+    //bio has the constraints that it must not be blank, and is bounded at 500 words. Bio may be null.
+    public void setBio(String bio){
+        notBlank(bio);
+        String[] bioWords = bio.split(" ");
+        if (bioWords.length > 500){
+            throw new IllegalArgumentException();
+        }
+        this.bio = bio;
+    }
 
+    public String getBio(){return this.bio;}
+    //personalSite is a URL attribute with set get methods representing the personal website of the band.
+    //personalSite has the constraint that it may not begin with the substrings https://www.ecm.com/ or http://xx.wikipedia.org/wiki/
+    public void setPersonalSite(URL site){
+        this.personalSite = site;
+    }
+
+    public URL getPersonalSite(){return this.personalSite;}
+    //wikiPage is a URL attribute with set get methods representing the wikipedia page of the band.
+    //wikiPage has the constraint that it must begin with a substring following the format http://xx.wikipedia.org/wiki/
+    public void setWikiPage (URL wikiPage){
+        this.wikiPage = wikiPage;
+    }
+
+    public URL getWikiPage(){return this.wikiPage;}
 
 }

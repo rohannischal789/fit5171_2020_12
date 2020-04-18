@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.HashSet;
@@ -168,7 +169,65 @@ public class MusicianUnitTest {
     }
 
     //TODO new attributes bio, artist external site, wikipage.
+    //Code extension
+
+    @Test
+    @DisplayName("Bio must set/get correctly")
+    //Simple check that we can actually set and retrieve bios
+    public void bioSetGetCheck(){
+        musician.setBio("This is a biography");
+        assertEquals(musician.getBio(), "This is a biography");
+    }
+
+    @Test
+    @DisplayName("Personal Site must set/get correctly")
+    //Simple check that we can actually set and retrieve personal sites
+    public void personalSiteSetGetCheck() throws MalformedURLException {
+        URL myPersonalSite = new URL("https://www.google.com");
+        musician.setPersonalSite(myPersonalSite);
+        assertEquals(musician.getPersonalSite(), myPersonalSite);
+    }
+    @Test
+    @DisplayName("WikiPage must set/get correctly")
+    //Simple check that we can actually set and retrieve wiki pages
+    public void wikiSetGetCheck() throws MalformedURLException{
+        URL myWikiPage = new URL("https://en.wikipedia.org/wiki/Linkin_Park");
+        musician.setPersonalSite(myWikiPage);
+        assertEquals(musician.getPersonalSite(), myWikiPage);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", " ", "    \t"})
+    @DisplayName("Bio must not be blank")
+    //We must not have blank biographies
+    public void bioBlankTest(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> musician.setBio(arg));
+    }
 
 
+    @Test
+    @DisplayName("Boundary Test, bio must be allowed to be up to 500 words")
+    //Checking inside our upper boundary for biography word length
+    public void bioBoundaryTestValid(){
+        String validBio = "";
+        //Create a string of 500 a's followed by trailing spaces.
+        for (int i= 0; i < 500; i++){
+            validBio += "a ";
+        }
+        musician.setBio(validBio);
+    }
+
+    @Test
+    @DisplayName("Boundary Test, bio must not be allowed to be over 500 words")
+    //Checking outside our upper boundary for biography word length
+    public void bioBoundaryTestInvalid(){
+        String invalidBio = "";
+        //Create a string of 500 a's followed by trailing spaces.
+        for (int i= 0; i < 501; i++){
+            invalidBio += "a ";
+        }
+        final String inBio = invalidBio;
+        assertThrows(IllegalArgumentException.class, () -> musician.setBio(inBio));
+    }
 
 }
