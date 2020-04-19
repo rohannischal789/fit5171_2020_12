@@ -27,14 +27,14 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Musician Name does not set/get correctly")
     //We must be able to retrieve and match the name attribute.
-    public void matchMusicianName(){
+    public void musicianNameSameOrNot(){
         assertEquals(musician.getName(), "anything name");
     }
 
     @Test
     @DisplayName("Musician Name is Null")
     //We must not be able to set a null name
-    public void nullMusicianNameError(){
+    public void musicianNameCannotBeNull(){
         assertThrows(NullPointerException.class, () -> new Musician(null));
     }
 
@@ -49,21 +49,21 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Name must match the form xxx xxx")
     //Musician must have a name which consists of at least two strings of characters separated by a space
-    public void substringTest(){
+    public void musicianNameShouldBeSepartedByASpace(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("Ben"));
     }
 
     @Test
     @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
     //Musicians names must be permitted to be 100 characters long, but no longer
-    public void validButLongNameTest(){
+    public void musicianNameLengthShouldAccept100Chars(){
         new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test
     @DisplayName("Names are capped to 100 characters")
     //Musician name may not be longer than 100 characters. The tested string is 101 characters.
-    public void nameLengthTest(){
+    public void musicianNameLengthShouldNotBeMoreThan100Chars(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
     }
 
@@ -71,7 +71,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Musician Albums does not set/get correctly")
     //The list of albums retrieved by getAlbum must match the input given to setAlbum.
-    public void albumSetTest(){
+    public void musicianAlbumSameOrNot(){
         Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Album album2 = new Album(1976, "ECM 1063/66", "The Köln Concert1");
         Album album3 = new Album(1977, "ECM 1065/67", "The Köln Concert2");
@@ -85,14 +85,14 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Non-null albumSet")
     //The set of albums must not be equal to null
-    public void nullAlbumSetError(){
+    public void musicianAlbumCannotBeNull(){
         assertThrows(NullPointerException.class, () ->  musician.setAlbums(null));
     }
 
     @Test
     @DisplayName("Musician equals does not correctly match")
     //This is the base case for matching using .equals, two musicians with matching details must register as equal.
-    public void equalsMusicianNameMatch(){
+    public void musicianSameOrNot(){
         Musician musician2 = musician;
         assertEquals(musician.equals(musician2), true);
     }
@@ -137,7 +137,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("URL did not correctly set.")
     //Test that URL sets successfully
-    public void URLSetTest(){
+    public void urlSameOrNot(){
         try {
             URL theURL = new URL("https://www.ecm.com/something_band");
             musician.setMusicianUrl(theURL);
@@ -150,7 +150,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("URL must be on the ECM domain")
     //Test that URL may only be on the ECM domain
-    public void URLvalidationTest(){
+    public void urlvalidationTest(){
         try {
             URL theURL = new URL("https://www.google.com");
             assertThrows(IllegalArgumentException.class, () -> musician.setMusicianUrl(theURL));
@@ -174,7 +174,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Bio must set/get correctly")
     //Simple check that we can actually set and retrieve bios
-    public void bioSetGetCheck(){
+    public void bioSameOrNot(){
         musician.setBio("This is a biography");
         assertEquals(musician.getBio(), "This is a biography");
     }
@@ -182,7 +182,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Personal Site must set/get correctly")
     //Simple check that we can actually set and retrieve personal sites
-    public void personalSiteSetGetCheck() throws MalformedURLException {
+    public void personalSiteSameOrNot() throws MalformedURLException {
         URL myPersonalSite = new URL("https://www.google.com");
         musician.setPersonalSite(myPersonalSite);
         assertEquals(musician.getPersonalSite(), myPersonalSite);
@@ -190,7 +190,7 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("WikiPage must set/get correctly")
     //Simple check that we can actually set and retrieve wiki pages
-    public void wikiSetGetCheck() throws MalformedURLException{
+    public void wikiPageSameOrNot() throws MalformedURLException{
         URL myWikiPage = new URL("https://en.wikipedia.org/wiki/Linkin_Park");
         musician.setWikiPage(myWikiPage);
         assertEquals(musician.getWikiPage(), myWikiPage);
@@ -200,7 +200,7 @@ public class MusicianUnitTest {
     @ValueSource(strings = {"", " ", "    \t"})
     @DisplayName("Bio must not be blank")
     //We must not have blank biographies
-    public void bioBlankTest(String arg) {
+    public void bioCannotBeNullOrEmpty(String arg) {
         assertThrows(IllegalArgumentException.class, () -> musician.setBio(arg));
     }
 

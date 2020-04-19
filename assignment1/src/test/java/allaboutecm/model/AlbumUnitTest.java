@@ -270,4 +270,17 @@ class AlbumUnitTest {
         assertEquals(album.hashCode(), albumHashCode);
     }
 
+
+    @Test
+    @DisplayName("URL must be on the ECM domain")
+    //Test that URL may only be on the ECM domain
+    public void albumURLMustContainECM(){
+        try {
+            URL theURL = new URL("https://www.google.com");
+            assertThrows(IllegalArgumentException.class, () -> album.setAlbumURL(theURL));
+        } catch (Exception e){
+
+        }
+    }
+
 }
