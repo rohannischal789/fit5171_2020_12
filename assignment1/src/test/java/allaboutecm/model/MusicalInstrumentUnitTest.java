@@ -77,6 +77,21 @@ public class MusicalInstrumentUnitTest {
     @DisplayName("Names are capped to 100 characters")
     //Musical Instrument name may not be longer than 100 characters. The tested string is 101 characters.
     public void musicianInstrumentLengthShouldNotBeMoreThan100Chars(){
+        assertThrows(IllegalArgumentException.class, () -> musicalInstrument.setName("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    }
+
+    @Test
+    @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
+    //Musical Instrument names must be permitted to be 100 characters long, but no longer
+    public void constructorNameLengthShouldAccept100Chars(){
+        musicalInstrument = new MusicalInstrument("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
+
+    @Test
+    @DisplayName("Names are capped to 100 characters")
+    //Musical Instrument name may not be longer than 100 characters. The tested string is 101 characters.
+    public void constructorLengthShouldNotBeMoreThan100Chars(){
         assertThrows(IllegalArgumentException.class, () -> new MusicalInstrument("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
     }
+
 }

@@ -188,9 +188,9 @@ class AlbumUnitTest {
     }
 
     @Test
-    @DisplayName("Constructor should be able to set a post-1969 release year")
+    @DisplayName("setReleaseYear should be able to set a post-1969 release year")
     //The checks the inside of the lower bound of our 1969-current year release year constraint.
-    public void constructorReleaseYearNotEarlyValidate() {
+    public void releaseYearNotEarlyValidate() {
         album.setReleaseYear(1969);
         album.setReleaseYear(1970);
     }
@@ -203,18 +203,18 @@ class AlbumUnitTest {
     }
 
     @Test
-    @DisplayName("Constructor should be able to set release date of this year or before")
+    @DisplayName("setReleaseYear should be able to set release date of this year or before")
     //The checks the inside of the upper bound of our 1969-current year release year constraint.
-    public void constructorReleaseYearNotLateValidate() {
+    public void releaseYearNotLateValidate() {
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         album.setReleaseYear(curYear);
         album.setReleaseYear(curYear - 1);
     }
 
     @Test
-    @DisplayName("Constructor should not be able to set a release year after the current year")
+    @DisplayName("setReleaseYear should not be able to set a release year after the current year")
     //The checks the outside of the upper bound of our 1969-current year release year constraint.
-    public void constructorReleaseYearLateValidate() {
+    public void releaseYearLateValidate() {
         int curYear = Calendar.getInstance().get(Calendar.YEAR);
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(curYear + 1));
     }

@@ -49,22 +49,43 @@ public class MusicianUnitTest {
     @Test
     @DisplayName("Name must match the form xxx xxx")
     //Musician must have a name which consists of at least two strings of characters separated by a space
-    public void musicianNameShouldBeSepartedByASpace(){
+    public void constructorMusicianNameShouldBeSepartedByASpace(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("Ben"));
     }
 
     @Test
     @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
     //Musicians names must be permitted to be 100 characters long, but no longer
-    public void musicianNameLengthShouldAccept100Chars(){
+    public void constructorMusicianNameLengthShouldAccept100Chars(){
         new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     @Test
     @DisplayName("Names are capped to 100 characters")
     //Musician name may not be longer than 100 characters. The tested string is 101 characters.
-    public void musicianNameLengthShouldNotBeMoreThan100Chars(){
+    public void constructorMusicianNameLengthShouldNotBeMoreThan100Chars(){
         assertThrows(IllegalArgumentException.class, () -> new Musician("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
+    }
+
+    @Test
+    @DisplayName("Name must match the form xxx xxx")
+    //Musician must have a name which consists of at least two strings of characters separated by a space
+    public void musicianNameShouldBeSepartedByASpace(){
+        assertThrows(IllegalArgumentException.class, () -> musician.setName("Ben"));
+    }
+
+    @Test
+    @DisplayName("Boundary Error, Name may be 100 characters long, but no longer")
+    //Musicians names must be permitted to be 100 characters long, but no longer
+    public void musicianNameLengthShouldAccept100Chars(){
+        musician.setName("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
+
+    @Test
+    @DisplayName("Names are capped to 100 characters")
+    //Musician name may not be longer than 100 characters. The tested string is 101 characters.
+    public void musicianNameLengthShouldNotBeMoreThan100Chars(){
+        assertThrows(IllegalArgumentException.class, () -> musician.setName("a aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
     }
 
 
@@ -168,7 +189,6 @@ public class MusicianUnitTest {
         assertThrows(NullPointerException.class, () -> musician.setAlbums(emptyItems));
     }
 
-    //TODO new attributes bio, artist external site, wikipage.
     //Code extension
 
     @Test

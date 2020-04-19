@@ -146,4 +146,35 @@ public class TrackUnitTest {
         int trackHashCode = Objects.hash("Track 1", "4:11", "Jazz", 1);
         assertEquals(track.hashCode(), trackHashCode);
     }
+
+    @Test
+    @DisplayName("Track name cannot be null")
+    public void constructorTrackNameCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new Track(null, "4:11", "Jazz",1));
+    }
+
+    @Test
+    @DisplayName("Track duration cannot be null")
+    public void constructorTrackDurationCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new Track("Track 1", null, "Jazz",1));
+    }
+
+    @Test
+    @DisplayName("Track genre cannot be null")
+    public void constructorTrackGenreCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new Track("Track 1", "4:11", null,1));
+    }
+
+    @Test
+    @DisplayName("Track number cannot be zero")
+    public void constructorTrackNumberCannotBeZero() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("Track 1", "4:11", "Jazz",0));
+    }
+
+    @Test
+    @DisplayName("Track number cannot be more than 499")
+    public void constructorTrackNumberCannotBeMoreThan499() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("Track 1", "4:11", "Jazz",500));
+    }
+
 }

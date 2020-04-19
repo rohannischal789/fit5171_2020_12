@@ -97,7 +97,7 @@ public class Album extends Entity {
     public void setAlbumURL(URL albumURL) {
         notNull(albumURL);
         String checkURL = albumURL.toString();
-        if (!(checkURL.substring(0,20).equals("https://www.ecm.com/"))){
+        if (!(checkURL.contains("https://www.ecm.com/"))){
             throw new IllegalArgumentException();
         }
         this.albumURL = albumURL;

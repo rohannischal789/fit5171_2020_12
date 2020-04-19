@@ -58,6 +58,12 @@ public class Musician extends Entity {
     public void setName(String name) {
         notNull(name);
         notBlank(name);
+        String[] substring = name.split(" ");
+        //Split the string by spaces into a list of strings. If we only have one element in the list it doesn't follow the minimum firstname lastname constraint
+        if(substring.length == 1)
+        {
+            throw new IllegalArgumentException();
+        }
         if (name.length() > 100){
             throw new IllegalArgumentException();
         }
@@ -100,7 +106,7 @@ public class Musician extends Entity {
     public void setMusicianUrl(URL musicianUrl){
         //The URL submitted must be on our website, the first 19 characters must be https://www.ecm.com/, anything after that may be the band name.
         //We could avoid hardcoding the string in a real project by referring to some global constant
-        if (!musicianUrl.toString().substring(0,19).equals("https://www.ecm.com/")){
+        if (!musicianUrl.toString().contains("https://www.ecm.com/")){
             throw new IllegalArgumentException();
         }
         this.musicianUrl = musicianUrl;
@@ -124,15 +130,8 @@ public class Musician extends Entity {
     //personalSite has the constraint that it may not begin with the substrings https://www.ecm.com/ or http://xx.wikipedia.org/wiki/
     public void setPersonalSite(URL site) {
         String siteString = site.toString();
-        if (siteString.length() >= 19){
-            if (siteString.substring(0,20).equals("https://www.ecm.com/")) {
+        if (siteString.contains("www.ecm.com") || siteString.contains("wikipedia.org")) {
                 throw new IllegalArgumentException();
-            }
-        }
-        if (siteString.length() >= 23) {
-            if (siteString.substring(11, 24).equals("wikipedia.org")) {
-                throw new IllegalArgumentException();
-            }
         }
         this.personalSite = site;
     }
@@ -142,10 +141,8 @@ public class Musician extends Entity {
     //wikiPage has the constraint that it must begin with a substring following the format http://xx.wikipedia.org/wiki/
     public void setWikiPage (URL wikiPage){
         String siteString = wikiPage.toString();
-        if (siteString.length() >= 23) {
-            if (!siteString.substring(11, 24).equals("wikipedia.org")) {
+        if (!siteString.contains("wikipedia.org")) {
                 throw new IllegalArgumentException();
-            }
         }
         this.wikiPage = wikiPage;
     }

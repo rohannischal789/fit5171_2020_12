@@ -25,9 +25,21 @@ public class MusicianInstrumentUnitTest {
     }
 
     @Test
+    @DisplayName("Musical Instrument cannot be null")
+    public void constructorMusicalInstrumentCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new MusicianInstrument(new Musician("Keith Jarrett"), null));
+    }
+
+    @Test
     @DisplayName("Musician cannot be null")
-    public void musicianCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> musicianInstrument.setMusician(null));
+    public void constructorMusicianCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new MusicianInstrument(null, new MusicalInstrument("Piano")));
+    }
+
+    @Test
+    @DisplayName("Musical Instrument and Musician cannot be null")
+    public void constructorBothCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> new MusicianInstrument(null, null));
     }
 
     @Test
