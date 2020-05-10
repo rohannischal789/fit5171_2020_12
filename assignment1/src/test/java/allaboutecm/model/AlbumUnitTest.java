@@ -102,10 +102,14 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album instruments cannot be different")
     public void albumInstrumentsCannotBeDifferent() {
+        ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
+        myArray.add(new MusicalInstrument("Piano"));
+        myArray.add(new MusicalInstrument("Guitar"));
+        Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
         //This needs to be given a set of musical instruments.
-        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
-                new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
-                new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
+        List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"), musicalInstrumentList),
+                new MusicianInstrument(new Musician("Adam Adam"), musicalInstrumentList),
+                new MusicianInstrument(new Musician("Annie Annie"), musicalInstrumentList));
         Set<MusicianInstrument> musicianInstrumentList = new HashSet<>(list);
         album.getInstruments().addAll(new HashSet<MusicianInstrument>(musicianInstrumentList));
         assertEquals(album.getInstruments(), musicianInstrumentList);
