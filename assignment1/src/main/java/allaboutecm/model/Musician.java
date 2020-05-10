@@ -4,6 +4,12 @@ import allaboutecm.dataaccess.neo4j.URLConverter;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ObjectUtils;
 
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
+
+
 import java.net.URL;
 import java.util.Iterator;
 import java.util.Objects;

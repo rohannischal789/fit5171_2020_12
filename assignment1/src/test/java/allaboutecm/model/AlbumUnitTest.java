@@ -102,6 +102,7 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album instruments cannot be different")
     public void albumInstrumentsCannotBeDifferent() {
+        //This needs to be given a set of musical instruments.
         List<MusicianInstrument> list = Arrays.asList(new MusicianInstrument(new Musician("Frank Frank"), new MusicalInstrument("Ukele")),
                 new MusicianInstrument(new Musician("Adam Adam"), new MusicalInstrument("Guitar")),
                 new MusicianInstrument(new Musician("Annie Annie"), new MusicalInstrument("Violin")));
