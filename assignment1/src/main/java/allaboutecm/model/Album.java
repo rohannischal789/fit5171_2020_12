@@ -1,9 +1,17 @@
 package allaboutecm.model;
 
+import allaboutecm.dataaccess.neo4j.URLConverter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
+import org.neo4j.ogm.annotation.Relationship;
+import org.neo4j.ogm.annotation.typeconversion.Convert;
 
 import java.net.URL;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
 import java.util.*;
 
 import static org.apache.commons.lang3.Validate.notBlank;
@@ -14,16 +22,26 @@ import static org.apache.commons.lang3.Validate.notNull;
  *
  * See {@https://www.ecmrecords.com/catalogue/143038750696/the-koln-concert-keith-jarrett}
  */
+@NodeEntity
 public class Album extends Entity {
 
+    @Property(name="releaseYear")
     private int releaseYear;
 
+    @Property(name="recordNumber")
     private String recordNumber;
 
+    @Property(name="albumName")
     private String albumName;
 
+    /**
+     * CHANGE: instead of a set, now featuredMusicians is a list,
+     * to better represent the order in which musicians are featured in an album.
+     */
+    @Relationship(type="featuredMusicians")
     private Set<Musician> featuredMusicians;
 
+    @Relationship(type="instruments")
     private Set<MusicianInstrument> instruments;
 
     private URL albumURL;

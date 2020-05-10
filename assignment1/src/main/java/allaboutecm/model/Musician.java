@@ -1,5 +1,6 @@
 package allaboutecm.model;
 
+import allaboutecm.dataaccess.neo4j.URLConverter;
 import com.google.common.collect.Sets;
 import org.apache.commons.lang3.ObjectUtils;
 
@@ -16,11 +17,16 @@ import static org.apache.commons.lang3.Validate.notNull;
  *
  * See {@https://www.ecmrecords.com/artists/1435045745}
  */
+@NodeEntity
 public class Musician extends Entity {
+    @Property(name="name")
     private String name;
 
+    @Convert(URLConverter.class)
+    @Property(name="musicianURL")
     private URL musicianUrl;
 
+    @Relationship(type="albums")
     private Set<Album> albums;
 
     //Extension
