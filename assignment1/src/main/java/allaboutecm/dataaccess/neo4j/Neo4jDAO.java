@@ -43,7 +43,6 @@ public class Neo4jDAO implements DAO {
         session.save(entity, DEPTH_ENTITY);
         tx.commit();
         return entity;
-
     }
 
     @Override
@@ -69,6 +68,8 @@ public class Neo4jDAO implements DAO {
             return musicians.iterator().next();
         }
     }
+
+
 
     private <T extends Entity> T findExistingEntity(Entity entity, Class clazz) {
         Filters filters = new Filters();
