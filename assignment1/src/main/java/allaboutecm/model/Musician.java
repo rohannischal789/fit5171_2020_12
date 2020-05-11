@@ -126,6 +126,7 @@ public class Musician extends Entity {
 
 
     //Extension functionality
+
     //bio is a string attribute with set get methods. This is intended to represent a short biography of the band,
     //bio has the constraints that it must not be blank, and is bounded at 500 words. Bio may be null.
     public void setBio(String bio){

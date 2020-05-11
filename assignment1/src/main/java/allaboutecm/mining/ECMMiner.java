@@ -3,14 +3,13 @@ package allaboutecm.mining;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.Album;
 import allaboutecm.model.Musician;
+import allaboutecm.model.MusicianInstrument;
+import allaboutecm.model.MusicalInstrument;
 import com.google.common.collect.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * TODO: implement and test the methods in this class.
@@ -89,8 +88,28 @@ public class ECMMiner {
      * @Param k the number of musicians to be returned.
      */
     public List<Musician> mostTalentedMusicians(int k) {
+        //Let's grab all the musician instruments.
+        Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
+        Map<MusicianInstrument, Integer> countMap = Maps.newHashMap();
 
-        return Lists.newArrayList();
+        for (MusicianInstrument m: musicianInstruments){
+            Integer instrumentCount = m.getMusicalInstruments().size();
+            countMap.put(m, instrumentCount);
+        }
+        List<Map.Entry<MusicianInstrument, Integer>> sortList = new LinkedList<Map.Entry<MusicianInstrument, Integer>>(countMap.entrySet());
+
+        Collections.sort(sortList, new Comparator<Map.Entry<MusicianInstrument, Integer>>() {
+            @Override
+            public int compare(Map.Entry<MusicianInstrument, Integer> o1, Map.Entry<MusicianInstrument, Integer> o2) {
+                return (o1.getValue().compareTo(o2.getValue()));
+            }
+        });
+        ArrayList resultList = new ArrayList();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
+            resultList.add(sortList.get(i).getKey().getMusician());
+        }
+
+        return resultList;
     }
 
     /**
@@ -100,6 +119,27 @@ public class ECMMiner {
      */
 
     public List<Musician> mostSocialMusicians(int k) {
+        //Get the list of musicians.
+        //Get the list of albums.
+
+        //Create a map where the musician is the key, and their collaborators are values. - musicianCollaborators
+
+        //For each album: get the list of musicians
+            //For each musician found for each album:
+                //Add all musicians also on the album
+                    // Map  Key Values
+                    // ALBUM 1: A,B,C,D
+                    //      A   |B, C, D
+                    //      B   |A, C, D
+                    //      C....
+
+                    //ALBUM 2: A,E
+                    //Say we find an album that A and E worked on
+                    //      A   |B, C, D, E
+                    //      E   |A
+
+        //
+
         return Lists.newArrayList();
     }
 
@@ -110,6 +150,14 @@ public class ECMMiner {
      */
 
     public List<Integer> busiestYears(int k) {
+        //Load all albums:
+        //Create a blank hashMap of Key = Integer (represents Year) , value Album (represents an album released that year)
+        //Loop through all albums:
+            //Get the year.
+            //Add it as a value to the entry where the year is the key. myHashMap.add(albumYear, theAlbum);
+
+        //Create a map of Integer, Integer where the year is the key, and the value is the count of albums From your Integer/Album hashMap
+        //Create an arrayList of the top K years, and return it
         return Lists.newArrayList();
     }
 
