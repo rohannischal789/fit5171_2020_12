@@ -2,7 +2,9 @@ package allaboutecm.dataaccess.neo4j;
 
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.Album;
+import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.Musician;
+import allaboutecm.model.MusicianInstrument;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -17,7 +19,10 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -94,6 +99,70 @@ class Neo4jDAOUnitTest {
 //        dao.delete(musician);
 //        assertEquals(0, dao.loadAll(Musician.class).size());
     }
+
+    @Test
+    public void successfulCreationAndLoadingOfMusicalInstrument() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
+
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+
+        dao.createOrUpdate(musicalInstrument);
+        MusicalInstrument loadedMusicalInstrument = dao.load(MusicalInstrument.class, musicalInstrument.getId());
+
+        assertNotNull(loadedMusicalInstrument.getId());
+        assertEquals(musicalInstrument, loadedMusicalInstrument);
+        assertEquals(musicalInstrument.getName(), loadedMusicalInstrument.getName());
+
+        assertEquals(1, dao.loadAll(MusicalInstrument.class).size());
+
+//        dao.delete(musicalInstrument);
+//        assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
+    }
+
+    @Test
+    public void successfulCreationAndLoadingOfMusicianInstrument() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(MusicianInstrument.class).size());
+        ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
+        myArray.add(new MusicalInstrument("Piano"));
+        myArray.add(new MusicalInstrument("Guitar"));
+        Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
+        MusicianInstrument musicianInstrument = new MusicianInstrument(new Musician("Keith Jarrett"), musicalInstrumentList);
+
+        dao.createOrUpdate(musicianInstrument);
+        MusicianInstrument loadedMusicianInstrument = dao.load(MusicianInstrument.class, musicianInstrument.getId());
+
+        assertNotNull(loadedMusicianInstrument.getId());
+        assertEquals(musicianInstrument, loadedMusicianInstrument);
+        assertEquals(musicianInstrument.getMusician(), loadedMusicianInstrument.getMusician());
+        assertEquals(musicianInstrument.getMusicalInstruments(), loadedMusicianInstrument.getMusicalInstruments());
+
+        assertEquals(1, dao.loadAll(MusicianInstrument.class).size());
+
+//        dao.delete(musicianInstrument);
+//        assertEquals(0, dao.loadAll(MusicianInstrument.class).size());
+    }
+
+    @Test
+    public void successfulCreationOfMusicianInstrumentAndMusicalInstrumentsAndMusician() throws MalformedURLException {
+        Musician musician = new Musician("Keith Jarrett");
+        ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
+        MusicalInstrument musicalInstrument=new MusicalInstrument("Piano");
+        myArray.add(musicalInstrument);
+        Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
+        MusicianInstrument musicianInstrument = new MusicianInstrument(musician, musicalInstrumentList);
+
+        dao.createOrUpdate(musician);
+        dao.createOrUpdate(musicalInstrument);
+        dao.createOrUpdate(musicianInstrument);
+
+        Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
+        assertEquals(1, musicianInstruments.size());
+        MusicianInstrument loadedMusicianInstrument = musicianInstruments.iterator().next();
+        assertEquals(musicianInstrument, loadedMusicianInstrument);
+        assertEquals(musicianInstrument.getMusicalInstruments(), loadedMusicianInstrument.getMusicalInstruments());
+        assertEquals(musicianInstrument.getMusician(), loadedMusicianInstrument.getMusician());
+    }
+
 
     @Test
     public void successfulCreationOfMusicianAndAlbum() throws MalformedURLException {
