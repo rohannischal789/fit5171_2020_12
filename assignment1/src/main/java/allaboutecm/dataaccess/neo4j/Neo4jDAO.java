@@ -1,11 +1,7 @@
 package allaboutecm.dataaccess.neo4j;
 
 import allaboutecm.dataaccess.DAO;
-import allaboutecm.model.Album;
-import allaboutecm.model.Entity;
-import allaboutecm.model.MusicalInstrument;
-import allaboutecm.model.Musician;
-import allaboutecm.model.MusicianInstrument;
+import allaboutecm.model.*;
 import com.google.common.collect.Sets;
 import org.neo4j.ogm.cypher.Filter;
 import org.neo4j.ogm.cypher.Filters;
@@ -66,6 +62,63 @@ public class Neo4jDAO implements DAO {
             return null;
         } else {
             return musicians.iterator().next();
+        }
+    }
+
+
+
+    public MusicalInstrument findMusicalInstrumentByName(String name) {
+        Filters filters = new Filters();
+        filters.add(new Filter("name", EQUALS, name));
+        Collection<MusicalInstrument> musicalInstruments = session.loadAll(MusicalInstrument.class, filters);
+        if (musicalInstruments.isEmpty()) {
+            return null;
+        } else {
+            return musicalInstruments.iterator().next();
+        }
+    }
+
+
+    public Track findTrackByName(String name) {
+        Filters filters = new Filters();
+        filters.add(new Filter("name", EQUALS, name));
+        Collection<Track> tracks = session.loadAll(Track.class, filters);
+        if (tracks.isEmpty()) {
+            return null;
+        } else {
+            return tracks.iterator().next();
+        }
+    }
+
+
+    public Track findTrackByDuration(String duration) {
+        Filters filters = new Filters();
+        filters.add(new Filter("duration", EQUALS, duration));
+        Collection<Track> tracks = session.loadAll(Track.class, filters);
+        if (tracks.isEmpty()) {
+            return null;
+        } else {
+            return tracks.iterator().next();
+        }
+    }
+    public Track findTrackByGenre(String genre) {
+        Filters filters = new Filters();
+        filters.add(new Filter("genre", EQUALS, genre));
+        Collection<Track> tracks = session.loadAll(Track.class, filters);
+        if (tracks.isEmpty()) {
+            return null;
+        } else {
+            return tracks.iterator().next();
+        }
+    }
+    public Track findTrackByTrackNumber(Integer trackNumber) {
+        Filters filters = new Filters();
+        filters.add(new Filter("trackNumber", EQUALS, trackNumber));
+        Collection<Track> tracks = session.loadAll(Track.class, filters);
+        if (tracks.isEmpty()) {
+            return null;
+        } else {
+            return tracks.iterator().next();
         }
     }
 

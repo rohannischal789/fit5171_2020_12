@@ -231,7 +231,7 @@ class Neo4jDAOUnitTest {
         assertEquals(musicalInstrument.getName(), loadedMusicalInstrument.getName());
 
         assertEquals(1, dao.loadAll(MusicalInstrument.class).size());
-        
+
        dao.delete(musicalInstrument);
      assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
     }
@@ -278,6 +278,94 @@ class Neo4jDAOUnitTest {
         assertEquals(musicianInstrument, loadedMusicianInstrument);
         assertEquals(musicianInstrument.getMusicalInstruments(), loadedMusicianInstrument.getMusicalInstruments());
         assertEquals(musicianInstrument.getMusician(), loadedMusicianInstrument.getMusician());
+    }
+
+    @Test
+    public void successfulFindMusicianByName()  throws MalformedURLException
+    {
+        assertEquals(0, dao.loadAll(Musician.class).size());
+
+        Musician musician = new Musician("Keith Jarrett");
+        dao.createOrUpdate(musician);
+        Musician loadedMusician = dao.load(Musician.class, musician.getId());
+        Musician foundMusician=dao.findMusicianByName(loadedMusician.getName());
+        assertNotNull(foundMusician.getId());
+        assertEquals(musician, foundMusician);
+        assertEquals(musician.getName(), foundMusician.getName());
+
+
+    }
+    @Test
+    public void successfulFindMusicalInstrumentByName() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
+
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        dao.createOrUpdate(musicalInstrument);
+        MusicalInstrument loadedMusicalInstrument = dao.load(MusicalInstrument.class, musicalInstrument.getId());
+        MusicalInstrument foundMusicalInstrument=dao.findMusicalInstrumentByName(loadedMusicalInstrument.getName());
+        assertNotNull(foundMusicalInstrument);
+        assertEquals(musicalInstrument, foundMusicalInstrument);
+        assertEquals(musicalInstrument.getName(), foundMusicalInstrument.getName());
+    }
+
+    @Test
+    public void successfulFindTrackByName(){
+        assertEquals(0, dao.loadAll(Track.class).size());
+
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        dao.createOrUpdate(track);
+        Track loadedTrack = dao.load(Track.class, track.getId());
+        Track foundTrack = dao.findTrackByName(loadedTrack.getName());
+        assertNotNull(foundTrack);
+        assertEquals(track, foundTrack);
+        assertEquals(track.getName(), foundTrack.getName());
+    }
+
+    @Test
+    public void successfulFindTrackByDuration(){
+        assertEquals(0, dao.loadAll(Track.class).size());
+
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        dao.createOrUpdate(track);
+        Track loadedTrack = dao.load(Track.class, track.getId());
+        Track foundTrack = dao.findTrackByDuration(loadedTrack.getDuration());
+        assertNotNull(foundTrack);
+        assertEquals(track, foundTrack);
+        assertEquals(track.getDuration(), foundTrack.getDuration());
+    }
+
+
+    @Test
+    public void successfulFindTrackByGenre(){
+    assertEquals(0, dao.loadAll(Track.class).size());
+
+    Track track = new Track("Track 1","4:20","Jazz",1);
+    List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+    track.setReviews(list);
+    dao.createOrUpdate(track);
+    Track loadedTrack = dao.load(Track.class, track.getId());
+    Track foundTrack = dao.findTrackByGenre(loadedTrack.getGenre());
+    assertNotNull(foundTrack);
+    assertEquals(track, foundTrack);
+    assertEquals(track.getGenre(), foundTrack.getGenre());
+}
+    @Test
+    public void successfulFindTrackByTrackNumber(){
+        assertEquals(0, dao.loadAll(Track.class).size());
+
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        dao.createOrUpdate(track);
+        Track loadedTrack = dao.load(Track.class, track.getId());
+        Track foundTrack = dao.findTrackByTrackNumber(loadedTrack.getTrackNumber());
+        assertNotNull(foundTrack);
+        assertEquals(track, foundTrack);
+        assertEquals(track.getTrackNumber(), foundTrack.getTrackNumber());
     }
 
 }
