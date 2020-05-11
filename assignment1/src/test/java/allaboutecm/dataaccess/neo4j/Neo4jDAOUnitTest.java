@@ -80,7 +80,7 @@ class Neo4jDAOUnitTest {
         assertEquals(0, dao.loadAll(Musician.class).size());
 
         Musician musician = new Musician("Keith Jarrett");
-        musician.setMusicianUrl(new URL("https://www.keithjarrett.org/"));
+        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
 
         dao.createOrUpdate(musician);
         Musician loadedMusician = dao.load(Musician.class, musician.getId());
@@ -98,7 +98,7 @@ class Neo4jDAOUnitTest {
     @Test
     public void successfulCreationOfMusicianAndAlbum() throws MalformedURLException {
         Musician musician = new Musician("Keith Jarrett");
-        musician.setMusicianUrl(new URL("https://www.keithjarrett.org/"));
+        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
 
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         musician.setAlbums(Sets.newHashSet(album));
