@@ -231,8 +231,6 @@ class Neo4jDAOUnitTest {
         assertEquals(musicalInstrument.getName(), loadedMusicalInstrument.getName());
 
         assertEquals(1, dao.loadAll(MusicalInstrument.class).size());
-
-
         
        dao.delete(musicalInstrument);
      assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
