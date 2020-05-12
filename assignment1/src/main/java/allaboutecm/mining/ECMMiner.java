@@ -126,13 +126,13 @@ public class ECMMiner {
 
     public List<Musician> mostSocialMusicians(int k) {
 
-        if (k > 1){
+        if (k < 1){
             throw new IllegalArgumentException();
         }
 
         Collection<Musician> musicians = dao.loadAll(Musician.class);
 
-        if (k < musicians.size()){
+        if (k > musicians.size()){
             throw new IllegalArgumentException();
         }
 
