@@ -33,7 +33,7 @@ class ECMMinerUnitTest {
     }
 
     @Test
-    public void shouldReturnTheMusicianWhenThereIsOnlyOne() {
+    public void shouldReturnTheMusicianWhenThereIsOnlyOneProlific() {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setAlbums(Sets.newHashSet(album));

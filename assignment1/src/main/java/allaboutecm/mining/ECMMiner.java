@@ -125,28 +125,55 @@ public class ECMMiner {
      */
 
     public List<Musician> mostSocialMusicians(int k) {
+
+        if (k > 1){
+            throw new IllegalArgumentException();
+        }
+
+        Collection<Musician> musicians = dao.loadAll(Musician.class);
+
+        if (k < musicians.size()){
+            throw new IllegalArgumentException();
+        }
+
         //Get the list of musicians.
-        //Get the list of albums.
+        //I want a multimap, I'm not certain how the builder works but this is how to make one.
+        SetMultimap<Musician, Musician> collaboratorMap = MultimapBuilder.hashKeys().hashSetValues().build();
+        //Go through each musician
+        for (Musician m : musicians){
+            //For each musician, loop through their albums
+            Set<Album> thisAlbumSet = m.getAlbums();
+            for (Album a : thisAlbumSet){
+                //For each album, loop through all musicians again to check if they have the same album in their album list.
+                for (Musician m1 : musicians) {
+                    if (m1.getAlbums().contains(a)){
+                        //If they do, record them as a collaborator.
+                        collaboratorMap.put(m, m1);
+                    }
+                }
+            }
+        }
+        //Let's make a hashmap to store Musicians against their collborator count, we don't care about the actual collaborators
+        HashMap<Musician, Integer> countMap = Maps.newHashMap();
+        for (Musician m: collaboratorMap.keys()){
+            //Store each musician against their collaborator count.
+            countMap.put(m, collaboratorMap.get(m).size());
+        }
+        //Create a linked list to sort the entries.
+        List<Map.Entry<Musician, Integer>> sortList = new LinkedList<Map.Entry<Musician, Integer>>(countMap.entrySet());
+        Collections.sort(sortList, new Comparator<Map.Entry<Musician, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Musician, Integer> o1, Map.Entry<Musician, Integer> o2) {
+                return (o1.getValue().compareTo(o2.getValue()));
+            }
+        });
 
-        //Create a map where the musician is the key, and their collaborators are values. - musicianCollaborators
+        ArrayList<Musician> returnList = new ArrayList<Musician>();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
+            returnList.add(sortList.get(i).getKey());
+        }
 
-        //For each album: get the list of musicians
-            //For each musician found for each album:
-                //Add all musicians also on the album
-                    // Map  Key Values
-                    // ALBUM 1: A,B,C,D
-                    //      A   |B, C, D
-                    //      B   |A, C, D
-                    //      C....
-
-                    //ALBUM 2: A,E
-                    //Say we find an album that A and E worked on
-                    //      A   |B, C, D, E
-                    //      E   |A
-
-        //
-
-        return Lists.newArrayList();
+        return returnList;
     }
 
     /**
