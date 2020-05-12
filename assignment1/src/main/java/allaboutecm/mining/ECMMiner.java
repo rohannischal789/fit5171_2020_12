@@ -184,14 +184,32 @@ public class ECMMiner {
 
     public List<Integer> busiestYears(int k) {
         //Load all albums:
+        Collection<Album> albums = dao.loadAll(Album.class);
+        Map<Integer, Integer> countMap = Maps.newHashMap();
         //Create a blank hashMap of Key = Integer (represents Year) , value Album (represents an album released that year)
         //Loop through all albums:
             //Get the year.
             //Add it as a value to the entry where the year is the key. myHashMap.add(albumYear, theAlbum);
-
+        for (Album a: albums) {
+            Integer year = a.getReleaseYear();
+            countMap.put(year, countMap.get(year) + 1);
+        }
         //Create a map of Integer, Integer where the year is the key, and the value is the count of albums From your Integer/Album hashMap
+
+        List<Map.Entry<Integer, Integer>> sortList = new LinkedList<Map.Entry<Integer, Integer>>(countMap.entrySet());
+
+        Collections.sort(sortList, new Comparator<Map.Entry<Integer, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
+                return (o1.getValue().compareTo(o2.getValue()));
+            }
+        });
         //Create an arrayList of the top K years, and return it
-        return Lists.newArrayList();
+        ArrayList resultList = new ArrayList();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
+            resultList.add(sortList.get(i).getKey());
+        }
+        return resultList;
     }
 
     /**
