@@ -88,8 +88,14 @@ public class ECMMiner {
      * @Param k the number of musicians to be returned.
      */
     public List<Musician> mostTalentedMusicians(int k) {
+        if (k < 1){
+            throw new IllegalArgumentException();
+        }
         //Let's grab all the musician instruments.
         Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
+        if (k > musicianInstruments.size()){
+            throw new IllegalArgumentException();
+        }
         Map<MusicianInstrument, Integer> countMap = Maps.newHashMap();
 
         for (MusicianInstrument m: musicianInstruments){

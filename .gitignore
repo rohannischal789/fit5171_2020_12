@@ -4,6 +4,6 @@
 
 assignment1/allaboutecm.iml
 
-assignment1/target/
+assignment1/target/*
 
 .gitignore
