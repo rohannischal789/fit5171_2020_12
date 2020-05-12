@@ -45,6 +45,7 @@ class ECMMinerUnitTest {
         assertTrue(musicians.contains(musician));
     }
 
+    //Find a single result in a list of 1
     @Test
     public void findTopMusicianByInstrumentCount(){
         //Create a musician and list of 1 instrument they play
@@ -62,7 +63,7 @@ class ECMMinerUnitTest {
         assertEquals(1, musicians.size());
         assertTrue(musicians.contains(musician1));
     }
-
+    //Find a single result in a list of n (here n = 3)
     @Test
     public void findTopMusicianByInstrumentCountFromMany(){
         //Create the first Musician/Instrument entry
@@ -93,7 +94,7 @@ class ECMMinerUnitTest {
         assertEquals(1, musicians.size());
         assertTrue(musicians.contains(musician3));
     }
-
+    //Find n results in a list of length n
     @ParameterizedTest
     @ValueSource(ints = {2,5,10})
     public void findTopInstrumentCountMusicianInMultiExact(int number) {
@@ -124,7 +125,7 @@ class ECMMinerUnitTest {
         }
 
     }
-
+    //Find n results in a list of length 2n
     @ParameterizedTest
     @ValueSource(ints = {2,5,10})
     public void findTopInstrumentCountMusicianInMulti(int number) {
@@ -155,13 +156,13 @@ class ECMMinerUnitTest {
             assertEquals("Keith Jarrett" + i, musicians.get((number*2) - i).getName());
         }
     }
-
+    //Throw an exception when K is an impossible value
     @ParameterizedTest
     @ValueSource(ints = {-1,0})
     public void impossibleKValueTalented(int number){
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostTalentedMusicians(number));
     }
-
+    //Throw an exception when K is bigger than the number of musicians.
     @Test
     public void kTooLargeTalented(){
         HashSet<MusicianInstrument> musicianInstruments = new HashSet<MusicianInstrument>();
