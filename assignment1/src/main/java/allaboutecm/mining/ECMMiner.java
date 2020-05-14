@@ -231,6 +231,18 @@ public class ECMMiner {
      */
 
     public List<Album> mostSimilarAlbums(int k, Album album) {
+        //If K is impossible throw exception
+        if (k < 0){
+            throw new IllegalArgumentException();
+        }
+        Collection<Album> albums = dao.loadAll(Album.class);
+        //
+        if (k > albums.size()){
+
+        }
+
+        Map<Album, Integer> scoreMap = Maps.newHashMap();
+
         return Lists.newArrayList();
     }
 }
