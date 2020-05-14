@@ -184,6 +184,9 @@ public class ECMMiner {
 
     public List<Integer> busiestYears(int k) {
         //Load all albums:
+        if (k < 1){
+            throw new IllegalArgumentException();
+        }
         Collection<Album> albums = dao.loadAll(Album.class);
         Map<Integer, Integer> countMap = Maps.newHashMap();
         //Create a blank hashMap of Key = Integer (represents Year) , value Album (represents an album released that year)

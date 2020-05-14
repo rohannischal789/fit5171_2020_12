@@ -212,5 +212,188 @@ class ECMMinerUnitTest {
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.busiestYears(number));
     }
 
+    @Test
+        public void findMostSocialListSizeOne(){
+            //Create a musician and an album, check that it is found by the "most social Musician" method
+            Musician theMusician = new Musician("Social Musician");
+            Album theAlbum = new Album(1994, "ECM-1000", "The Album");
+            HashSet<Album> albumSet = new HashSet<>();
+            albumSet.add(theAlbum);
+            theMusician.setAlbums(albumSet);
+
+            HashSet<Musician> fakeMusicianSet = new HashSet<>();
+            fakeMusicianSet.add(theMusician);
+
+            when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(fakeMusicianSet));
+
+            List socialMusicians = ecmMiner.mostSocialMusicians(1);
+
+            assertEquals(1, socialMusicians.size());
+            assertTrue(socialMusicians.get(0).equals(theMusician));
+        }
+
+        @Test
+        public void findMostSocialListSizeN(){
+            //Create 3 musicians. We are going make the third one the expected "Social" musician
+            Musician theMusician1 = new Musician("Antisocial Musician1");
+            Musician theMusician2 = new Musician("Antisocial Musician2");
+            Musician theMusician3 = new Musician("Social Musician");
+            //Create 2 albums. Our third musician will have both albums added to their album set.
+            Album theAlbum1 = new Album(1994, "ECM-1000", "The Album1");
+            Album theAlbum2 = new Album(1994, "ECM-1001", "The Album2");
+            //Create the album set of musician1
+            HashSet<Album> albumSet1 = new HashSet<>();
+            albumSet1.add(theAlbum1);
+            theMusician1.setAlbums(albumSet1);
+            //Create the album set of musician 2
+            HashSet<Album> albumSet2 = new HashSet<>();
+            albumSet2.add(theAlbum2);
+            theMusician2.setAlbums(albumSet2);
+            //Create a set with both albums.
+            HashSet<Album> albumSet3 = new HashSet<>();
+            albumSet3.add(theAlbum1);
+            albumSet3.add(theAlbum2);
+            theMusician3.setAlbums(albumSet3);
+            //Compile them into a set of musicians to pass to mockito.
+            HashSet<Musician> fakeMusicianSet = new HashSet<>();
+            fakeMusicianSet.add(theMusician1);
+            fakeMusicianSet.add(theMusician2);
+            fakeMusicianSet.add(theMusician3);
+
+            when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(fakeMusicianSet));
+
+            List socialMusicians = ecmMiner.mostSocialMusicians(1);
+
+            assertEquals(1, socialMusicians.size());
+            assertTrue(socialMusicians.get(0).equals(theMusician3));
+        }
+
+        @Test
+        public void findMostSocialListSizeNSpecialCase(){
+            //This method checks that only the artist with the highest count of unique collaborators is returned.
+
+            //Create 3 musicians. We are going make the third one the expected "Social" musician
+            Musician theMusician1 = new Musician("Antisocial Musician1");
+            Musician theMusician2 = new Musician("Antisocial Musician2");
+            Musician theMusician3 = new Musician("Social Musician");
+            Musician theMusician4 = new Musician("Antisocial Musician3");
+            //Create 2 albums. Our third musician will have both albums added to their album set.
+            Album theAlbum1 = new Album(1994, "ECM-1000", "The Album1");
+            Album theAlbum2 = new Album(1994, "ECM-1001", "The Album2");
+            Album theAlbum3 = new Album(1994, "ECM-1002", "The Album3");
+            Album theAlbum4 = new Album(1994, "ECM-1003", "The Album4");
+            Album theAlbum5 = new Album(1994, "ECM-1003", "The Album5");
+            Album theAlbum6 = new Album(1994, "ECM-1003", "The Album6");
+            //Create the album set of musician1
+            HashSet<Album> albumSet1 = new HashSet<>();
+            albumSet1.add(theAlbum1);
+            albumSet1.add(theAlbum4);
+            albumSet1.add(theAlbum5);
+            albumSet1.add(theAlbum6);
+            theMusician1.setAlbums(albumSet1);
+            //Create the album set of musician 2
+            HashSet<Album> albumSet2 = new HashSet<>();
+            albumSet2.add(theAlbum2);
+            theMusician2.setAlbums(albumSet2);
+            //Create a set with albums 1,2 and 3.
+            HashSet<Album> albumSet3 = new HashSet<>();
+            albumSet3.add(theAlbum1);
+            albumSet3.add(theAlbum2);
+            albumSet3.add(theAlbum3);
+            theMusician3.setAlbums(albumSet3);
+            //Album Set 4 will be a set containing 4 albums total. This will give the highest non-unique collaborator count, at 4.
+            //However, this artist will only have 2 collaborators, musician 1 and 3, where musician3 will have 3 collaborators.
+            HashSet<Album> albumSet4 = new HashSet<>();
+            albumSet4.add(theAlbum3);
+            albumSet4.add(theAlbum4);
+            albumSet4.add(theAlbum5);
+            albumSet4.add(theAlbum6);
+            theMusician4.setAlbums(albumSet4);
+            //Compile them into a set of musicians to pass to mockito.
+            HashSet<Musician> fakeMusicianSet = new HashSet<>();
+            fakeMusicianSet.add(theMusician1);
+            fakeMusicianSet.add(theMusician2);
+            fakeMusicianSet.add(theMusician3);
+            fakeMusicianSet.add(theMusician4);
+
+            when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(fakeMusicianSet));
+
+            List socialMusicians = ecmMiner.mostSocialMusicians(1);
+
+            assertEquals(1, socialMusicians.size());
+            assertTrue(socialMusicians.get(0).equals(theMusician3));
+        }
+
+        @Test
+        public void findTopSocialMusicianInMultiExact(){
+            //Unlike above, this is hardcoded for a n=4, as it is difficult to elegantly manage collborators dynamically
+            //Create a musician set to hold our musicians
+            ArrayList<Musician> musicianList = new ArrayList<>();
+            List<Album> albumList = new ArrayList<>();
+            Album album1 = new Album (1994, "ECM-1090", "Album1");
+            Album album2 = new Album (1994, "ECM-1090", "Album2");
+            Album album3 = new Album (1994, "ECM-1090", "Album3");
+            Album album4 = new Album (1994, "ECM-1090", "Album4");
+            Album album5 = new Album (1994, "ECM-1090", "Album5");
+            for (int i = 0; i < 4; i++){
+                musicianList.add(new Musician("Musician "+(i+1)));
+            }
+            //We expect Musician 1 to have 0 collaborators and be last. We expect Musician 3 to have 2 collaborators and be first.
+            musicianList.get(0).setAlbums(new HashSet<Album>(Arrays.asList(album5)));
+            musicianList.get(1).setAlbums(new HashSet<Album>(Arrays.asList(album1, album2)));
+            musicianList.get(2).setAlbums(new HashSet<Album>(Arrays.asList(album2, album3)));
+            musicianList.get(3).setAlbums(new HashSet<Album>(Arrays.asList(album3, album4)));
+
+            HashSet<Musician> fakeMusicianSet = new HashSet<>(musicianList);
+            when(dao.loadAll(Musician.class)).thenReturn(fakeMusicianSet);
+
+            List<Musician> socialMusicians = ecmMiner.mostSocialMusicians(4);
+            assertEquals(4, socialMusicians.size());
+
+            assertEquals(socialMusicians.get(0).getName(), musicianList.get(2).getName());
+            assertEquals(socialMusicians.get(3).getName(), musicianList.get(0).getName());
+        }
+
+        @Test
+        public void findTopSocialMusicianInMulti(){
+            //Unlike above, this is hardcoded for a n=6, as it is difficult to elegantly manage collaborators dynamically
+            //Create a musician set to hold our musicians
+            ArrayList<Musician> musicianList = new ArrayList<>();
+            List<Album> albumList = new ArrayList<>();
+            Album album1 = new Album (1994, "ECM-1090", "Album1");
+            Album album2 = new Album (1994, "ECM-1090", "Album2");
+            Album album3 = new Album (1994, "ECM-1090", "Album3");
+            Album album4 = new Album (1994, "ECM-1090", "Album4");
+            Album album5 = new Album (1994, "ECM-1090", "Album5");
+            Album album6 = new Album (1994, "ECM-1090", "Album6");
+            Album album7 = new Album (1994, "ECM-1090", "Album6");
+            for (int i = 0; i < 6; i++){
+                musicianList.add(new Musician("Musician "+(i+1)));
+            }
+            //We expect Musician 1 to have 0 collaborators and be last. We expect Musician 3 to have 2 collaborators and be first.
+            musicianList.get(0).setAlbums(new HashSet<Album>(Arrays.asList(album5))); // C = 1
+            musicianList.get(1).setAlbums(new HashSet<Album>(Arrays.asList(album1, album2))); // C = 1
+            musicianList.get(2).setAlbums(new HashSet<Album>(Arrays.asList(album2, album3, album6, album7))); //C = 4
+            musicianList.get(3).setAlbums(new HashSet<Album>(Arrays.asList(album3, album4))); //C = 2
+            musicianList.get(4).setAlbums(new HashSet<Album>(Arrays.asList(album5, album6, album4))); // C = 3
+    ;       musicianList.get(4).setAlbums(new HashSet<Album>(Arrays.asList(album7))); //C = 1
+
+            HashSet<Musician> fakeMusicianSet = new HashSet<>(musicianList);
+            when(dao.loadAll(Musician.class)).thenReturn(fakeMusicianSet);
+
+            List<Musician> socialMusicians = ecmMiner.mostSocialMusicians(3);
+            assertEquals(3, socialMusicians.size());
+
+            assertEquals(socialMusicians.get(0).getName(), musicianList.get(2).getName());
+            assertEquals(socialMusicians.get(1).getName(), musicianList.get(4).getName());
+            assertEquals(socialMusicians.get(2).getName(), musicianList.get(3).getName());
+        }
+
+
+        @ParameterizedTest
+        @ValueSource(ints = {-1,0})
+        public void impossibleKValueSocial(int number){
+            assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSocialMusicians(number));
+        }
 
 }
