@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
+import java.lang.reflect.Array;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
@@ -176,8 +177,40 @@ class ECMMinerUnitTest {
         }
 
         when(dao.loadAll(MusicianInstrument.class)).thenReturn(Sets.newHashSet(musicianInstruments));
-
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostTalentedMusicians(6));
     }
+
+    @Test
+    public void findBusiestYearByReleaseYearCount(){
+        ArrayList<Album> myArray = new ArrayList<Album>();
+        myArray.add(new Album(2011,"ECM123","Album1"));
+        myArray.add(new Album(2011,"ECM773","Album10"));
+        myArray.add(new Album(2001,"ECM800","Album11"));
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(myArray));
+
+        List<Integer> years = ecmMiner.busiestYears(1);
+
+        assertEquals(1, years.size());
+    }
+
+    @Test
+        public void findBusiestYearByReleaseYear(){
+            ArrayList<Album> myArray = new ArrayList<Album>();
+            myArray.add(new Album(2011,"ECM123","Album1"));
+            myArray.add(new Album(2011,"ECM773","Album10"));
+            myArray.add(new Album(2001,"ECM800","Album11"));
+            when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(myArray));
+
+            List<Integer> years = ecmMiner.busiestYears(1);
+
+            assertEquals(2011, years.get(0));
+        }
+
+    @ParameterizedTest
+    @ValueSource(ints = {-1,0})
+    public void impossibleKValueBusiestYear(int number){
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.busiestYears(number));
+    }
+
 
 }

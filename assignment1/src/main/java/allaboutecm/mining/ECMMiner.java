@@ -192,7 +192,13 @@ public class ECMMiner {
             //Add it as a value to the entry where the year is the key. myHashMap.add(albumYear, theAlbum);
         for (Album a: albums) {
             Integer year = a.getReleaseYear();
-            countMap.put(year, countMap.get(year) + 1);
+            if(null != countMap.get(year)) {
+                countMap.put(year, countMap.get(year) + 1);
+            }
+            else
+            {
+                countMap.put(year, 1);
+            }
         }
         //Create a map of Integer, Integer where the year is the key, and the value is the count of albums From your Integer/Album hashMap
 
