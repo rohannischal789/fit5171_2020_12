@@ -239,6 +239,8 @@ class Neo4jDAOUnitTest {
         assertEquals(0, dao.loadAll(Track.class).size());
     }
 
+
+
     @Test
     public void successfulFindByAlbumName()  {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -252,6 +254,36 @@ class Neo4jDAOUnitTest {
         Album foundAlbum = dao.findAlbumByName("The Köln Concert");
 
         assertEquals(album.getAlbumName(), foundAlbum.getAlbumName());
+    }
+
+    @Test
+    public void successfulFindByAlbumReleaseYear()  {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        album.setTracks(Arrays.asList(track));
+
+        dao.createOrUpdate(album);
+
+        Album foundAlbum = dao.findAlbumByReleaseYear(1975);
+
+        assertEquals(album.getReleaseYear(), foundAlbum.getReleaseYear());
+    }
+
+    @Test
+    public void successfulFindByAlbumRecordNumber()  {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        album.setTracks(Arrays.asList(track));
+
+        dao.createOrUpdate(album);
+
+        Album foundAlbum = dao.findAlbumByRecordNumber("ECM 1064/65");
+
+        assertEquals(album.getRecordNumber(), foundAlbum.getRecordNumber());
     }
 
     @Test
