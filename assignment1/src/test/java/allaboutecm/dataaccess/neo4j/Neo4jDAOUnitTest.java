@@ -42,7 +42,7 @@ class Neo4jDAOUnitTest {
         Configuration configuration = new Configuration.Builder().build();
 
         // Disk-based embedded store
-        // Configuration configuration = new Configuration.Builder().uri(new File(TEST_DB).toURI().toString()).build();
+        //Configuration configuration = new Configuration.Builder().uri(new File(TEST_DB).toURI().toString()).build();
 
         // HTTP data store, need to install the Neo4j desktop app and create & run a database first.
 //        Configuration configuration = new Configuration.Builder().uri("http://neo4j:password@localhost:7474").build();
@@ -65,7 +65,7 @@ class Neo4jDAOUnitTest {
         sessionFactory.close();
         File testDir = new File(TEST_DB);
         if (testDir.exists()) {
-//            FileUtils.deleteDirectory(testDir.toPath());
+            //FileUtils.deleteDirectory(testDir.toPath());
         }
     }
 
@@ -214,6 +214,22 @@ class Neo4jDAOUnitTest {
         Album loadedAlbum = albums.iterator().next();
         assertEquals(album, loadedAlbum);
         assertEquals(album.getTracks(), loadedAlbum.getTracks());
+    }
+
+    @Test
+    public void successfulFindByAlbumName()  {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        album.setTracks(Arrays.asList(track));
+
+        dao.createOrUpdate(album);
+        dao.createOrUpdate(track);
+
+        Album foundAlbum = dao.findAlbumByName("The Köln Concert");
+
+        assertEquals(album.getAlbumName(), foundAlbum.getAlbumName());
     }
 
 

@@ -65,6 +65,53 @@ public class Neo4jDAO implements DAO {
         }
     }
 
+    @Override
+    public MusicalInstrument findMusicalInstrumentByName(String name) {
+        Filters filters = new Filters();
+        filters.add(new Filter("name", EQUALS, name));
+        Collection<MusicalInstrument> musicalInstrument = session.loadAll(MusicalInstrument.class, filters);
+        if (musicalInstrument.isEmpty()) {
+            return null;
+        } else {
+            return musicalInstrument.iterator().next();
+        }
+    }
+
+    @Override
+    public Album findAlbumByName(String name) {
+        Filters filters = new Filters();
+        filters.add(new Filter("albumName", EQUALS, name));
+        Collection<Album> album = session.loadAll(Album.class, filters);
+        if (album.isEmpty()) {
+            return null;
+        } else {
+            return album.iterator().next();
+        }
+    }
+
+    @Override
+    public Album findAlbumByReleaseYear(int releaseYear) {
+        Filters filters = new Filters();
+        filters.add(new Filter("releaseYear", EQUALS, releaseYear));
+        Collection<Album> album = session.loadAll(Album.class, filters);
+        if (album.isEmpty()) {
+            return null;
+        } else {
+            return album.iterator().next();
+        }
+    }
+
+    @Override
+    public Album findAlbumByRecordNumber(String recordNumber) {
+        Filters filters = new Filters();
+        filters.add(new Filter("recordNumber", EQUALS, recordNumber));
+        Collection<Album> album = session.loadAll(Album.class, filters);
+        if (album.isEmpty()) {
+            return null;
+        } else {
+            return album.iterator().next();
+        }
+    }
 
 
     public MusicalInstrument findMusicalInstrumentByName(String name) {
