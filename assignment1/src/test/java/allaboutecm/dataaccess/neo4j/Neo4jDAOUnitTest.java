@@ -384,4 +384,49 @@ class Neo4jDAOUnitTest {
         assertEquals(track.getTrackNumber(), foundTrack.getTrackNumber());
     }
 
+    @Test
+    public void updateTrack()
+    {
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        dao.createOrUpdate(track);
+        Track loadedTrack = dao.load(Track.class, track.getId());
+        Track foundTrack = dao.findTrackByName(loadedTrack.getName());
+        assertNotNull(foundTrack);
+        assertEquals(track, foundTrack);
+        assertEquals(track.getName(), foundTrack.getName());
+        track.setName("Track 2");
+        dao.createOrUpdate(track);
+        Track loadedTrack_2 = dao.load(Track.class, track.getId());
+        Track foundTrack_2 = dao.findTrackByName(loadedTrack_2.getName());
+        assertNotNull(foundTrack_2);
+        assertEquals(track, foundTrack_2);
+        assertEquals(track.getName(), foundTrack_2.getName());
+        assertEquals(1, dao.loadAll(Track.class).size());
+
+    }
+
+    @Test
+    public void updateMusicalInstrument() {
+        assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
+
+        MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
+        dao.createOrUpdate(musicalInstrument);
+        MusicalInstrument loadedMusicalInstrument = dao.load(MusicalInstrument.class, musicalInstrument.getId());
+        MusicalInstrument foundMusicalInstrument=dao.findMusicalInstrumentByName(loadedMusicalInstrument.getName());
+        assertNotNull(foundMusicalInstrument);
+        assertEquals(musicalInstrument, foundMusicalInstrument);
+        assertEquals(musicalInstrument.getName(), foundMusicalInstrument.getName());
+
+        musicalInstrument.setName("Guitar");
+
+        dao.createOrUpdate(musicalInstrument);
+        MusicalInstrument loadedTrack_2 = dao.load(MusicalInstrument.class, musicalInstrument.getId());
+        MusicalInstrument foundTrack_2 = dao.findMusicalInstrumentByName(loadedTrack_2.getName());
+        assertNotNull(foundTrack_2);
+        assertEquals(musicalInstrument, foundTrack_2);
+        assertEquals(musicalInstrument.getName(), foundTrack_2.getName());
+        assertEquals(1, dao.loadAll(MusicalInstrument.class).size());
+    }
 }
