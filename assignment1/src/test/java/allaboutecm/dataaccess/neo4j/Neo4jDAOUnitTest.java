@@ -76,7 +76,7 @@ class Neo4jDAOUnitTest {
 
 
     @Test
-    public void successfulCreationAndLoadingOfMusician() throws MalformedURLException {
+    public void successfulCreationOfMusician() throws MalformedURLException {
         assertEquals(0, dao.loadAll(Musician.class).size());
 
         Musician musician = new Musician("Keith Jarrett");
@@ -96,9 +96,94 @@ class Neo4jDAOUnitTest {
         assertEquals(musician.getWikiPage(), loadedMusician.getWikiPage());
 
         assertEquals(1, dao.loadAll(Musician.class).size());
+    }
+
+    @Test
+    public void successfulUpdationOfMusician() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(Musician.class).size());
+
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
+        musician.setBio("I am a Musician");
+        musician.setPersonalSite(new URL("https://keithjarrett.org"));
+        musician.setWikiPage(new URL("https://www.wikipedia.org/keithjarrett"));
+
+        dao.createOrUpdate(musician);
+        musician.setName("New name");
+        dao.createOrUpdate(musician);
+        assertEquals(1, dao.loadAll(Musician.class).size());
+        Musician loadedMusician = dao.load(Musician.class, musician.getId());
+
+        assertNotNull(loadedMusician.getId());
+        assertEquals(musician, loadedMusician);
+        assertEquals(musician.getName(), loadedMusician.getName());
+    }
+
+    @Test
+    public void successfulDeletionOfMusician() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(Musician.class).size());
+
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
+        musician.setBio("I am a Musician");
+        musician.setPersonalSite(new URL("https://keithjarrett.org"));
+        musician.setWikiPage(new URL("https://www.wikipedia.org/keithjarrett"));
+
+        dao.createOrUpdate(musician);
+        assertEquals(1, dao.loadAll(Musician.class).size());
 
         dao.delete(musician);
         assertEquals(0, dao.loadAll(Musician.class).size());
+    }
+
+
+    @Test
+    public void successfulCreationOfAlbum() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(Album.class).size());
+
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        album.setAlbumURL(new URL("https://www.ecm.com/keithjarrett"));
+
+        dao.createOrUpdate(album);
+        Album loadedAlbum = dao.load(Album.class, album.getId());
+
+        assertNotNull(loadedAlbum.getId());
+        assertEquals(album, loadedAlbum);
+        assertEquals(album.getAlbumURL(), loadedAlbum.getAlbumURL());
+
+        assertEquals(1, dao.loadAll(Album.class).size());
+    }
+
+    @Test
+    public void successfulUpdationOfAlbum() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(Album.class).size());
+
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        album.setAlbumURL(new URL("https://www.ecm.com/keithjarrett"));
+
+        dao.createOrUpdate(album);
+        album.setAlbumName("The New Concert");
+        dao.createOrUpdate(album);
+        assertEquals(1, dao.loadAll(Album.class).size());
+        Album loadedAlbum = dao.load(Album.class, album.getId());
+
+        assertNotNull(loadedAlbum.getId());
+        assertEquals(album, loadedAlbum);
+        assertEquals(album.getAlbumURL(), loadedAlbum.getAlbumURL());
+    }
+
+    @Test
+    public void successfulDeletionOfAlbum() throws MalformedURLException {
+        assertEquals(0, dao.loadAll(Album.class).size());
+
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        album.setAlbumURL(new URL("https://www.ecm.com/keithjarrett"));
+
+        dao.createOrUpdate(album);
+        assertEquals(1, dao.loadAll(Album.class).size());
+
+        dao.delete(album);
+        assertEquals(0, dao.loadAll(Album.class).size());
     }
 
     @Test
@@ -179,26 +264,6 @@ class Neo4jDAOUnitTest {
 
         dao.delete(track);
         assertEquals(0, dao.loadAll(Track.class).size());
-    }
-
-    @Test
-    public void successfulCreationAndLoadingOfAlbum() throws MalformedURLException {
-        assertEquals(0, dao.loadAll(Album.class).size());
-
-        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
-        album.setAlbumURL(new URL("https://www.ecm.com/keithjarrett"));
-
-        dao.createOrUpdate(album);
-        Album loadedAlbum = dao.load(Album.class, album.getId());
-
-        assertNotNull(loadedAlbum.getId());
-        assertEquals(album, loadedAlbum);
-        assertEquals(album.getAlbumURL(), loadedAlbum.getAlbumURL());
-
-        assertEquals(1, dao.loadAll(Album.class).size());
-
-        dao.delete(album);
-        assertEquals(0, dao.loadAll(Album.class).size());
     }
 
     @Test
