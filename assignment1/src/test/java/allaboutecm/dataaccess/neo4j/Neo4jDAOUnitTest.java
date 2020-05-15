@@ -96,7 +96,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void successfulUpdationOfMusician() throws MalformedURLException {
+    public void successfulUpdatingOfMusician() throws MalformedURLException {
         assertEquals(0, dao.loadAll(Musician.class).size());
 
         Musician musician = new Musician("Keith Jarrett");
@@ -152,7 +152,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void successfulUpdationOfAlbum() throws MalformedURLException {
+    public void successfulUpdatingOfAlbum() throws MalformedURLException {
         assertEquals(0, dao.loadAll(Album.class).size());
 
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
@@ -202,7 +202,7 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
-    public void successfulUpdationOfTrack()
+    public void successfulUpdatingOfTrack()
     {
         Track track = new Track("Track 1","4:20","Jazz",1);
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
@@ -306,7 +306,7 @@ class Neo4jDAOUnitTest {
 
 
     @Test
-    public void successfulUpdationOfMusicalInstrument() {
+    public void successfulUpdatingOfMusicalInstrument() {
         assertEquals(0, dao.loadAll(MusicalInstrument.class).size());
 
         MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
@@ -362,7 +362,7 @@ class Neo4jDAOUnitTest {
 
 
     @Test
-    public void successfulUpdationOfMusicianInstrument() throws MalformedURLException {
+    public void successfulUpdatingOfMusicianInstrument() throws MalformedURLException {
         assertEquals(0, dao.loadAll(MusicianInstrument.class).size());
         ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
         myArray.add(new MusicalInstrument("Piano"));
