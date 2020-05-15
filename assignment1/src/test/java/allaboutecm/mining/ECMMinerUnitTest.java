@@ -501,7 +501,9 @@ class ECMMinerUnitTest {
     }
 
     @Test
-    public void multipleKExactList(){}
+    public void multipleKExactList(){
+        //Here we create 5 connected albums and search for them through the
+    }
 
     @Test
     public void multipleKLargeLsit(){}
@@ -514,6 +516,10 @@ class ECMMinerUnitTest {
 
     @Test
     public void tooLargeKValueSimilarity(){}
+
+    public void albumNotInDataBaseSimilarity(){}
+
+
 
 
 }

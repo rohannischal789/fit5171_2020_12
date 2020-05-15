@@ -236,13 +236,47 @@ public class ECMMiner {
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
-        //
-        if (k > albums.size()){
-
+        //Check if our given album is in the search space, if it isn't throw an exception, if it is, prune it from the search space.
+        if (albums.contains(album)){
+            albums.remove(album);
+        }else{
+            throw new IllegalArgumentException();
         }
-
+        //If we're looking for more results than there are albums, throw exception
+        if (k > albums.size()){
+            throw new IllegalArgumentException();
+        }
         Map<Album, Integer> scoreMap = Maps.newHashMap();
+        for (Album a : albums){
+            //Let's loop through each album and assign a score
+            int score = 0;
+            for (Musician m : album.getFeaturedMusicians()){
+                //If the two albums share any musicians, award two points for each.
+                if (a.getFeaturedMusicians().contains(m)){
+                    score+=2;
+                }
+            }
+            //If the albums were released in the same year, award a bonus point.
+            if (album.getReleaseYear() == a.getReleaseYear()){
+                score+=1;
+            }
+            //Now add the score to our score map
+            scoreMap.put(a, score);
+        }
+        //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(scoreMap.entrySet());
 
-        return Lists.newArrayList();
+        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
+                return (o1.getValue().compareTo(o2.getValue()));
+            }
+        });
+        //Loop from the end of the list towards the beginning, back k entries.
+        ArrayList resultList = new ArrayList();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
+            resultList.add(sortList.get(i).getKey());
+        }
+        return resultList;
     }
 }
