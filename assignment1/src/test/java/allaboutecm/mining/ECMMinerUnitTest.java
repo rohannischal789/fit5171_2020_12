@@ -7,6 +7,7 @@ import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.MusicianInstrument;
 import allaboutecm.model.Musician;
 import com.google.common.collect.Sets;
+import com.sun.deploy.uitoolkit.impl.awt.AWTWindowFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -465,7 +466,6 @@ class ECMMinerUnitTest {
     @Test
     public void similarAlbumsSingleKLargeList(){
         //Create a set to hold the albums we make for the test. Call this fakeAlbumSet
-        //Create a set to hold musicians we're going to make for the test.
 
         //Create a set to hold albums. Call this similarAlbumSet
         //Add 2 albums to this set, one album we're going to search using, and one album we're going to use as a search result. *ALSO* Add these albums to fakeAlbumSet
@@ -478,8 +478,7 @@ class ECMMinerUnitTest {
             //similarAlbumSet.add(resultAlbum);
             //fakeAlbumSet.add(fakeAlbum);
 
-        //Create a musician and add similarAlbumSet to the musician.
-        //Add the musician to the musicianSet
+        //Create a musician and add the musician to the album
 
         //Create a new set, and add 3 albums to this set. Call this unSimilarAlbumSet *ALSO* add these albums to fake album set
         //This should look like:
@@ -488,11 +487,9 @@ class ECMMinerUnitTest {
             //fakeAlbumSet.add(unsimilarAlbum1);
             //and so on until unsimilarAlbum3 ...
 
-        //Create a new musician and add unsimilarAlbumSet to this musician
-        //Add the musician to the musician set
+        //Create a new musician and add it to the unsimilar albums
 
         //when(dao.loadall(Album.class...) using the album set.
-        //when(dao.loadall(Musician.class...) using the musician set.
 
         //Create a results array (Should hold album objects) and assign it using the mostSimilarAlbum(1, searchAlbum) method
 
@@ -502,14 +499,134 @@ class ECMMinerUnitTest {
 
     @Test
     public void multipleKExactList(){
-        //Here we create 5 connected albums and search for them through the
+        //Here we create 5 connected albums, two non-connected albums and search for the top 4 results.
+        //We are going to set result album1 to share all 3 musicians and have it released in the same year, resultalbum2 share all 3 musicians,
+        //3 share only 2 musicians, 4 share only 1 musicians, 5 share 0 musicians but have the same release year and 6 share no musicians or year.
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        Musician musician = new Musician("The Musician");
+        Musician musician2 = new Musician("The Musician1");
+        Musician musician3 = new Musician("The Musician2");
+        Musician musician4 = new Musician("Unrelated Musician");
+        Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
+        Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
+        Album resultAlbum2 = new Album(1999, "ECM-1000", "Album 3");
+        Album resultAlbum3 = new Album(1999, "ECM-1000", "Album 4");
+        Album resultAlbum4 = new Album(1999, "ECM-1000", "Album 5");
+        Album resultAlbum5 = new Album(2000, "ECM-1000", "Album 6");
+        Album resultAlbum6 = new Album(1999, "ECM-1000", "Album 7");
+        //Let's add the musicians to the albums
+        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
+        ArrayList<Musician> twoMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
+        ArrayList<Musician> oneMusicianList = new ArrayList<Musician>(Arrays.asList(musician));
+        ArrayList<Musician> unrelatedMusician = new ArrayList<Musician>(Arrays.asList(musician4));
+
+        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum2.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum3.setFeaturedMusicians(new HashSet<Musician>(twoMusicianList));
+        resultAlbum4.setFeaturedMusicians(new HashSet<Musician>(oneMusicianList));
+        resultAlbum5.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+        resultAlbum6.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+
+
+        //Lets add all the albums to our mock list.
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum1);
+        fakeAlbumSet.add(resultAlbum2);
+        fakeAlbumSet.add(resultAlbum3);
+        fakeAlbumSet.add(resultAlbum4);
+        fakeAlbumSet.add(resultAlbum5);
+        fakeAlbumSet.add(resultAlbum6);
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+
+        List<Album> similarAlbums = ecmMiner.mostSimilarAlbums(6, searchAlbum);
+        assertEquals(6, similarAlbums.size());
+        assertEquals("Album 2", similarAlbums.get(0).getAlbumName());
+        assertEquals("Album 3", similarAlbums.get(1).getAlbumName());
+        assertEquals("Album 4", similarAlbums.get(2).getAlbumName());
+        assertEquals("Album 5", similarAlbums.get(3).getAlbumName());
+        assertEquals("Album 6", similarAlbums.get(4).getAlbumName());
+        assertEquals("Album 7", similarAlbums.get(5).getAlbumName());
+
     }
 
     @Test
-    public void multipleKLargeLsit(){}
+    public void multipleKLargeList(){
+        //This test is almost the same as the above, but we will add many more unrelated albums, and we will search for one fewer result
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        Musician musician = new Musician("The Musician");
+        Musician musician2 = new Musician("The Musician1");
+        Musician musician3 = new Musician("The Musician2");
+        Musician musician4 = new Musician("Unrelated Musician");
+        Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
+        Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
+        Album resultAlbum2 = new Album(1999, "ECM-1000", "Album 3");
+        Album resultAlbum3 = new Album(1999, "ECM-1000", "Album 4");
+        Album resultAlbum4 = new Album(1999, "ECM-1000", "Album 5");
+        Album resultAlbum5 = new Album(2000, "ECM-1000", "Album 6");
+        //Let's add the musicians to the albums
+        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
+        ArrayList<Musician> twoMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
+        ArrayList<Musician> oneMusicianList = new ArrayList<Musician>(Arrays.asList(musician));
+        ArrayList<Musician> unrelatedMusician = new ArrayList<Musician>(Arrays.asList(musician4));
+
+        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum2.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum3.setFeaturedMusicians(new HashSet<Musician>(twoMusicianList));
+        resultAlbum4.setFeaturedMusicians(new HashSet<Musician>(oneMusicianList));
+        resultAlbum5.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+
+
+        //Lets add all the albums to our mock list.
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum1);
+        fakeAlbumSet.add(resultAlbum2);
+        fakeAlbumSet.add(resultAlbum3);
+        fakeAlbumSet.add(resultAlbum4);
+        fakeAlbumSet.add(resultAlbum5);
+
+        //Now to make our 0 scoring albums
+        for (int i = 0; i < 5; i++){
+            Album theAlbum = new Album(1999, "ECM-100"+i, "Album " + (6+i));
+            theAlbum.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+            fakeAlbumSet.add(theAlbum);
+        }
+
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+
+        List<Album> similarAlbums = ecmMiner.mostSimilarAlbums(5, searchAlbum);
+        assertEquals(5, similarAlbums.size());
+        assertEquals("Album 2", similarAlbums.get(0).getAlbumName());
+        assertEquals("Album 3", similarAlbums.get(1).getAlbumName());
+        assertEquals("Album 4", similarAlbums.get(2).getAlbumName());
+        assertEquals("Album 5", similarAlbums.get(3).getAlbumName());
+        assertEquals("Album 6", similarAlbums.get(4).getAlbumName());
+
+    }
 
     @Test
-    public void excludeSearchAlbumFromResults(){}
+    public void excludeSearchAlbumFromResults(){
+        //Make a few albums.
+        Album searchAlbum = new Album(1998, "ECM-1000", "Album 1");
+        Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
+        Musician musician = new Musician("The Musician");
+        //Give them a musician
+        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
+        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum);
+        //Mock the albums
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+        //Get the search result
+        List<Album> similarAlbums = ecmMiner.mostSimilarAlbums(1, searchAlbum);
+        assertEquals(1, similarAlbums.size());
+        assertFalse(similarAlbums.contains(searchAlbum));
+
+    }
 
     @Test
     public void impossibleKValueSimilarity(){}

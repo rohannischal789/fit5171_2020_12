@@ -237,6 +237,7 @@ public class ECMMiner {
         }
         Collection<Album> albums = dao.loadAll(Album.class);
         //Check if our given album is in the search space, if it isn't throw an exception, if it is, prune it from the search space.
+        //We do this because an album is always going to get the highest similarity score for itself, but this isn't useful to know.
         if (albums.contains(album)){
             albums.remove(album);
         }else{
