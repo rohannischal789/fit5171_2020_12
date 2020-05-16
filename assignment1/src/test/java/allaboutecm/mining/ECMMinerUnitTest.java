@@ -529,40 +529,34 @@ class ECMMinerUnitTest {
         Musician musician2 = new Musician("The Musician1");
         Musician musician3 = new Musician("The Musician2");
         Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
-        Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
+        Album resultAlbum = new Album(2000, "ECM-1000", "Album 2");
+        Album nonResultAlbum1 = new Album(2000, "ECM-1000", "Album 3");
+        Album nonResultAlbum2 = new Album(2000, "ECM-1000", "Album 4");
+        Album nonResultAlbum3 = new Album(2000, "ECM-1000", "Album 5");
 
-        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
 
-        //Create a set to hold albums. Call this similarAlbumSet
-        HashSet<Album> similarAlbumSet = new HashSet<>();
 
-        //Add 2 albums to this set, one album we're going to search using, and one album we're going to use as a search result. *ALSO* Add these albums to fakeAlbumSet
-        //This should look like:
+        ArrayList<Musician> similarMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
+        ArrayList<Musician> unsimilarMusicianList = new ArrayList<Musician>(Arrays.asList(musician3));
+
+        searchAlbum.setFeaturedMusicians(new HashSet(similarMusicianList));
+        resultAlbum.setFeaturedMusicians(new HashSet(similarMusicianList));
+        nonResultAlbum1.setFeaturedMusicians(new HashSet(similarMusicianList));
+        nonResultAlbum2.setFeaturedMusicians(new HashSet(similarMusicianList));
+        nonResultAlbum3.setFeaturedMusicians(new HashSet(similarMusicianList));
+
         fakeAlbumSet.add(searchAlbum);
-        fakeAlbumSet.add(resultAlbum1);
-        similarAlbumSet.add(searchAlbum);
-        similarAlbumSet.add(resultAlbum1);
+        fakeAlbumSet.add(resultAlbum);
+        fakeAlbumSet.add(nonResultAlbum1);
+        fakeAlbumSet.add(nonResultAlbum2);
+        fakeAlbumSet.add(nonResultAlbum3);
 
-            //Album searchAlbum = new Album(...);
-            //simlarAlbumSet.add(searchAlbum);
-            //fakeAlbumSet.add(searchAlbum);
-            //Album resultAlbum = new Album(...)
-            //similarAlbumSet.add(resultAlbum);
-            //fakeAlbumSet.add(fakeAlbum);
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
 
-        //Create a musician and add the musician to the album
-        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        List<Album> similarAlbums = ecmMiner.mostSimilarAlbums(1, searchAlbum);
 
-        //Create a new set, and add 3 albums to this set. Call this unSimilarAlbumSet *ALSO* add these albums to fake album set
-        HashSet<Album> unSimilarAlbumSet = new HashSet<>();
-        //This should look like:
-            //Album unsimilarAlbum1 = new Album(...);
-            //unsimilarAlbumSet.add(unsimilarAlbum1);
-            //fakeAlbumSet.add(unsimilarAlbum1);
-            //and so on until unsimilarAlbum3 ...
-        unSimilarAlbumSet.add(searchAlbum);
-        unSimilarAlbumSet.add(resultAlbum1);
+        assertEquals(1, similarAlbums.size());
+        assertEquals(resultAlbum.getAlbumName(), similarAlbums.get(0).getAlbumName());
 
         //Create a new musician and add it to the unsimilar albums
 
