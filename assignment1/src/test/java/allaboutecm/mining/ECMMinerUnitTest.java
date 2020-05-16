@@ -629,12 +629,48 @@ class ECMMinerUnitTest {
     }
 
     @Test
-    public void impossibleKValueSimilarity(){}
+    public void impossibleKValueSimilarity(){
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(-1, null));
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(0, null));
+    }
 
     @Test
-    public void tooLargeKValueSimilarity(){}
+    public void tooLargeKValueSimilarity(){
+        //Make a few albums.
+        Album searchAlbum = new Album(1998, "ECM-1000", "Album 1");
+        Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
+        Musician musician = new Musician("The Musician");
+        //Give them a musician
+        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
+        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum);
+        //Mock the albums
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+        //Search for more albums than the 1 we expect to be part of the search space
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(2, searchAlbum));
 
-    public void albumNotInDataBaseSimilarity(){}
+    }
+
+    public void albumNotInDataBaseSimilarity(){
+        Album searchAlbum = new Album(1998, "ECM-1000", "Album 1");
+        Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
+        Musician musician = new Musician("The Musician");
+        //Give them a musician
+        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
+        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(resultAlbum);
+        //Mock the albums
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSimilarAlbums(1, searchAlbum));
+        //Search for the search album, even though it isn't in our album space
+    }
 
 
 
