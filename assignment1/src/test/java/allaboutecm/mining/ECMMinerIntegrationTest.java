@@ -3,7 +3,9 @@ package allaboutecm.mining;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.dataaccess.neo4j.Neo4jDAO;
 import allaboutecm.model.Album;
+import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.Musician;
+import allaboutecm.model.MusicianInstrument;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -15,7 +17,10 @@ import org.neo4j.ogm.session.SessionFactory;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.mock;
@@ -79,4 +84,21 @@ class ECMMinerIntegrationTest {
         assertTrue(musicians.contains(musician));
     }
 
+    @Test
+    public void findTopMusicianByInstrumentCount(){
+        //Create a musician and list of 1 instrument they play
+        Musician musician1 = new Musician("Keith Jarrett");
+        List <MusicalInstrument> MIList = new ArrayList<MusicalInstrument>();
+        MIList.add(new MusicalInstrument("An Instrument"));
+        //Convert the instrument to hashset and create a musicianinstrument from our musician and our hashset
+        Set musicianSet = new HashSet<MusicalInstrument>(MIList);
+        MusicianInstrument onlyEntry = new MusicianInstrument(musician1, musicianSet);
+        //When we try to load from the dao, give them our Musician Instrument instead
+        dao.createOrUpdate(onlyEntry);
+
+        List<Musician> musicians = ecmMiner.mostTalentedMusicians(1);
+
+        assertEquals(1, musicians.size());
+        assertTrue(musicians.contains(musician1));
+    }
 }

@@ -194,7 +194,7 @@ class ECMMinerUnitTest {
     }
 
     @Test
-        public void findBusiestYearByReleaseYear(){
+    public void findBusiestYearByReleaseYear(){
             ArrayList<Album> myArray = new ArrayList<Album>();
             myArray.add(new Album(2011,"ECM123","Album1"));
             myArray.add(new Album(2011,"ECM773","Album10"));
@@ -417,7 +417,7 @@ class ECMMinerUnitTest {
     }
 
     @Test
-    public  void busiestYearMultiKExactList(){
+    public void busiestYearMultiKExactList(){
         //Create a set to hold the albums we make for the test.
         ArrayList<Album> myArray = new ArrayList<Album>();
 
