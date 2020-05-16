@@ -7,7 +7,6 @@ import allaboutecm.model.MusicalInstrument;
 import allaboutecm.model.MusicianInstrument;
 import allaboutecm.model.Musician;
 import com.google.common.collect.Sets;
-import com.sun.deploy.uitoolkit.impl.awt.AWTWindowFactory;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -400,13 +399,19 @@ class ECMMinerUnitTest {
     @Test
     public void busiestYearSingleKSingleList(){
         //Create a set to hold the albums we make for the test.
+        ArrayList<Album> myArray = new ArrayList<Album>();
 
         //Add a new album to the set.
+        myArray.add(new Album(2011,"ECM123","Album1"));
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(myArray));
 
         //Do the when(dao....) line
 
         //Create a years array and assign it using the busiest years method.
+        List<Integer> years = ecmMiner.busiestYears(1);
 
+        assertEquals(1, years.size());
+        assertEquals(2011, years.get(0));
         //Assert that years.size() == 1.
         //Assert that the year you set the album to on line 405 is the same as the element years[0]
     }
@@ -414,13 +419,25 @@ class ECMMinerUnitTest {
     @Test
     public  void busiestYearMultiKExactList(){
         //Create a set to hold the albums we make for the test.
+        ArrayList<Album> myArray = new ArrayList<Album>();
 
         //Add new albums to the set:
         //Add 3 albums released in one year, 2 albums released in a different year, and 1 album released in the third year.
-
+        myArray.add(new Album(2011,"ECM123","Album1"));
+        myArray.add(new Album(2011,"ECM1234","Album11"));
+        myArray.add(new Album(2011,"ECM1235","Album12"));
+        myArray.add(new Album(2009,"ECM1236","Album13"));
+        myArray.add(new Album(2009,"ECM1237","Album14"));
+        myArray.add(new Album(2005,"ECM1238","Album15"));
         //Do when(dao...)
-
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(myArray));
         //Create a years array and assign it using the busiest years method (k = 3).
+        List<Integer> years = ecmMiner.busiestYears(3);
+
+        assertEquals(3, years.size());
+        assertEquals(2011, years.get(0));
+        assertEquals(2009, years.get(1));
+        assertEquals(2005, years.get(2));
 
         // Assert that years.size() == 3.
         //Assert that years[0] == 3 album year, years[1] == 2 album year, years[2] == 1 album year.
@@ -428,14 +445,36 @@ class ECMMinerUnitTest {
 
     public void busiestYearMultiKLargeList(){
         //Create a set to hold the albums we make for the test.
+        ArrayList<Album> myArray = new ArrayList<Album>();
 
         //Add new albums to the set:
         //Add 4 albums released in one year, 3 albums released in a different year, and 2 album released in the third year and add 3 additional albums each...
         //...on a different year to each other (the years with multiple other albums)
+        myArray.add(new Album(2011,"ECM123","Album1"));
+        myArray.add(new Album(2011,"ECM1234","Album11"));
+        myArray.add(new Album(2011,"ECM1235","Album12"));
+        myArray.add(new Album(2011,"ECM1236","Album13"));
+        myArray.add(new Album(2009,"ECM1237","Album14"));
+        myArray.add(new Album(2009,"ECM1238","Album15"));
+        myArray.add(new Album(2009,"ECM1239","Album16"));
+        myArray.add(new Album(2005,"ECM12371","Album17"));
+        myArray.add(new Album(2005,"ECM12382","Album18"));
+        myArray.add(new Album(2001,"ECM12383","Album19"));
+        myArray.add(new Album(2000,"ECM12385","Album25"));
+        myArray.add(new Album(2002,"ECM12380","Album21"));
+
 
         //Do when(dao...)
 
+        when(dao.loadAll(Album.class)).thenReturn(Sets.newHashSet(myArray));
+
         //Create a years array and assign it using the busiest years method (k = 3).
+        List<Integer> years = ecmMiner.busiestYears(3);
+
+        assertEquals(3, years.size());
+        assertEquals(2011, years.get(0));
+        assertEquals(2009, years.get(1));
+        assertEquals(2005, years.get(2));
 
         // Assert that years.size() == 3.
         //Assert that years[0] == 4 album year, years[1] == 3 album year, years[2] == 2 album year.
@@ -447,6 +486,20 @@ class ECMMinerUnitTest {
     public void similarAlbumSingleKTwoList(){
         //Create a set to hold the albums we make for the test.
         //Create a set to hold musicians we're going to make for the test.
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        Musician musician = new Musician("The Musician");
+        Musician musician2 = new Musician("The Musician1");
+        Musician musician3 = new Musician("The Musician2");
+        Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
+        Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
+
+        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
+
+        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum1);
 
         //Add 2 albums to this set, one album we're going to search using, and one album we're going to use as a search result.
         //Create a Musician to be used for the test.
@@ -455,6 +508,11 @@ class ECMMinerUnitTest {
 
         //when(dao.loadall(Album.class...) using the album set.
         //when(dao.loadall(Musician.class...) using the musician set.
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+
+        List<Album> similarAlbums = ecmMiner.mostSimilarAlbums(1, searchAlbum);
+        assertEquals(1, similarAlbums.size());
+        assertEquals("Album 2", similarAlbums.get(0).getAlbumName());
 
         //Create a results array (Should hold album objects) and assign it using the mostSimilarAlbum(1, searchAlbum) method
 
@@ -466,10 +524,24 @@ class ECMMinerUnitTest {
     @Test
     public void similarAlbumsSingleKLargeList(){
         //Create a set to hold the albums we make for the test. Call this fakeAlbumSet
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        Musician musician = new Musician("The Musician");
+        Musician musician2 = new Musician("The Musician1");
+        Musician musician3 = new Musician("The Musician2");
+        Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
+        Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
+
+        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
 
         //Create a set to hold albums. Call this similarAlbumSet
+        HashSet<Album> similarAlbumSet = new HashSet<>();
+
         //Add 2 albums to this set, one album we're going to search using, and one album we're going to use as a search result. *ALSO* Add these albums to fakeAlbumSet
         //This should look like:
+        fakeAlbumSet.add(searchAlbum);
+        fakeAlbumSet.add(resultAlbum1);
+        similarAlbumSet.add(searchAlbum);
+        similarAlbumSet.add(resultAlbum1);
 
             //Album searchAlbum = new Album(...);
             //simlarAlbumSet.add(searchAlbum);
@@ -479,13 +551,18 @@ class ECMMinerUnitTest {
             //fakeAlbumSet.add(fakeAlbum);
 
         //Create a musician and add the musician to the album
+        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
 
         //Create a new set, and add 3 albums to this set. Call this unSimilarAlbumSet *ALSO* add these albums to fake album set
+        HashSet<Album> unSimilarAlbumSet = new HashSet<>();
         //This should look like:
             //Album unsimilarAlbum1 = new Album(...);
             //unsimilarAlbumSet.add(unsimilarAlbum1);
             //fakeAlbumSet.add(unsimilarAlbum1);
             //and so on until unsimilarAlbum3 ...
+        unSimilarAlbumSet.add(searchAlbum);
+        unSimilarAlbumSet.add(resultAlbum1);
 
         //Create a new musician and add it to the unsimilar albums
 
