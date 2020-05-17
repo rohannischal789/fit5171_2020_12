@@ -39,13 +39,16 @@ public class Album extends Entity {
      * to better represent the order in which musicians are featured in an album.
      */
     @Relationship(type="featuredMusicians")
-    private Set<Musician> featuredMusicians;
+    private List<Musician> featuredMusicians;
 
     @Relationship(type="instruments")
     private Set<MusicianInstrument> instruments;
 
+    @Convert(URLConverter.class)
+    @Property(name="albumURL")
     private URL albumURL;
 
+    @Relationship(type="tracks")
     private Set<Track> tracks;
 
     public Album(int releaseYear, String recordNumber, String albumName) {
@@ -65,7 +68,7 @@ public class Album extends Entity {
 
             this.albumURL = null;
 
-            featuredMusicians = Sets.newHashSet();
+            featuredMusicians = Lists.newArrayList();
             instruments = Sets.newHashSet();
             tracks = Sets.newHashSet();
         }
@@ -82,11 +85,11 @@ public class Album extends Entity {
         this.recordNumber = recordNumber;
     }
 
-    public Set<Musician> getFeaturedMusicians() {
+    public List<Musician> getFeaturedMusicians() {
         return featuredMusicians;
     }
 
-    public void setFeaturedMusicians(Set<Musician> featuredMusicians) {
+    public void setFeaturedMusicians(List<Musician> featuredMusicians) {
         notNull(featuredMusicians);
         Iterator<Musician> itr = featuredMusicians.iterator();
         while(itr.hasNext()){

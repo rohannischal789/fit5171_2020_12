@@ -37,10 +37,15 @@ public class Musician extends Entity {
 
     //Extension
 
+    @Property(name="bio")
     private String bio;
 
+    @Convert(URLConverter.class)
+    @Property(name="personalSite")
     private URL personalSite;
 
+    @Convert(URLConverter.class)
+    @Property(name="wikiPage")
     private URL wikiPage;
 
     public Musician(String name) {
