@@ -9,7 +9,7 @@ import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
 @NodeEntity
-public class Rating {
+public class Rating extends Entity {
 
     @Property(name="ratingScore")
     private int ratingScore;

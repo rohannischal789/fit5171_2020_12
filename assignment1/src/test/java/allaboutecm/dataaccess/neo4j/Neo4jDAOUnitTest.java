@@ -184,6 +184,52 @@ class Neo4jDAOUnitTest {
     }
 
     @Test
+    public void successfulCreationAndLoadingOfRating()  {
+        assertEquals(0, dao.loadAll(Rating.class).size());
+
+        Rating rating = new Rating(4, "Life Magazine");
+
+        dao.createOrUpdate(rating);
+        Rating loadedRating = dao.load(Rating.class, rating.getId());
+
+        assertNotNull(loadedRating.getId());
+        assertEquals(rating, loadedRating);
+        assertEquals(rating.getSource(), loadedRating.getSource());
+
+        assertEquals(1, dao.loadAll(Rating.class).size());
+    }
+
+    @Test
+    public void successfulUpdatingOfRating() {
+        assertEquals(0, dao.loadAll(Rating.class).size());
+
+        Rating rating = new Rating(4, "Life Magazine");
+
+        dao.createOrUpdate(rating);
+        rating.setRatingScore(3);
+        dao.createOrUpdate(rating);
+        assertEquals(1, dao.loadAll(Rating.class).size());
+        Rating loadedRating = dao.load(Rating.class, rating.getId());
+
+        assertNotNull(loadedRating.getId());
+        assertEquals(rating, loadedRating);
+        assertEquals(rating.getSource(), loadedRating.getSource());
+    }
+
+    @Test
+    public void successfulDeletionOfRating() {
+        assertEquals(0, dao.loadAll(Rating.class).size());
+
+        Rating rating = new Rating(4, "Life Magazine");
+
+        dao.createOrUpdate(rating);
+        assertEquals(1, dao.loadAll(Rating.class).size());
+
+        dao.delete(rating);
+        assertEquals(0, dao.loadAll(Rating.class).size());
+    }
+
+    @Test
     public void successfulCreationAndLoadingOfTrack(){
         assertEquals(0, dao.loadAll(Track.class).size());
 
@@ -412,8 +458,7 @@ class Neo4jDAOUnitTest {
 
         Musician musician = new Musician("Keith Jarrett");
         dao.createOrUpdate(musician);
-        Musician loadedMusician = dao.load(Musician.class, musician.getId());
-        Musician foundMusician=dao.findMusicianByName(loadedMusician.getName());
+        Musician foundMusician=dao.findMusicianByName(musician.getName());
         assertNotNull(foundMusician.getId());
         assertEquals(musician, foundMusician);
         assertEquals(musician.getName(), foundMusician.getName());
@@ -425,8 +470,7 @@ class Neo4jDAOUnitTest {
 
         MusicalInstrument musicalInstrument = new MusicalInstrument("Piano");
         dao.createOrUpdate(musicalInstrument);
-        MusicalInstrument loadedMusicalInstrument = dao.load(MusicalInstrument.class, musicalInstrument.getId());
-        MusicalInstrument foundMusicalInstrument=dao.findMusicalInstrumentByName(loadedMusicalInstrument.getName());
+        MusicalInstrument foundMusicalInstrument=dao.findMusicalInstrumentByName(musicalInstrument.getName());
         assertNotNull(foundMusicalInstrument);
         assertEquals(musicalInstrument, foundMusicalInstrument);
         assertEquals(musicalInstrument.getName(), foundMusicalInstrument.getName());
@@ -440,8 +484,7 @@ class Neo4jDAOUnitTest {
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
         dao.createOrUpdate(track);
-        Track loadedTrack = dao.load(Track.class, track.getId());
-        Track foundTrack = dao.findTrackByName(loadedTrack.getName());
+        Track foundTrack = dao.findTrackByName(track.getName());
         assertNotNull(foundTrack);
         assertEquals(track, foundTrack);
         assertEquals(track.getName(), foundTrack.getName());
@@ -455,8 +498,7 @@ class Neo4jDAOUnitTest {
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
         dao.createOrUpdate(track);
-        Track loadedTrack = dao.load(Track.class, track.getId());
-        Track foundTrack = dao.findTrackByDuration(loadedTrack.getDuration());
+        Track foundTrack = dao.findTrackByDuration(track.getDuration());
         assertNotNull(foundTrack);
         assertEquals(track, foundTrack);
         assertEquals(track.getDuration(), foundTrack.getDuration());
@@ -470,8 +512,7 @@ class Neo4jDAOUnitTest {
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
         dao.createOrUpdate(track);
-        Track loadedTrack = dao.load(Track.class, track.getId());
-        Track foundTrack = dao.findTrackByGenre(loadedTrack.getGenre());
+        Track foundTrack = dao.findTrackByGenre(track.getGenre());
         assertNotNull(foundTrack);
         assertEquals(track, foundTrack);
         assertEquals(track.getGenre(), foundTrack.getGenre());
@@ -485,11 +526,38 @@ class Neo4jDAOUnitTest {
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
         dao.createOrUpdate(track);
-        Track loadedTrack = dao.load(Track.class, track.getId());
-        Track foundTrack = dao.findTrackByTrackNumber(loadedTrack.getTrackNumber());
+        Track foundTrack = dao.findTrackByTrackNumber(track.getTrackNumber());
         assertNotNull(foundTrack);
         assertEquals(track, foundTrack);
         assertEquals(track.getTrackNumber(), foundTrack.getTrackNumber());
+    }
+
+    @Test
+    public void successfulFindRatingByScore() {
+        assertEquals(0, dao.loadAll(Rating.class).size());
+
+        Rating rating = new Rating(4, "Life Magazine");
+
+        dao.createOrUpdate(rating);
+        Rating loadedRating = dao.findRatingByScore(rating.getRatingScore());
+
+        assertNotNull(loadedRating);
+        assertEquals(rating, loadedRating);
+        assertEquals(rating.getRatingScore(), loadedRating.getRatingScore());
+    }
+
+    @Test
+    public void successfulFindRatingBySource() {
+        assertEquals(0, dao.loadAll(Rating.class).size());
+
+        Rating rating = new Rating(4, "Life Magazine");
+
+        dao.createOrUpdate(rating);
+        Rating loadedRating = dao.findRatingBySource(rating.getSource());
+
+        assertNotNull(loadedRating);
+        assertEquals(rating, loadedRating);
+        assertEquals(rating.getSource(), loadedRating.getSource());
     }
 
     @Test
@@ -511,6 +579,22 @@ class Neo4jDAOUnitTest {
 
     @Test
     public void successfulCreationOfAlbumAndMusician() throws MalformedURLException {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
+        album.setFeaturedMusicians(Arrays.asList(musician));
+
+        dao.createOrUpdate(album);
+
+        Collection<Album> albums = dao.loadAll(Album.class);
+        assertEquals(1, albums.size());
+        Album loadedAlbum = albums.iterator().next();
+        assertEquals(album, loadedAlbum);
+        assertEquals(album.getFeaturedMusicians(), loadedAlbum.getFeaturedMusicians());
+    }
+
+    @Test
+    public void successfulCreationOfAlbumAndRating() throws MalformedURLException {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));

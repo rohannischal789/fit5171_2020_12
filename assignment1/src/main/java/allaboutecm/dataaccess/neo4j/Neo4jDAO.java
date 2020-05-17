@@ -103,7 +103,6 @@ public class Neo4jDAO implements DAO {
         }
     }
 
-
     public MusicalInstrument findMusicalInstrumentByName(String name) {
         Filters filters = new Filters();
         filters.add(new Filter("name", EQUALS, name));
@@ -114,7 +113,6 @@ public class Neo4jDAO implements DAO {
             return musicalInstruments.iterator().next();
         }
     }
-
 
     public Track findTrackByName(String name) {
         Filters filters = new Filters();
@@ -127,7 +125,6 @@ public class Neo4jDAO implements DAO {
         }
     }
 
-
     public Track findTrackByDuration(String duration) {
         Filters filters = new Filters();
         filters.add(new Filter("duration", EQUALS, duration));
@@ -138,6 +135,7 @@ public class Neo4jDAO implements DAO {
             return tracks.iterator().next();
         }
     }
+
     public Track findTrackByGenre(String genre) {
         Filters filters = new Filters();
         filters.add(new Filter("genre", EQUALS, genre));
@@ -148,7 +146,32 @@ public class Neo4jDAO implements DAO {
             return tracks.iterator().next();
         }
     }
-    public Track findTrackByTrackNumber(Integer trackNumber) {
+
+    @Override
+    public Rating findRatingByScore(int score) {
+        Filters filters = new Filters();
+        filters.add(new Filter("ratingScore", EQUALS, score));
+        Collection<Rating> ratings = session.loadAll(Rating.class, filters);
+        if (ratings.isEmpty()) {
+            return null;
+        } else {
+            return ratings.iterator().next();
+        }
+    }
+
+    @Override
+    public Rating findRatingBySource(String source) {
+        Filters filters = new Filters();
+        filters.add(new Filter("source", EQUALS, source));
+        Collection<Rating> ratings = session.loadAll(Rating.class, filters);
+        if (ratings.isEmpty()) {
+            return null;
+        } else {
+            return ratings.iterator().next();
+        }
+    }
+
+    public Track findTrackByTrackNumber(int trackNumber) {
         Filters filters = new Filters();
         filters.add(new Filter("trackNumber", EQUALS, trackNumber));
         Collection<Track> tracks = session.loadAll(Track.class, filters);
@@ -158,8 +181,6 @@ public class Neo4jDAO implements DAO {
             return tracks.iterator().next();
         }
     }
-
-
 
     private <T extends Entity> T findExistingEntity(Entity entity, Class clazz) {
         Filters filters = new Filters();
@@ -187,6 +208,18 @@ public class Neo4jDAO implements DAO {
             filters.add(new Filter("musician", EQUALS, musicianInstrument.getMusician()))
                     .and(new Filter("musicalInstruments", EQUALS, musicianInstrument.getMusicalInstruments()));
             collection = session.loadAll(MusicianInstrument.class, filters);
+        } else if (clazz.equals(Track.class)) {
+            Track track = (Track) entity;
+            filters.add(new Filter("name", EQUALS, track.getName()))
+                    .and(new Filter("duration", EQUALS, track.getDuration()))
+                    .and(new Filter("genre", EQUALS, track.getGenre()))
+                    .and(new Filter("trackNumber", EQUALS, track.getTrackNumber()));
+            collection = session.loadAll(Track.class, filters);
+        } else if (clazz.equals(Rating.class)) {
+            Rating rating = (Rating) entity;
+            filters.add(new Filter("ratingScore", EQUALS, rating.getRatingScore()))
+                    .and(new Filter("source", EQUALS, rating.getSource()));
+            collection = session.loadAll(Rating.class, filters);
         }
         Entity existingEntity = null;
         if (!collection.isEmpty()) {

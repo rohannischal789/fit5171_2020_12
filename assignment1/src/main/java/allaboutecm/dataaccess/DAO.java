@@ -1,10 +1,7 @@
 package allaboutecm.dataaccess;
 
-import allaboutecm.model.Album;
-import allaboutecm.model.Entity;
-import allaboutecm.model.MusicalInstrument;
-import allaboutecm.model.Musician;
-import allaboutecm.model.Track;
+import allaboutecm.model.*;
+import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
 
 import java.util.Collection;
 
@@ -25,6 +22,7 @@ public interface DAO {
     Track findTrackByName(String name);
     Track findTrackByDuration(String duration);
     Track findTrackByGenre(String genre);
-    Track findTrackByTrackNumber(Integer trackNumber);
-
+    Track findTrackByTrackNumber(int trackNumber);
+    Rating findRatingByScore(int score);
+    Rating findRatingBySource(String source);
 }

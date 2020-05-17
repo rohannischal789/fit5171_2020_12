@@ -51,6 +51,9 @@ public class Album extends Entity {
     @Relationship(type="tracks")
     private Set<Track> tracks;
 
+    @Relationship(type="ratings")
+    private Set<Rating> ratings;
+
     public Album(int releaseYear, String recordNumber, String albumName) {
         notNull(recordNumber);
         notNull(albumName);
@@ -71,6 +74,7 @@ public class Album extends Entity {
             featuredMusicians = Lists.newArrayList();
             instruments = Sets.newHashSet();
             tracks = Sets.newHashSet();
+            ratings = Sets.newHashSet();
         }
     }
 
@@ -158,6 +162,19 @@ public class Album extends Entity {
         notBlank(albumName);
 
         this.albumName = albumName;
+    }
+
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        notNull(ratings);
+        Iterator<Rating> itr = ratings.iterator();
+        while(itr.hasNext()){
+            notNull(itr.next());
+        }
+        this.ratings = ratings;
     }
 
     @Override

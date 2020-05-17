@@ -277,7 +277,6 @@ class AlbumUnitTest {
         assertEquals(album.hashCode(), albumHashCode);
     }
 
-
     @Test
     @DisplayName("URL must be on the ECM domain")
     //Test that URL may only be on the ECM domain
@@ -288,6 +287,32 @@ class AlbumUnitTest {
         } catch (Exception e){
 
         }
+    }
+
+    @Test
+    @DisplayName("Album ratings cannot be different")
+    public void albumRatingsCannotBeDifferent() {
+        List<Rating> list = Arrays.asList(new Rating(2,"Rolling Stone Magazine"),
+                new Rating(3,"Life Magazine"),
+                new Rating(1,"New Magazine"));
+        Set<Rating> ratingsList = new HashSet<>(list);
+        album.setRatings(new HashSet<Rating>(ratingsList));
+        assertEquals(album.getRatings(), ratingsList);
+    }
+
+    @Test
+    @DisplayName("None of the MusicianInstruments can be null")
+    //No element of what is passed to setInstruments may be null.
+    public void nullRatingsTest() {
+        Rating[] blankArray = {null, null};
+        Set<Rating> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        assertThrows(NullPointerException.class, () -> album.setRatings(emptyItems));
+    }
+
+    @Test
+    @DisplayName("Album musicians cannot be null")
+    public void ratingsCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> album.setRatings(null));
     }
 
 }
