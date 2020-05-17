@@ -247,7 +247,7 @@ class Neo4jDAOUnitTest {
         Track track = new Track("Track 1","4:20","Jazz",1);
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
-        album.setTracks(Arrays.asList(track));
+        album.setTracks(Sets.newHashSet(track));
 
         dao.createOrUpdate(album);
 
@@ -262,7 +262,7 @@ class Neo4jDAOUnitTest {
         Track track = new Track("Track 1","4:20","Jazz",1);
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
-        album.setTracks(Arrays.asList(track));
+        album.setTracks(Sets.newHashSet(track));
 
         dao.createOrUpdate(album);
 
@@ -277,7 +277,7 @@ class Neo4jDAOUnitTest {
         Track track = new Track("Track 1","4:20","Jazz",1);
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
-        album.setTracks(Arrays.asList(track));
+        album.setTracks(Sets.newHashSet(track));
 
         dao.createOrUpdate(album);
 
@@ -514,7 +514,7 @@ class Neo4jDAOUnitTest {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
         Musician musician = new Musician("Keith Jarrett");
         musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
-        album.setFeaturedMusicians(Sets.newHashSet(musician));
+        album.setFeaturedMusicians(Arrays.asList(musician));
 
         dao.createOrUpdate(album);
 
@@ -550,7 +550,7 @@ class Neo4jDAOUnitTest {
         Track track = new Track("Track 1","4:20","Jazz",1);
         List<String> list = Arrays.asList("Nice song" , "Brilliant track");
         track.setReviews(list);
-        album.setTracks(Arrays.asList(track));
+        album.setTracks(Sets.newHashSet(track));
 
         dao.createOrUpdate(album);
 

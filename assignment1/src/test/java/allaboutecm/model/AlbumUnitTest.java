@@ -1,5 +1,6 @@
 package allaboutecm.model;
 
+import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -134,12 +135,9 @@ class AlbumUnitTest {
     @DisplayName("Featured Musicians was not correctly set or read back")
     //Featured musicians set and get methods must match input and output
     public void albumFeaturedMusiciansCannotBeDifferent() {
-        ArrayList<Musician> myArray = new ArrayList<Musician>();
-        myArray.add(new Musician("Frank Frank"));
-        myArray.add(new Musician("Adam Adam"));
-        myArray.add(new Musician("Annie Annie"));
+        List<Musician> musiciansList = Arrays.asList(new Musician("Frank Frank"),
+        new Musician("Adam Adam"),new Musician("Annie Annie"));
 
-        Set<Musician> musiciansList = new HashSet<>(myArray);
         album.setFeaturedMusicians(musiciansList);
         assertEquals(album.getFeaturedMusicians(), musiciansList);
     }
@@ -149,7 +147,7 @@ class AlbumUnitTest {
     //No element of what is passed to setFeaturedMusicians() may be null.
     public void nullMusicianTest() {
         Musician[] blankArray = {null, null};
-        Set<Musician> emptyItems = new HashSet<>(Arrays.asList(blankArray));
+        List<Musician> emptyItems = Arrays.asList(blankArray);
         assertThrows(NullPointerException.class, () -> album.setFeaturedMusicians(emptyItems));
     }
 
@@ -162,19 +160,23 @@ class AlbumUnitTest {
     @Test
     @DisplayName("Album tracks cannot be different")
     public void albumTracksCannotBeDifferent() {
+
         List<Track> trackList = Arrays.asList( new Track("Track 1", "4:11", "Jazz", 1),
                 new Track("Track 2", "3:05", "Jazz", 2),
                 new Track("Track 3", "5:24", "Rock", 3),
                 new Track("Track 4", "4:14", "Jazz", 4));
-        album.getTracks().addAll(trackList);
-        assertEquals(album.getTracks(), trackList);
+        //This needs to be given a set of musical instruments.
+        Set<Track> trackListFinal = new HashSet<>(trackList);
+
+        album.setTracks(trackListFinal);
+        assertEquals(album.getTracks(), trackListFinal);
     }
 
     @Test
     @DisplayName("None of the tracks can be null")
     //No element of what is passed to setTracks() may be null.
     public void nullTracksTest() {
-        List<Track> emptyItems = Arrays.asList(null,null);
+        Set<Track> emptyItems = Sets.newHashSet(null, null);
         assertThrows(NullPointerException.class, () -> album.setTracks(emptyItems));
     }
 

@@ -546,10 +546,10 @@ class ECMMinerIntegrationTest {
         Album searchAlbum = new Album(2000, "ECM-1000", "Album 1");
         Album resultAlbum1 = new Album(2000, "ECM-1000", "Album 2");
 
-        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
+        List<Musician> threeMusicianList = Arrays.asList(musician, musician2, musician3);
 
-        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
+        searchAlbum.setFeaturedMusicians(threeMusicianList);
+        resultAlbum1.setFeaturedMusicians(threeMusicianList);
 
         fakeAlbumSet.add(searchAlbum);
         fakeAlbumSet.add(resultAlbum1);
@@ -591,14 +591,14 @@ class ECMMinerIntegrationTest {
 
 
 
-        ArrayList<Musician> similarMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
-        ArrayList<Musician> unsimilarMusicianList = new ArrayList<Musician>(Arrays.asList(musician3));
+        List<Musician> similarMusicianList = Arrays.asList(musician, musician2);
+        List<Musician> unsimilarMusicianList = Arrays.asList(musician3);
 
-        searchAlbum.setFeaturedMusicians(new HashSet(similarMusicianList));
-        resultAlbum.setFeaturedMusicians(new HashSet(similarMusicianList));
-        nonResultAlbum1.setFeaturedMusicians(new HashSet(similarMusicianList));
-        nonResultAlbum2.setFeaturedMusicians(new HashSet(similarMusicianList));
-        nonResultAlbum3.setFeaturedMusicians(new HashSet(similarMusicianList));
+        searchAlbum.setFeaturedMusicians(similarMusicianList);
+        resultAlbum.setFeaturedMusicians(similarMusicianList);
+        nonResultAlbum1.setFeaturedMusicians(similarMusicianList);
+        nonResultAlbum2.setFeaturedMusicians(similarMusicianList);
+        nonResultAlbum3.setFeaturedMusicians(similarMusicianList);
 
         fakeAlbumSet.add(searchAlbum);
         fakeAlbumSet.add(resultAlbum);
@@ -643,18 +643,18 @@ class ECMMinerIntegrationTest {
         Album resultAlbum5 = new Album(2000, "ECM-1000", "Album 6");
         Album resultAlbum6 = new Album(1999, "ECM-1000", "Album 7");
         //Let's add the musicians to the albums
-        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
-        ArrayList<Musician> twoMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
-        ArrayList<Musician> oneMusicianList = new ArrayList<Musician>(Arrays.asList(musician));
-        ArrayList<Musician> unrelatedMusician = new ArrayList<Musician>(Arrays.asList(musician4));
+        List<Musician> threeMusicianList = Arrays.asList(musician, musician2, musician3);
+        List<Musician> twoMusicianList = Arrays.asList(musician, musician2);
+        List<Musician> oneMusicianList = Arrays.asList(musician);
+        List<Musician> unrelatedMusician = Arrays.asList(musician4);
 
-        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum2.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum3.setFeaturedMusicians(new HashSet<Musician>(twoMusicianList));
-        resultAlbum4.setFeaturedMusicians(new HashSet<Musician>(oneMusicianList));
-        resultAlbum5.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
-        resultAlbum6.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+        searchAlbum.setFeaturedMusicians(threeMusicianList);
+        resultAlbum1.setFeaturedMusicians(threeMusicianList);
+        resultAlbum2.setFeaturedMusicians(threeMusicianList);
+        resultAlbum3.setFeaturedMusicians(twoMusicianList);
+        resultAlbum4.setFeaturedMusicians(oneMusicianList);
+        resultAlbum5.setFeaturedMusicians(unrelatedMusician);
+        resultAlbum6.setFeaturedMusicians(unrelatedMusician);
 
 
         //Lets add all the albums to our mock list.
@@ -695,17 +695,17 @@ class ECMMinerIntegrationTest {
         Album resultAlbum4 = new Album(1999, "ECM-1000", "Album 5");
         Album resultAlbum5 = new Album(2000, "ECM-1000", "Album 6");
         //Let's add the musicians to the albums
-        ArrayList<Musician> threeMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2, musician3));
-        ArrayList<Musician> twoMusicianList = new ArrayList<Musician>(Arrays.asList(musician, musician2));
-        ArrayList<Musician> oneMusicianList = new ArrayList<Musician>(Arrays.asList(musician));
-        ArrayList<Musician> unrelatedMusician = new ArrayList<Musician>(Arrays.asList(musician4));
+        List<Musician> threeMusicianList = Arrays.asList(musician, musician2, musician3);
+        List<Musician> twoMusicianList = Arrays.asList(musician, musician2);
+        List<Musician> oneMusicianList = Arrays.asList(musician);
+        List<Musician> unrelatedMusician = Arrays.asList(musician4);
 
-        searchAlbum.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum1.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum2.setFeaturedMusicians(new HashSet<Musician>(threeMusicianList));
-        resultAlbum3.setFeaturedMusicians(new HashSet<Musician>(twoMusicianList));
-        resultAlbum4.setFeaturedMusicians(new HashSet<Musician>(oneMusicianList));
-        resultAlbum5.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+        searchAlbum.setFeaturedMusicians(threeMusicianList);
+        resultAlbum1.setFeaturedMusicians(threeMusicianList);
+        resultAlbum2.setFeaturedMusicians(threeMusicianList);
+        resultAlbum3.setFeaturedMusicians(twoMusicianList);
+        resultAlbum4.setFeaturedMusicians(oneMusicianList);
+        resultAlbum5.setFeaturedMusicians(unrelatedMusician);
 
 
         //Lets add all the albums to our mock list.
@@ -719,7 +719,7 @@ class ECMMinerIntegrationTest {
         //Now to make our 0 scoring albums
         for (int i = 0; i < 5; i++){
             Album theAlbum = new Album(1999, "ECM-100"+i, "Album " + (6+i));
-            theAlbum.setFeaturedMusicians(new HashSet<Musician>(unrelatedMusician));
+            theAlbum.setFeaturedMusicians(unrelatedMusician);
             fakeAlbumSet.add(theAlbum);
         }
 
@@ -744,9 +744,9 @@ class ECMMinerIntegrationTest {
         Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
         Musician musician = new Musician("The Musician");
         //Give them a musician
-        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
-        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
-        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        List<Musician> musicianList = Arrays.asList(musician);
+        searchAlbum.setFeaturedMusicians(musicianList);
+        resultAlbum.setFeaturedMusicians(musicianList);
         //Create the mock set of albums
         HashSet<Album> fakeAlbumSet = new HashSet<>();
         fakeAlbumSet.add(searchAlbum);
@@ -775,9 +775,9 @@ class ECMMinerIntegrationTest {
         Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
         Musician musician = new Musician("The Musician");
         //Give them a musician
-        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
-        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
-        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        List<Musician> musicianList = Arrays.asList(musician);
+        searchAlbum.setFeaturedMusicians(musicianList);
+        resultAlbum.setFeaturedMusicians(musicianList);
         //Create the mock set of albums
         HashSet<Album> fakeAlbumSet = new HashSet<>();
         fakeAlbumSet.add(searchAlbum);
@@ -796,9 +796,9 @@ class ECMMinerIntegrationTest {
         Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
         Musician musician = new Musician("The Musician");
         //Give them a musician
-        ArrayList<Musician> musicianList = new ArrayList<Musician>(Arrays.asList(musician));
-        searchAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
-        resultAlbum.setFeaturedMusicians(new HashSet<>(musicianList));
+        List<Musician> musicianList = Arrays.asList(musician);
+        searchAlbum.setFeaturedMusicians(musicianList);
+        resultAlbum.setFeaturedMusicians(musicianList);
         //Create the mock set of albums
         HashSet<Album> fakeAlbumSet = new HashSet<>();
         fakeAlbumSet.add(resultAlbum);

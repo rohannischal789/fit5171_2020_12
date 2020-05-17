@@ -46,7 +46,7 @@ public class Album extends Entity {
 
     private URL albumURL;
 
-    private List<Track> tracks;
+    private Set<Track> tracks;
 
     public Album(int releaseYear, String recordNumber, String albumName) {
         notNull(recordNumber);
@@ -67,7 +67,7 @@ public class Album extends Entity {
 
             featuredMusicians = Sets.newHashSet();
             instruments = Sets.newHashSet();
-            tracks = Lists.newArrayList();
+            tracks = Sets.newHashSet();
         }
     }
 
@@ -121,11 +121,11 @@ public class Album extends Entity {
         this.albumURL = albumURL;
     }
 
-    public List<Track> getTracks() {
+    public Set<Track> getTracks() {
         return tracks;
     }
 
-    public void setTracks(List<Track> tracks) {
+    public void setTracks(Set<Track> tracks) {
         notNull(tracks);
         Iterator<Track> itr = tracks.iterator();
         while(itr.hasNext()){

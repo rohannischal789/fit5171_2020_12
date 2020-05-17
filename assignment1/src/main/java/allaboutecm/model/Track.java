@@ -1,6 +1,8 @@
 package allaboutecm.model;
 
 import com.google.common.collect.Lists;
+import org.neo4j.ogm.annotation.NodeEntity;
+import org.neo4j.ogm.annotation.Property;
 
 import java.util.Iterator;
 import java.util.List;
@@ -9,14 +11,19 @@ import java.util.Objects;
 import static org.apache.commons.lang3.Validate.notBlank;
 import static org.apache.commons.lang3.Validate.notNull;
 
+@NodeEntity
 public class Track extends Entity {
 
+    @Property(name="name")
     private String name;
 
+    @Property(name="duration")
     private String duration;
 
+    @Property(name="genre")
     private String genre;
 
+    @Property(name="trackNumber")
     private int trackNumber;
 
     private List<String> reviews;
