@@ -2,10 +2,7 @@ package allaboutecm.mining;
 
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.dataaccess.neo4j.Neo4jDAO;
-import allaboutecm.model.Album;
-import allaboutecm.model.MusicalInstrument;
-import allaboutecm.model.Musician;
-import allaboutecm.model.MusicianInstrument;
+import allaboutecm.model.*;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -22,6 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
 class ECMMinerIntegrationTest {
     private static final String TEST_DB = "target/test-data/test-db.neo4j";
@@ -810,5 +808,78 @@ class ECMMinerIntegrationTest {
         //Search for the search album, even though it isn't in our album space
     }
 
+    @Test
+    public void highestRatedAlbumsTestK1(){
+        Album album1 = new Album(1998, "ECM-1000", "Album 1");
+        Album album2 = new Album(1998, "ECM-2000", "Album 2");
+
+        List<Rating> list = Arrays.asList(new Rating(2,"Rolling Stone Magazine"));
+
+        //List<Rating> list = Arrays.asList(new Rating(2,"Rolling Stone Magazine"),
+        //        new Rating(3,"Life Magazine"),
+        //        new Rating(1,"New Magazine"));
+        Set<Rating> ratingsList = new HashSet<>(list);
+        album1.setRatings(ratingsList);
+
+        List<Rating> list2 = Arrays.asList(new Rating(5,"Rolling Stone Magazine"), new Rating(1,"New Stone Magazine"));
+        //List<Rating> list2 = Arrays.asList(new Rating(2,"Rolling Stone Magazine"),
+        //        new Rating(3,"Life Magazine"));
+        Set<Rating> ratingsList2 = new HashSet<>(list2);
+
+        album2.setRatings(ratingsList2);
+
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(album1);
+        fakeAlbumSet.add(album2);
+
+        for (Album a:fakeAlbumSet) {
+            dao.createOrUpdate(a);
+        }
+        List<Album> highestRatedAlbum = ecmMiner.highestRatedAlbums(1);
+
+        assertEquals(1, highestRatedAlbum.size());
+        assertEquals(album2.getAlbumName(), highestRatedAlbum.get(0).getAlbumName());
+        assertEquals(album2.getRatings(), highestRatedAlbum.get(0).getRatings());
+    }
+
+    @Test
+    public void highestRatedAlbumsTestK2(){
+        Album album1 = new Album(1998, "ECM-1000", "Album 1");
+        Album album2 = new Album(1998, "ECM-2000", "Album 2");
+        Album album3 = new Album(1991, "ECM-3000", "Album 3");
+
+        List<Rating> list = Arrays.asList(new Rating(2,"Rolling Stone Magazine"));
+
+        Set<Rating> ratingsList = new HashSet<>(list);
+        album1.setRatings(ratingsList);
+
+        List<Rating> list2 = Arrays.asList(new Rating(5,"Rolling Stone Magazine"), new Rating(1,"New Stone Magazine"));
+        Set<Rating> ratingsList2 = new HashSet<>(list2);
+
+        album2.setRatings(ratingsList2);
+
+        List<Rating> list3 = Arrays.asList(new Rating(2,"Rolling Stone Magazine"),
+                new Rating(1,"Life Magazine"),
+                new Rating(1,"New Magazine"));
+        Set<Rating> ratingsList3 = new HashSet<>(list3);
+        album3.setRatings(ratingsList3);
+
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(album1);
+        fakeAlbumSet.add(album2);
+        fakeAlbumSet.add(album3);
+        //Mock the albums
+        for (Album a:fakeAlbumSet) {
+            dao.createOrUpdate(a);
+        }
+        List<Album> highestRatedAlbum = ecmMiner.highestRatedAlbums(2);
+
+        assertEquals(2, highestRatedAlbum.size());
+        assertEquals(album2.getAlbumName(), highestRatedAlbum.get(0).getAlbumName());
+        assertEquals(album2.getRatings(), highestRatedAlbum.get(0).getRatings());
+        assertEquals(album1.getAlbumName(), highestRatedAlbum.get(1).getAlbumName());
+        assertEquals(album1.getRatings(), highestRatedAlbum.get(1).getRatings());
+    }
 
 }

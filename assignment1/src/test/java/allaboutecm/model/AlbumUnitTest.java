@@ -296,7 +296,7 @@ class AlbumUnitTest {
                 new Rating(3,"Life Magazine"),
                 new Rating(1,"New Magazine"));
         Set<Rating> ratingsList = new HashSet<>(list);
-        album.setRatings(new HashSet<Rating>(ratingsList));
+        album.setRatings(ratingsList);
         assertEquals(album.getRatings(), ratingsList);
     }
 

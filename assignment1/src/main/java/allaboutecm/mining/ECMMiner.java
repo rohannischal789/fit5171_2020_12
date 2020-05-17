@@ -29,6 +29,9 @@ public class ECMMiner {
      * When startYear/endYear is negative, that means startYear/endYear is ignored.
      */
     public List<Musician> mostProlificMusicians(int k, int startYear, int endYear) {
+        if (k < 1){
+            throw new IllegalArgumentException();
+        }
         Collection<Musician> musicians = dao.loadAll(Musician.class);
         Map<String, Musician> nameMap = Maps.newHashMap();
         for (Musician m : musicians) {
@@ -280,7 +283,7 @@ public class ECMMiner {
 
     public List<Album> highestRatedAlbums(int k) {
         //If K is impossible throw exception
-        if (k < 0){
+        if (k < 1){
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
@@ -289,7 +292,7 @@ public class ECMMiner {
         if (k > albums.size()){
             throw new IllegalArgumentException();
         }
-        Map<Album, Integer> ratingsMap = Maps.newHashMap();
+        Map<Album, Float> ratingsMap = Maps.newHashMap();
         for (Album a : albums){
             //Let's loop through each album and assign a score
             int total = 0;
@@ -299,14 +302,14 @@ public class ECMMiner {
                 count++;
             }
             //Now add the score to our score map
-            ratingsMap.put(a, (total/count));
+            ratingsMap.put(a, (float)(total/count));
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(ratingsMap.entrySet());
+        List<Map.Entry<Album, Float>> sortList = new LinkedList<Map.Entry<Album, Float>>(ratingsMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
+        Collections.sort(sortList, new Comparator<Map.Entry<Album, Float>>() {
             @Override
-            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
+            public int compare(Map.Entry<Album, Float> o1, Map.Entry<Album, Float> o2) {
                 return (o1.getValue().compareTo(o2.getValue()));
             }
         });
