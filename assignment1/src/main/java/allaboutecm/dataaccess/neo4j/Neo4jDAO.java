@@ -103,6 +103,18 @@ public class Neo4jDAO implements DAO {
         }
     }
 
+    @Override
+    public Album findAlbumBySales(int sales) {
+        Filters filters = new Filters();
+        filters.add(new Filter("sales", EQUALS, sales));
+        Collection<Album> album = session.loadAll(Album.class, filters);
+        if (album.isEmpty()) {
+            return null;
+        } else {
+            return album.iterator().next();
+        }
+    }
+
     public MusicalInstrument findMusicalInstrumentByName(String name) {
         Filters filters = new Filters();
         filters.add(new Filter("name", EQUALS, name));

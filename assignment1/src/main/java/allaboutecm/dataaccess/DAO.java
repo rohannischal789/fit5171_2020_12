@@ -19,6 +19,7 @@ public interface DAO {
     Album findAlbumByName(String name);
     Album findAlbumByReleaseYear(int releaseYear);
     Album findAlbumByRecordNumber(String recordNumber);
+    Album findAlbumBySales(int sales);
     Track findTrackByName(String name);
     Track findTrackByDuration(String duration);
     Track findTrackByGenre(String genre);

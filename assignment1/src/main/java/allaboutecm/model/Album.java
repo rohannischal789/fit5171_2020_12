@@ -54,6 +54,9 @@ public class Album extends Entity {
     @Relationship(type="ratings")
     private Set<Rating> ratings;
 
+    @Property(name="sales")
+    private int sales;
+
     public Album(int releaseYear, String recordNumber, String albumName) {
         notNull(recordNumber);
         notNull(albumName);
@@ -68,6 +71,7 @@ public class Album extends Entity {
             this.releaseYear = releaseYear;
             this.recordNumber = recordNumber;
             this.albumName = albumName;
+            this.sales = 0;
 
             this.albumURL = null;
 
@@ -139,6 +143,18 @@ public class Album extends Entity {
             notNull(itr.next());
         }
         this.tracks = tracks;
+    }
+
+    public int getSales() {
+        return sales;
+    }
+
+    public void setSales(int sales) {
+        if(sales < 0)
+        {
+            throw new IllegalArgumentException();
+        }
+        this.sales = sales;
     }
 
     public int getReleaseYear() {

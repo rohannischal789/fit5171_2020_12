@@ -818,4 +818,55 @@ class ECMMinerUnitTest {
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.highestRatedAlbums(-1));
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.highestRatedAlbums(0));
     }
+
+    @Test
+    public void mostSellingAlbumsTestK1(){
+        Album album1 = new Album(1998, "ECM-1000", "Album 1");
+        Album album2 = new Album(1998, "ECM-2000", "Album 2");
+
+        album1.setSales(10);
+        album2.setSales(20);
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(album1);
+        fakeAlbumSet.add(album2);
+        //Mock the albums
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+        List<Album> mostSellingAlbums = ecmMiner.mostSellingAlbums(1);
+
+        assertEquals(1, mostSellingAlbums.size());
+        assertEquals(album2.getAlbumName(), mostSellingAlbums.get(0).getAlbumName());
+        assertEquals(album2.getSales(), mostSellingAlbums.get(0).getSales());
+    }
+
+    @Test
+    public void mostSellingAlbumsTestK2(){
+        Album album1 = new Album(1998, "ECM-1000", "Album 1");
+        Album album2 = new Album(1998, "ECM-2000", "Album 2");
+        Album album3 = new Album(1998, "ECM-3000", "Album 3");
+
+        album1.setSales(10);
+        album2.setSales(20);
+        album3.setSales(15);
+        //Create the mock set of albums
+        HashSet<Album> fakeAlbumSet = new HashSet<>();
+        fakeAlbumSet.add(album1);
+        fakeAlbumSet.add(album2);
+        fakeAlbumSet.add(album3);
+        //Mock the albums
+        when(dao.loadAll(Album.class)).thenReturn(fakeAlbumSet);
+        List<Album> mostSellingAlbums = ecmMiner.mostSellingAlbums(2);
+
+        assertEquals(2, mostSellingAlbums.size());
+        assertEquals(album2.getAlbumName(), mostSellingAlbums.get(0).getAlbumName());
+        assertEquals(album2.getSales(), mostSellingAlbums.get(0).getSales());
+        assertEquals(album3.getAlbumName(), mostSellingAlbums.get(1).getAlbumName());
+        assertEquals(album3.getRatings(), mostSellingAlbums.get(1).getRatings());
+    }
+
+    @Test
+    public void impossibleKValueMostSellingAlbum(){
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSellingAlbums(-1));
+        assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSellingAlbums(0));
+    }
 }

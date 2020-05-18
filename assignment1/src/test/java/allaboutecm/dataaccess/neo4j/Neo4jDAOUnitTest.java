@@ -285,7 +285,20 @@ class Neo4jDAOUnitTest {
         assertEquals(0, dao.loadAll(Track.class).size());
     }
 
+    @Test
+    public void successfulFindByAlbumSales()  {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Track track = new Track("Track 1","4:20","Jazz",1);
+        List<String> list = Arrays.asList("Nice song" , "Brilliant track");
+        track.setReviews(list);
+        album.setTracks(Sets.newHashSet(track));
+        album.setSales(10);
+        dao.createOrUpdate(album);
 
+        Album foundAlbum = dao.findAlbumBySales(10);
+
+        assertEquals(album.getSales(), foundAlbum.getSales());
+    }
 
     @Test
     public void successfulFindByAlbumName()  {
@@ -596,9 +609,9 @@ class Neo4jDAOUnitTest {
     @Test
     public void successfulCreationOfAlbumAndRating() throws MalformedURLException {
         Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
-        Musician musician = new Musician("Keith Jarrett");
-        musician.setMusicianUrl(new URL("https://www.ecm.com/keithjarrett"));
-        album.setFeaturedMusicians(Arrays.asList(musician));
+        List<Rating> list = Arrays.asList(new Rating(2,"Rolling Stone Magazine"));
+        Set<Rating> ratingsList = new HashSet<>(list);
+        album.setRatings(ratingsList);
 
         dao.createOrUpdate(album);
 
@@ -606,7 +619,7 @@ class Neo4jDAOUnitTest {
         assertEquals(1, albums.size());
         Album loadedAlbum = albums.iterator().next();
         assertEquals(album, loadedAlbum);
-        assertEquals(album.getFeaturedMusicians(), loadedAlbum.getFeaturedMusicians());
+        assertEquals(album.getRatings(), loadedAlbum.getRatings());
     }
 
     @Test

@@ -315,4 +315,22 @@ class AlbumUnitTest {
         assertThrows(NullPointerException.class, () -> album.setRatings(null));
     }
 
+    @Test
+    @DisplayName("sales Cannot Be Less Than Zero")
+    public void salesCannotBeLessThanZero() {
+        assertThrows(IllegalArgumentException.class, () -> album.setSales(-1));
+    }
+
+    @Test
+    @DisplayName("sales Cannot Be Less Than Zero")
+    public void salesAcceptsZero() {
+        album.setSales(0);
+    }
+
+    @Test
+    @DisplayName("sales Cannot Be different")
+    public void salesSameOrNot() {
+        album.setSales(10);
+        assertEquals(album.getSales(), 10);
+    }
 }

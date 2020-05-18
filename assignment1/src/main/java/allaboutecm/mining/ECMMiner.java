@@ -320,4 +320,37 @@ public class ECMMiner {
         }
         return resultList;
     }
+
+    public List<Album> mostSellingAlbums(int k) {
+        //If K is impossible throw exception
+        if (k < 1){
+            throw new IllegalArgumentException();
+        }
+        Collection<Album> albums = dao.loadAll(Album.class);
+
+        //If we're looking for more results than there are albums, throw exception
+        if (k > albums.size()){
+            throw new IllegalArgumentException();
+        }
+        Map<Album, Integer> ratingsMap = Maps.newHashMap();
+        for (Album a : albums){
+            //Let's loop through each album and assign a score
+            ratingsMap.put(a, a.getSales());
+        }
+        //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(ratingsMap.entrySet());
+
+        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
+            @Override
+            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
+                return (o1.getValue().compareTo(o2.getValue()));
+            }
+        });
+        //Loop from the end of the list towards the beginning, back k entries.
+        ArrayList resultList = new ArrayList();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
+            resultList.add(sortList.get(i).getKey());
+        }
+        return resultList;
+    }
 }
