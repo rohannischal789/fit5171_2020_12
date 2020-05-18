@@ -724,6 +724,38 @@ class ECMMinerUnitTest {
     }
 
     @Test
+    public void shouldReturnTheMusicianWhenThereAreTwoProlific() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album album2 = new Album(1972, "ECM 1061/65", "The Köln Concert");
+        Album album3 = new Album(1971, "ECM 1062/65", "The Köln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album1,album2));
+        Musician musician2 = new Musician("Frank Si");
+        musician2.setAlbums(Sets.newHashSet(album3));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(2, -1, -1);
+
+        assertEquals(musician.getName(), musicians.get(0).getName());
+    }
+
+    @Test
+    public void shouldReturnTheMusicianWithinTheYear() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Album album2 = new Album(1975, "ECM 1061/65", "The Köln Concert");
+        Album album3 = new Album(1975, "ECM 1062/65", "The Köln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        musician.setAlbums(Sets.newHashSet(album1,album2));
+        Musician musician2 = new Musician("Frank Si");
+        musician2.setAlbums(Sets.newHashSet(album3));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(2, 1974, 1976);
+
+        assertEquals(musician.getName(), musicians.get(0).getName());
+    }
+
+    @Test
     public void albumNotInDataBaseSimilarity(){
         Album searchAlbum = new Album(1998, "ECM-1000", "Album 1");
         Album resultAlbum = new Album(1998, "ECM-1000", "Album 2");
