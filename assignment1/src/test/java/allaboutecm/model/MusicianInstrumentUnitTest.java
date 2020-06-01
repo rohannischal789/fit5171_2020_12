@@ -28,7 +28,7 @@ public class MusicianInstrumentUnitTest {
     @Test
     @DisplayName("Musical Instrument cannot be null")
     public void musicalInstrumentCannotBeNull() {
-        assertThrows(NullPointerException.class, () -> musicianInstrument.setMusicalInstrument(null));
+        assertThrows(NullPointerException.class, () -> musicianInstrument.setMusicalInstruments(null));
     }
 
     @Test
@@ -70,6 +70,13 @@ public class MusicianInstrumentUnitTest {
         assertEquals(musicianInstrument.getMusician(), musician1);
     }
 
+
+    @Test
+    @DisplayName("Musician cannot be null")
+    public void musicianCannotBeNull() {
+        assertThrows(NullPointerException.class, () -> musicianInstrument.setMusician(null));
+    }
+
     @Test
     @DisplayName("Equals should return a false when there are different values in objects")
     public void musicianInstrumentEqualsShouldBeFalse(){
@@ -90,6 +97,16 @@ public class MusicianInstrumentUnitTest {
         Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
         MusicianInstrument musicianInstrument1 = new MusicianInstrument(new Musician("Keith Jarrett"), musicalInstrumentList);
         assertTrue(musicianInstrument.equals(musicianInstrument1));
+    }
+    @Test
+    public void sameMusicianAndInstrumentHasSameMusicianInstrumentOrNot() {
+        HashSet<MusicalInstrument> set = new HashSet<>();
+        set.add(new MusicalInstrument("Instrument name 01"));
+        MusicianInstrument anotherMusicianInstrument = new MusicianInstrument(
+                new Musician("musician name 01"),
+                set);
+
+        assertEquals(anotherMusicianInstrument, musicianInstrument);
     }
 
     @Test

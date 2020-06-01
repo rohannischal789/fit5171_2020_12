@@ -58,8 +58,9 @@ public class MusicianInstrument extends Entity {
         return musicalInstruments;
     }
 
-    public void setMusicalInstrument(Set<MusicalInstrument> musicalInstruments) {
+    public void setMusicalInstruments(Set<MusicalInstrument> musicalInstruments) {
         notNull(musicalInstruments);
+        notEmpty(musicalInstruments);
         this.musicalInstruments = musicalInstruments;
     }
 
