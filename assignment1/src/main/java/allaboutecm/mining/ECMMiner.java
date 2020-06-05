@@ -7,6 +7,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * TODO: implement and test the methods in this class.
@@ -29,9 +30,6 @@ public class ECMMiner {
      * When startYear/endYear is negative, that means startYear/endYear is ignored.
      */
     public List<Musician> mostProlificMusicians(int k, int startYear, int endYear) {
-        if (k < 1){
-            throw new IllegalArgumentException();
-        }
         Collection<Musician> musicians = dao.loadAll(Musician.class);
         Map<String, Musician> nameMap = Maps.newHashMap();
         for (Musician m : musicians) {
@@ -65,18 +63,9 @@ public class ECMMiner {
         List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
         sortedKeys.sort(Ordering.natural().reverse());
         for (Integer count : sortedKeys) {
+            if (result.size()>=k) break;
             List<Musician> list = countMap.get(count);
-            if (list.size() >= k) {
-                break;
-            }
-            if (result.size() + list.size() >= k) {
-                int newAddition = k - result.size();
-                for (int i = 0; i < newAddition; i++) {
-                    result.add(list.get(i));
-                }
-            } else {
-                result.addAll(list);
-            }
+            result.addAll(list);
         }
 
         return result;
@@ -353,4 +342,33 @@ public class ECMMiner {
         }
         return resultList;
     }
+    public List<Concerts> NextConcerts(int k) {
+
+        long today = new Date().getTime();
+
+        Collection<Concerts> concerts = dao.loadAll(Concerts.class);
+        List<Concerts> listOfSales = concerts.stream()
+                .filter(s->s.getDate().getTime()>today)
+                .sorted((s1,s2)->(int)(s1.getDate().getTime() - s2.getDate().getTime()))
+                .collect(Collectors.toList());
+
+        List<Concerts> result = Lists.newArrayList();
+        Set<Concerts> set = Sets.newHashSet();
+        Date lastTime = new Date();
+
+        for (Concerts s : listOfSales)
+        {
+            if (result.size()>=k && !lastTime.equals(s.getDate())) break;
+            if (!set.contains(s))
+            {
+                result.add(s);
+                set.add(s);
+                lastTime = s.getDate();
+            }
+        }
+
+        return result;
+    }
+
+
 }
