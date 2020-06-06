@@ -2,7 +2,6 @@ package allaboutecm.model;
 
 import allaboutecm.dataaccess.neo4j.URLConverter;
 import com.google.common.collect.Sets;
-import org.apache.commons.lang3.ObjectUtils;
 
 import org.neo4j.ogm.annotation.NodeEntity;
 import org.neo4j.ogm.annotation.Property;
@@ -94,7 +93,7 @@ public class Musician extends Entity {
     public void setAlbums(Set<Album> albums) {
         //The album list can't be set to null, and no element of the list may be set to null.
         notNull(albums);
-        if (albums.size()==0) throw new IllegalArgumentException("You should enter at least one album");
+        if (albums.isEmpty()) throw new IllegalArgumentException("You should enter at least one album");
         Iterator<Album> itr = albums.iterator();
         while(itr.hasNext()){
             notNull(itr.next());
@@ -109,7 +108,7 @@ public class Musician extends Entity {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Musician that = (Musician) o;
-        return (Objects.equals(name, that.name) & Objects.equals(musicianUrl, that.getMusicianUrl()) & Objects.equals(albums, that.getAlbums())); //Delete later?
+        return (Objects.equals(name, that.name) && Objects.equals(musicianUrl, that.getMusicianUrl()) && Objects.equals(albums, that.getAlbums())); //Delete later?
     }
 
     @Override

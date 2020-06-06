@@ -1024,7 +1024,7 @@ class ECMMinerUnitTest {
         Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
         when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert));
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(1, concerts.size());
         assertTrue(concerts.contains(concert));
@@ -1032,7 +1032,7 @@ class ECMMinerUnitTest {
 
     @Test
     public void shouldReturnEmptyListWhenThereIsNoConcert() {
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(0, concerts.size());
     }
@@ -1041,7 +1041,7 @@ class ECMMinerUnitTest {
     public void shouldReturnEmptyListWhenThereIsNoConcertAfterNow() throws ParseException {
         Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2000-10-20 09:19:29"),"test concert");
         when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert));
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(0, concerts.size());
     }
@@ -1051,7 +1051,7 @@ class ECMMinerUnitTest {
         Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
         Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2030-10-20 09:19:29"),"test concert No.2");
         when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(2, concerts.size());
         assertTrue(concerts.contains(concert1));
@@ -1063,7 +1063,7 @@ class ECMMinerUnitTest {
         Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
         Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert No.2");
         when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
-        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(1);
 
         assertEquals(2, concerts.size());
         assertTrue(concerts.contains(concert1));
@@ -1076,7 +1076,7 @@ class ECMMinerUnitTest {
         Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
         Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2023-10-20 09:19:29"),"test concert No.2");
         when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
-        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(1);
 
         assertEquals(1, concerts.size());
         assertTrue(concerts.contains(concert1));
