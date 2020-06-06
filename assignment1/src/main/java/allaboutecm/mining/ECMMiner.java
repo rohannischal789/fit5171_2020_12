@@ -48,10 +48,11 @@ public class ECMMiner {
         }
 
         Map<String, Collection<Album>> albumMultimap = multimap.asMap();
-        for (String name : albumMultimap.keySet()) {
-            Collection<Album> albums = albumMultimap.get(name);
+
+        for (Map.Entry<String,Collection<Album>> name : albumMultimap.entrySet()) {
+            Collection<Album> albums = albumMultimap.get(name.getKey());
             int size = albums.size();
-            countMap.put(size, nameMap.get(name));
+            countMap.put(size, nameMap.get(name.getKey()));
         }
 
         List<Musician> result = Lists.newArrayList();
