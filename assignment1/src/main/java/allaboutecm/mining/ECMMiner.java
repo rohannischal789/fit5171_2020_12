@@ -3,19 +3,13 @@ package allaboutecm.mining;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.*;
 import com.google.common.collect.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * TODO: implement and test the methods in this class.
  * Note that you can extend the Neo4jDAO class to make implementing this class easier.
  */
 public class ECMMiner {
-    private static Logger logger = LoggerFactory.getLogger(ECMMiner.class);
-
     private final DAO dao;
 
     public ECMMiner(DAO dao) {
@@ -91,14 +85,9 @@ public class ECMMiner {
             Integer instrumentCount = m.getMusicalInstruments().size();
             countMap.put(m, instrumentCount);
         }
-        List<Map.Entry<MusicianInstrument, Integer>> sortList = new LinkedList<Map.Entry<MusicianInstrument, Integer>>(countMap.entrySet());
+        List<Map.Entry<MusicianInstrument, Integer>> sortList = new LinkedList<>(countMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<MusicianInstrument, Integer>>() {
-            @Override
-            public int compare(Map.Entry<MusicianInstrument, Integer> o1, Map.Entry<MusicianInstrument, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
             resultList.add(sortList.get(i).getKey().getMusician());
@@ -149,15 +138,10 @@ public class ECMMiner {
             countMap.put(m, collaboratorMap.get(m).size());
         }
         //Create a linked list to sort the entries.
-        List<Map.Entry<Musician, Integer>> sortList = new LinkedList<Map.Entry<Musician, Integer>>(countMap.entrySet());
-        Collections.sort(sortList, new Comparator<Map.Entry<Musician, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Musician, Integer> o1, Map.Entry<Musician, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        List<Map.Entry<Musician, Integer>> sortList = new LinkedList<>(countMap.entrySet());
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
 
-        ArrayList<Musician> returnList = new ArrayList<Musician>();
+        ArrayList<Musician> returnList = new ArrayList<>();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
             returnList.add(sortList.get(i).getKey());
         }
@@ -178,10 +162,6 @@ public class ECMMiner {
         }
         Collection<Album> albums = dao.loadAll(Album.class);
         Map<Integer, Integer> countMap = Maps.newHashMap();
-        //Create a blank hashMap of Key = Integer (represents Year) , value Album (represents an album released that year)
-        //Loop through all albums:
-            //Get the year.
-            //Add it as a value to the entry where the year is the key. myHashMap.add(albumYear, theAlbum);
         for (Album a: albums) {
             Integer year = a.getReleaseYear();
             if(null != countMap.get(year)) {
@@ -194,14 +174,9 @@ public class ECMMiner {
         }
         //Create a map of Integer, Integer where the year is the key, and the value is the count of albums From your Integer/Album hashMap
 
-        List<Map.Entry<Integer, Integer>> sortList = new LinkedList<Map.Entry<Integer, Integer>>(countMap.entrySet());
+        List<Map.Entry<Integer, Integer>> sortList = new LinkedList<>(countMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         //Create an arrayList of the top K years, and return it
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -254,14 +229,9 @@ public class ECMMiner {
             scoreMap.put(a, score);
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(scoreMap.entrySet());
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<>(scoreMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Map.Entry.comparingByValue());
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -294,14 +264,9 @@ public class ECMMiner {
             ratingsMap.put(a, (float)(total/count));
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Float>> sortList = new LinkedList<Map.Entry<Album, Float>>(ratingsMap.entrySet());
+        List<Map.Entry<Album, Float>> sortList = new LinkedList<>(ratingsMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Float>>() {
-            @Override
-            public int compare(Map.Entry<Album, Float> o1, Map.Entry<Album, Float> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Map.Entry.comparingByValue());
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -327,14 +292,9 @@ public class ECMMiner {
             ratingsMap.put(a, a.getSales());
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(ratingsMap.entrySet());
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<>(ratingsMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -342,7 +302,7 @@ public class ECMMiner {
         }
         return resultList;
     }
-    public List<Concerts> NextConcerts(int k) {
+    public List<Concerts> findNextConcerts(int k) {
 
         long today = new Date().getTime();
 
