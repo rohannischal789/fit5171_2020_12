@@ -34,6 +34,18 @@ public class TrackUnitTest {
     }
 
     @Test
+    @DisplayName("Track name cannot be more than 100")
+    public void trackNameLengthMoreThan100() {
+        assertThrows(IllegalArgumentException.class, () -> track.setName("asfhvhfvEVFHBDSSJHDAJDGHDGADHJDGSJGDJHAGDAGDSGDGSDGAHGDHGDHGDGDHSDJADGHASDGJAGDHASGDJSADHGSGSADJDGSDQYGUDYEDGJSHBDASHBDJASHBDSHBDJASDBHSAHSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS"));
+    }
+
+    @Test
+    @DisplayName("Track name in constructor cannot be empty or blank")
+    public void constructorTrackNameLengthMoreThan100() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("asfhvhfvEVFHBDSSJHDAJDGHDGADHJDGSJGDJHAGDAGDSGDGSDGAHGDHGDHGDGDHSDJADGHASDGJAGDHASGDJSADHGSGSADJDGSDQYGUDYEDGJSHBDASHBDJASHBDSHBDJASDBHSAHSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS", "4:11", "Jazz",500));
+    }
+
+    @Test
     @DisplayName("track name cannot be different")
     public void trackNameSameOrNot() {
         assertEquals(track.getName(), "Track 1");
@@ -131,6 +143,18 @@ public class TrackUnitTest {
     public void tracksSameOrNot() {
         Track track1 = new Track("Track 1", "4:11", "Jazz",1);
         assertEquals(track, track1);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false in case of null")
+    public void trackEqualsNull(){
+        assertEquals(track.equals(null), false);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false when there are different objects")
+    public void trackEqualsDifferentObject(){
+        assertEquals(track.equals(new Rating(1,"Test")), false);
     }
 
     @Test
