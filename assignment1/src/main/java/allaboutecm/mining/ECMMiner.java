@@ -3,19 +3,14 @@ package allaboutecm.mining;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.model.*;
 import com.google.common.collect.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- * TODO: implement and test the methods in this class.
  * Note that you can extend the Neo4jDAO class to make implementing this class easier.
  */
 public class ECMMiner {
-    private static Logger logger = LoggerFactory.getLogger(ECMMiner.class);
-
     private final DAO dao;
 
     public ECMMiner(DAO dao) {
@@ -63,7 +58,7 @@ public class ECMMiner {
         List<Integer> sortedKeys = Lists.newArrayList(countMap.keySet());
         sortedKeys.sort(Ordering.natural().reverse());
         for (Integer count : sortedKeys) {
-            if (result.size()>=k) break;
+            if (result.size() >= k) break;
             List<Musician> list = countMap.get(count);
             result.addAll(list);
         }
@@ -77,30 +72,25 @@ public class ECMMiner {
      * @Param k the number of musicians to be returned.
      */
     public List<Musician> mostTalentedMusicians(int k) {
-        if (k < 1){
+        if (k < 1) {
             throw new IllegalArgumentException();
         }
         //Let's grab all the musician instruments.
         Collection<MusicianInstrument> musicianInstruments = dao.loadAll(MusicianInstrument.class);
-        if (k > musicianInstruments.size()){
+        if (k > musicianInstruments.size()) {
             throw new IllegalArgumentException();
         }
         Map<MusicianInstrument, Integer> countMap = Maps.newHashMap();
 
-        for (MusicianInstrument m: musicianInstruments){
+        for (MusicianInstrument m : musicianInstruments) {
             Integer instrumentCount = m.getMusicalInstruments().size();
             countMap.put(m, instrumentCount);
         }
-        List<Map.Entry<MusicianInstrument, Integer>> sortList = new LinkedList<Map.Entry<MusicianInstrument, Integer>>(countMap.entrySet());
+        List<Map.Entry<MusicianInstrument, Integer>> sortList = new LinkedList<>(countMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<MusicianInstrument, Integer>>() {
-            @Override
-            public int compare(Map.Entry<MusicianInstrument, Integer> o1, Map.Entry<MusicianInstrument, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         ArrayList resultList = new ArrayList();
-        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
             resultList.add(sortList.get(i).getKey().getMusician());
         }
 
@@ -115,13 +105,13 @@ public class ECMMiner {
 
     public List<Musician> mostSocialMusicians(int k) {
 
-        if (k < 1){
+        if (k < 1) {
             throw new IllegalArgumentException();
         }
 
         Collection<Musician> musicians = dao.loadAll(Musician.class);
 
-        if (k > musicians.size()){
+        if (k > musicians.size()) {
             throw new IllegalArgumentException();
         }
 
@@ -129,13 +119,13 @@ public class ECMMiner {
         //I want a multimap, I'm not certain how the builder works but this is how to make one.
         SetMultimap<Musician, Musician> collaboratorMap = MultimapBuilder.hashKeys().hashSetValues().build();
         //Go through each musician
-        for (Musician m : musicians){
+        for (Musician m : musicians) {
             //For each musician, loop through their albums
             Set<Album> thisAlbumSet = m.getAlbums();
-            for (Album a : thisAlbumSet){
+            for (Album a : thisAlbumSet) {
                 //For each album, loop through all musicians again to check if they have the same album in their album list.
                 for (Musician m1 : musicians) {
-                    if (m1.getAlbums().contains(a)){
+                    if (m1.getAlbums().contains(a)) {
                         //If they do, record them as a collaborator.
                         collaboratorMap.put(m, m1);
                     }
@@ -144,21 +134,16 @@ public class ECMMiner {
         }
         //Let's make a hashmap to store Musicians against their collborator count, we don't care about the actual collaborators
         HashMap<Musician, Integer> countMap = Maps.newHashMap();
-        for (Musician m: collaboratorMap.keys()){
+        for (Musician m : collaboratorMap.keys()) {
             //Store each musician against their collaborator count.
             countMap.put(m, collaboratorMap.get(m).size());
         }
         //Create a linked list to sort the entries.
-        List<Map.Entry<Musician, Integer>> sortList = new LinkedList<Map.Entry<Musician, Integer>>(countMap.entrySet());
-        Collections.sort(sortList, new Comparator<Map.Entry<Musician, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Musician, Integer> o1, Map.Entry<Musician, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        List<Map.Entry<Musician, Integer>> sortList = new LinkedList<>(countMap.entrySet());
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
 
-        ArrayList<Musician> returnList = new ArrayList<Musician>();
-        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--){
+        ArrayList<Musician> returnList = new ArrayList<>();
+        for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
             returnList.add(sortList.get(i).getKey());
         }
 
@@ -173,35 +158,24 @@ public class ECMMiner {
 
     public List<Integer> busiestYears(int k) {
         //Load all albums:
-        if (k < 1){
+        if (k < 1) {
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
         Map<Integer, Integer> countMap = Maps.newHashMap();
-        //Create a blank hashMap of Key = Integer (represents Year) , value Album (represents an album released that year)
-        //Loop through all albums:
-            //Get the year.
-            //Add it as a value to the entry where the year is the key. myHashMap.add(albumYear, theAlbum);
-        for (Album a: albums) {
+        for (Album a : albums) {
             Integer year = a.getReleaseYear();
-            if(null != countMap.get(year)) {
+            if (null != countMap.get(year)) {
                 countMap.put(year, countMap.get(year) + 1);
-            }
-            else
-            {
+            } else {
                 countMap.put(year, 1);
             }
         }
         //Create a map of Integer, Integer where the year is the key, and the value is the count of albums From your Integer/Album hashMap
 
-        List<Map.Entry<Integer, Integer>> sortList = new LinkedList<Map.Entry<Integer, Integer>>(countMap.entrySet());
+        List<Map.Entry<Integer, Integer>> sortList = new LinkedList<>(countMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Integer, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Integer, Integer> o1, Map.Entry<Integer, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         //Create an arrayList of the top K years, and return it
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -221,47 +195,42 @@ public class ECMMiner {
 
     public List<Album> mostSimilarAlbums(int k, Album album) {
         //If K is impossible throw exception
-        if (k < 0){
+        if (k < 0) {
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
         //Check if our given album is in the search space, if it isn't throw an exception, if it is, prune it from the search space.
         //We do this because an album is always going to get the highest similarity score for itself, but this isn't useful to know.
-        if (albums.contains(album)){
+        if (albums.contains(album)) {
             albums.remove(album);
-        }else{
+        } else {
             throw new IllegalArgumentException();
         }
         //If we're looking for more results than there are albums, throw exception
-        if (k > albums.size()){
+        if (k > albums.size()) {
             throw new IllegalArgumentException();
         }
         Map<Album, Integer> scoreMap = Maps.newHashMap();
-        for (Album a : albums){
+        for (Album a : albums) {
             //Let's loop through each album and assign a score
             int score = 0;
-            for (Musician m : album.getFeaturedMusicians()){
+            for (Musician m : album.getFeaturedMusicians()) {
                 //If the two albums share any musicians, award two points for each.
-                if (a.getFeaturedMusicians().contains(m)){
-                    score+=2;
+                if (a.getFeaturedMusicians().contains(m)) {
+                    score += 2;
                 }
             }
             //If the albums were released in the same year, award a bonus point.
-            if (album.getReleaseYear() == a.getReleaseYear()){
-                score+=1;
+            if (album.getReleaseYear() == a.getReleaseYear()) {
+                score += 1;
             }
             //Now add the score to our score map
             scoreMap.put(a, score);
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(scoreMap.entrySet());
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<>(scoreMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Map.Entry.comparingByValue());
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -272,36 +241,32 @@ public class ECMMiner {
 
     public List<Album> highestRatedAlbums(int k) {
         //If K is impossible throw exception
-        if (k < 1){
+        if (k < 1) {
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
 
         //If we're looking for more results than there are albums, throw exception
-        if (k > albums.size()){
+        if (k > albums.size()) {
             throw new IllegalArgumentException();
         }
         Map<Album, Float> ratingsMap = Maps.newHashMap();
-        for (Album a : albums){
+        for (Album a : albums) {
             //Let's loop through each album and assign a score
             int total = 0;
             int count = 0;
-            for (Rating r: a.getRatings()){
+            for (Rating r : a.getRatings()) {
                 total += r.getRatingScore();
                 count++;
             }
             //Now add the score to our score map
-            ratingsMap.put(a, (float)(total/count));
+            if (count != 0)
+                ratingsMap.put(a, (total /(float) count));
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Float>> sortList = new LinkedList<Map.Entry<Album, Float>>(ratingsMap.entrySet());
+        List<Map.Entry<Album, Float>> sortList = new LinkedList<>(ratingsMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Float>>() {
-            @Override
-            public int compare(Map.Entry<Album, Float> o1, Map.Entry<Album, Float> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Map.Entry.comparingByValue());
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -312,29 +277,24 @@ public class ECMMiner {
 
     public List<Album> mostSellingAlbums(int k) {
         //If K is impossible throw exception
-        if (k < 1){
+        if (k < 1) {
             throw new IllegalArgumentException();
         }
         Collection<Album> albums = dao.loadAll(Album.class);
 
         //If we're looking for more results than there are albums, throw exception
-        if (k > albums.size()){
+        if (k > albums.size()) {
             throw new IllegalArgumentException();
         }
         Map<Album, Integer> ratingsMap = Maps.newHashMap();
-        for (Album a : albums){
+        for (Album a : albums) {
             //Let's loop through each album and assign a score
             ratingsMap.put(a, a.getSales());
         }
         //This is the structure we used to sort in previous examples, it will produce a list ordered smallest to largest.
-        List<Map.Entry<Album, Integer>> sortList = new LinkedList<Map.Entry<Album, Integer>>(ratingsMap.entrySet());
+        List<Map.Entry<Album, Integer>> sortList = new LinkedList<>(ratingsMap.entrySet());
 
-        Collections.sort(sortList, new Comparator<Map.Entry<Album, Integer>>() {
-            @Override
-            public int compare(Map.Entry<Album, Integer> o1, Map.Entry<Album, Integer> o2) {
-                return (o1.getValue().compareTo(o2.getValue()));
-            }
-        });
+        Collections.sort(sortList, Comparator.comparing(Map.Entry::getValue));
         //Loop from the end of the list towards the beginning, back k entries.
         ArrayList resultList = new ArrayList();
         for (int i = sortList.size() - 1; i >= sortList.size() - k; i--) {
@@ -342,25 +302,24 @@ public class ECMMiner {
         }
         return resultList;
     }
-    public List<Concerts> NextConcerts(int k) {
+
+    public List<Concerts> findNextConcerts(int k) {
 
         long today = new Date().getTime();
 
         Collection<Concerts> concerts = dao.loadAll(Concerts.class);
         List<Concerts> listOfSales = concerts.stream()
-                .filter(s->s.getDate().getTime()>today)
-                .sorted((s1,s2)->(int)(s1.getDate().getTime() - s2.getDate().getTime()))
+                .filter(s -> s.getDate().getTime() > today)
+                .sorted((s1, s2) -> (int) (s1.getDate().getTime() - s2.getDate().getTime()))
                 .collect(Collectors.toList());
 
         List<Concerts> result = Lists.newArrayList();
         Set<Concerts> set = Sets.newHashSet();
         Date lastTime = new Date();
 
-        for (Concerts s : listOfSales)
-        {
-            if (result.size()>=k && !lastTime.equals(s.getDate())) break;
-            if (!set.contains(s))
-            {
+        for (Concerts s : listOfSales) {
+            if (result.size() >= k && !lastTime.equals(s.getDate())) break;
+            if (!set.contains(s)) {
                 result.add(s);
                 set.add(s);
                 lastTime = s.getDate();

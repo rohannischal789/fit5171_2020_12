@@ -1060,7 +1060,7 @@ class ECMMinerIntegrationTest {
         Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
         dao.createOrUpdate(concert);
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(1, concerts.size());
         assertTrue(concerts.contains(concert));
@@ -1068,7 +1068,7 @@ class ECMMinerIntegrationTest {
 
     @Test
     public void shouldReturnEmptyListWhenThereIsNoConcert() {
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(0, concerts.size());
     }
@@ -1078,7 +1078,7 @@ class ECMMinerIntegrationTest {
         Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2000-10-20 09:19:29"),"test concert");
         dao.createOrUpdate(concert);
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(0, concerts.size());
     }
@@ -1090,7 +1090,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(concert1);
         dao.createOrUpdate(concert2);
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(5);
 
         assertEquals(2, concerts.size());
         assertTrue(concerts.contains(concert1));
@@ -1104,7 +1104,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(concert1);
         dao.createOrUpdate(concert2);
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(1);
 
         assertEquals(2, concerts.size());
         assertTrue(concerts.contains(concert1));
@@ -1119,7 +1119,7 @@ class ECMMinerIntegrationTest {
         dao.createOrUpdate(concert1);
         dao.createOrUpdate(concert2);
 
-        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+        List<Concerts> concerts = ecmMiner.findNextConcerts(1);
 
         assertEquals(1, concerts.size());
         assertTrue(concerts.contains(concert1));

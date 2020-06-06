@@ -60,6 +60,7 @@ public class MusicianInstrumentUnitTest {
         myArray.add(new MusicalInstrument("Piano"));
         myArray.add(new MusicalInstrument("Guitar"));
         Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
+        musicianInstrument.setMusicalInstruments(musicalInstrumentList);
         assertEquals(musicianInstrument.getMusicalInstruments(), musicalInstrumentList);
     }
 
@@ -75,6 +76,12 @@ public class MusicianInstrumentUnitTest {
     @DisplayName("Musician cannot be null")
     public void musicianCannotBeNull() {
         assertThrows(NullPointerException.class, () -> musicianInstrument.setMusician(null));
+    }
+
+    @Test
+    @DisplayName("Instrument cannot be empty")
+    public void musicalInstrumentCannotBeEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusicalInstruments(new HashSet<>()));
     }
 
     @Test

@@ -1,7 +1,6 @@
 package allaboutecm.dataaccess;
 
 import allaboutecm.model.*;
-import org.neo4j.cypher.internal.frontend.v2_3.ast.functions.Str;
 
 import java.util.Collection;
 
