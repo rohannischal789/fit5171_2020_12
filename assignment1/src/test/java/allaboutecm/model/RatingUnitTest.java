@@ -107,4 +107,33 @@ public class RatingUnitTest {
     public void constructorSourceNullValidate() {
         assertThrows(NullPointerException.class, () -> new Rating(5, null));
     }
+
+
+
+    @Test
+    @DisplayName("Rating objects cannot be different")
+    public void ratingsSameOrNot() {
+        Rating rating1 = new Rating(5, "Rolling Stone Magazine");
+        assertEquals(rating, rating1);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false in case of null")
+    public void ratingEqualsNull(){
+        assertEquals(rating.equals(null), false);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false when there are different objects")
+    public void trackEqualsDifferentObject(){
+        assertEquals(rating.equals(new Track("Test","4:11","Jazz",1)), false);
+    }
+
+    @Test
+    @DisplayName("Equals should return a false when there are different values in objects")
+    public void trackEqualsShouldBeFalse(){
+        Rating rating1 = new Rating(1, "Rolling Stone Magazine");
+        assertEquals(rating.equals(rating1), false);
+    }
+
 }
