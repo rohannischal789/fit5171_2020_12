@@ -60,6 +60,7 @@ public class MusicianInstrumentUnitTest {
         myArray.add(new MusicalInstrument("Piano"));
         myArray.add(new MusicalInstrument("Guitar"));
         Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
+        musicianInstrument.setMusicalInstruments(musicalInstrumentList);
         assertEquals(musicianInstrument.getMusicalInstruments(), musicalInstrumentList);
     }
 

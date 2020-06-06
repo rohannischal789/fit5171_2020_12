@@ -36,6 +36,7 @@ public class RatingUnitTest {
     @Test
     @DisplayName("Source cannot be different")
     public void sourceSameOrNot() {
+        rating.setSource("Rolling Stone Magazine");
         assertEquals(rating.getSource(), "Rolling Stone Magazine");
     }
 
