@@ -53,6 +53,13 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(arg));
     }
 
+    @ParameterizedTest
+    @DisplayName("Record number should be in the format ECM ####")
+    @ValueSource(strings ={"ABC", "ABC 123", "123 123", "123"})
+    public void recordNumberShouldStartWithECM(String arg) {
+        assertThrows(IllegalArgumentException.class, () -> album.setRecordNumber(arg));
+    }
+
     @Test
     @DisplayName("record Number cannot be different")
     public void recordNumberSameOrNot() {
@@ -88,6 +95,13 @@ class AlbumUnitTest {
         assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(year));
     }
 
+    @ParameterizedTest
+    @DisplayName("Release year shouldn't be 0 or lower")
+    @ValueSource(ints = {0, -1})
+    public void releaseYearCannotBe0OrLower(int arg) {
+        assertThrows(IllegalArgumentException.class, () -> album.setReleaseYear(arg));
+    }
+
     @Test
     @DisplayName("record Number cannot be different")
     public void releaseYearSameOrNot() {
@@ -114,6 +128,12 @@ class AlbumUnitTest {
         Set<MusicianInstrument> musicianInstrumentList = new HashSet<>(list);
         album.getInstruments().addAll(new HashSet<MusicianInstrument>(musicianInstrumentList));
         assertEquals(album.getInstruments(), musicianInstrumentList);
+    }
+
+    @Test
+    @DisplayName("Instruments cannot be an empty set")
+    public void instrumentsCannotBeEmptySet() {
+        assertThrows(IllegalArgumentException.class, () -> album.setInstruments(Collections.emptySet()));
     }
 
     @Test
@@ -170,6 +190,12 @@ class AlbumUnitTest {
 
         album.setTracks(trackListFinal);
         assertEquals(album.getTracks(), trackListFinal);
+    }
+
+    @Test
+    @DisplayName("Tracks cannot be empty list")
+    public void tracksCannotBeEmptyList() {
+        assertThrows(IllegalArgumentException.class, () -> album.setTracks(Collections.emptySet()));
     }
 
     @Test

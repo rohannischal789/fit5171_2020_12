@@ -64,6 +64,7 @@ public class Album extends Entity {
         notBlank(recordNumber);
         notBlank(albumName);
 
+        checkRecordNumber(recordNumber);
         if (releaseYear > Calendar.getInstance().get(Calendar.YEAR) | releaseYear < 1969){
             throw new IllegalArgumentException();
         } else {
@@ -89,7 +90,7 @@ public class Album extends Entity {
     public void setRecordNumber(String recordNumber) {
         notNull(recordNumber);
         notBlank(recordNumber);
-
+        checkRecordNumber(recordNumber);
         this.recordNumber = recordNumber;
     }
 
@@ -99,6 +100,7 @@ public class Album extends Entity {
 
     public void setFeaturedMusicians(List<Musician> featuredMusicians) {
         notNull(featuredMusicians);
+        if (featuredMusicians.size()==0) throw new IllegalArgumentException("You should enter at least one featured musician");
         Iterator<Musician> itr = featuredMusicians.iterator();
         while(itr.hasNext()){
             notNull(itr.next());
@@ -112,6 +114,7 @@ public class Album extends Entity {
 
     public void setInstruments(Set<MusicianInstrument> instruments) {
         notNull(instruments);
+        if (instruments.size()==0) throw new IllegalArgumentException("You should enter at least one instrument");
         Iterator<MusicianInstrument> itr = instruments.iterator();
         while(itr.hasNext()){
             notNull(itr.next());
@@ -138,6 +141,7 @@ public class Album extends Entity {
 
     public void setTracks(Set<Track> tracks) {
         notNull(tracks);
+        if (tracks.size()==0) throw new IllegalArgumentException("You should enter at least one track");
         Iterator<Track> itr = tracks.iterator();
         while(itr.hasNext()){
             notNull(itr.next());
@@ -206,5 +210,11 @@ public class Album extends Entity {
     @Override
     public int hashCode() {
         return Objects.hash(releaseYear, recordNumber, albumName);
+    }
+
+    private void checkRecordNumber(String recordNumber) {
+        if (!recordNumber.matches("ECM.*")) {
+            throw new IllegalArgumentException("Record number should start with ECM");
+        }
     }
 }
