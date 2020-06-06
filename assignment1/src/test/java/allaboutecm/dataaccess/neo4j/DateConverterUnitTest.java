@@ -29,7 +29,7 @@ class DateConverterUnitTest {
 
     @Test
     public void toEntityAttributeNull() {
-        assertEquals(null, dc.toGraphProperty(null));
+        assertEquals(null, dc.toEntityAttribute(null));
     }
 
     @Test
