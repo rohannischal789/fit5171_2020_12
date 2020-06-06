@@ -33,8 +33,8 @@ public class Rating extends Entity {
 
     public void setRatingScore(int ratingScore) {
         if (ratingScore <= 0 || ratingScore > 5){
-            throw new IllegalArgumentException();
-        }
+        throw new IllegalArgumentException();
+    }
         this.ratingScore = ratingScore;
     }
 
