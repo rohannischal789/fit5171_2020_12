@@ -100,11 +100,11 @@ public class MusicianInstrumentUnitTest {
     }
     @Test
     public void sameMusicianAndInstrumentHasSameMusicianInstrumentOrNot() {
-        HashSet<MusicalInstrument> set = new HashSet<>();
-        set.add(new MusicalInstrument("Instrument name 01"));
-        MusicianInstrument anotherMusicianInstrument = new MusicianInstrument(
-                new Musician("musician name 01"),
-                set);
+        ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
+        myArray.add(new MusicalInstrument("Piano"));
+        myArray.add(new MusicalInstrument("Guitar"));
+        Set<MusicalInstrument> musicalInstrumentList = new HashSet<>(myArray);
+        MusicianInstrument anotherMusicianInstrument = new MusicianInstrument(new Musician("Keith Jarrett"), musicalInstrumentList);
 
         assertEquals(anotherMusicianInstrument, musicianInstrument);
     }
