@@ -40,6 +40,18 @@ public class TrackUnitTest {
     }
 
     @Test
+    @DisplayName("Track name cannot have 101 characters")
+    public void trackNameLength101Check() {
+        assertThrows(IllegalArgumentException.class, () -> track.setName("ljkajdjdsklasdbsdlkjbdsjgbdsjkgbdjsgbjbdskajdjkfdskaaaaalsdksksjdsskjfskdjfsskdfsdkjffjkdfnksdjfnskjd"));
+    }
+
+    @Test
+    @DisplayName("Track name in constructor cannot be empty or blank")
+    public void constructorTrackNameLength101() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("ljkajdjdsklasdbsdlkjbdsjgbdsjkgbdjsgbjbdskajdjkfdskaaaaalsdksksjdsskjfskdjfsskdfsdkjffjkdfnksdjfnskjd", "4:11", "Jazz",500));
+    }
+
+    @Test
     @DisplayName("Track name in constructor cannot be empty or blank")
     public void constructorTrackNameLengthMoreThan100() {
         assertThrows(IllegalArgumentException.class, () -> new Track("asfhvhfvEVFHBDSSJHDAJDGHDGADHJDGSJGDJHAGDAGDSGDGSDGAHGDHGDHGDGDHSDJADGHASDGJAGDHASGDJSADHGSGSADJDGSDQYGUDYEDGJSHBDASHBDJASHBDSHBDJASDBHSAHSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS", "4:11", "Jazz",500));
