@@ -78,6 +78,12 @@ public class MusicianInstrumentUnitTest {
     }
 
     @Test
+    @DisplayName("Instrument cannot be empty")
+    public void musicalInstrumentCannotBeEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> musicianInstrument.setMusicalInstruments(new HashSet<>()));
+    }
+
+    @Test
     @DisplayName("Equals should return a false when there are different values in objects")
     public void musicianInstrumentEqualsShouldBeFalse(){
         ArrayList<MusicalInstrument> myArray = new ArrayList<MusicalInstrument>();
