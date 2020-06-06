@@ -65,7 +65,7 @@ public class Musician extends Entity {
         this.name = name;
         this.musicianUrl = null;
 
-        albums = Sets.newLinkedHashSet();
+        albums = Sets.newHashSet();
     }
 
     public String getName() {
@@ -94,6 +94,7 @@ public class Musician extends Entity {
     public void setAlbums(Set<Album> albums) {
         //The album list can't be set to null, and no element of the list may be set to null.
         notNull(albums);
+        if (albums.size()==0) throw new IllegalArgumentException("You should enter at least one album");
         Iterator<Album> itr = albums.iterator();
         while(itr.hasNext()){
             notNull(itr.next());

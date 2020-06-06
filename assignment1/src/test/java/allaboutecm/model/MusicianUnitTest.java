@@ -47,6 +47,12 @@ public class MusicianUnitTest {
     }
 
     @Test
+    @DisplayName("Album List cannot be empty")
+    public void albumListCannotBeEmpty() {
+        assertThrows(IllegalArgumentException.class, () -> musician.setAlbums(new HashSet<Album>()));
+    }
+
+    @Test
     @DisplayName("Name must match the form xxx xxx")
     //Musician must have a name which consists of at least two strings of characters separated by a space
     public void constructorMusicianNameShouldBeSepartedByASpace(){

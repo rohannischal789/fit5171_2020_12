@@ -3,6 +3,7 @@ package allaboutecm.mining;
 import allaboutecm.dataaccess.DAO;
 import allaboutecm.dataaccess.neo4j.Neo4jDAO;
 import allaboutecm.model.*;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,15 +11,15 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.lang.reflect.Array;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 import static org.mockito.Mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-/**
- * TODO: perform unit testing on the ECMMiner class, by making use of mocking.
- */
+
 class ECMMinerUnitTest {
     private DAO dao;
     private ECMMiner ecmMiner;
@@ -42,6 +43,122 @@ class ECMMinerUnitTest {
         assertEquals(1, musicians.size());
         assertTrue(musicians.contains(musician));
     }
+
+
+    @Test
+    public void shouldReturnTwoProlificMusiciansWhenTwoMusicianMatchesTheYearAndTheyHaveSameAlbumsWithoutThinkingAboutYear() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        album1.setFeaturedMusicians(Lists.newArrayList(musician1));
+        musician1.setAlbums(Sets.newHashSet(album1));
+        Album album2 = new Album(1976, "ECM 1065/66", "another album");
+        Musician musician2 = new Musician("another musician");
+        album2.setFeaturedMusicians(Lists.newArrayList(musician2));
+        musician2.setAlbums(Sets.newHashSet(album2));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1,-1,-1);
+
+        assertEquals(2, musicians.size());
+        assertTrue(musicians.contains(musician1));
+        assertTrue(musicians.contains(musician2));
+    }
+
+    @Test
+    public void shouldReturnTheMostProlificMusiciansWithoutThinkingAboutYear() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        album1.setFeaturedMusicians(Lists.newArrayList(musician1));
+        musician1.setAlbums(Sets.newHashSet(album1));
+        Album album2 = new Album(1976, "ECM 1065/66", "another album");
+        Album album3 = new Album(1977, "ECM 1066/67", "another album No.2");
+        Musician musician2 = new Musician("another musician");
+        album2.setFeaturedMusicians(Lists.newArrayList(musician2));
+        album3.setFeaturedMusicians(Lists.newArrayList(musician2));
+        musician2.setAlbums(Sets.newHashSet(album2,album3));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1,-1,-1);
+
+        assertEquals(1, musicians.size());
+        assertTrue(musicians.contains(musician2));
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenThereIsNoProlificMusician() {
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(5, -1, -1);
+
+        assertEquals(0, musicians.size());
+    }
+
+    public void shouldReturnEmptyListWhenThereisNoProlificMusicianMatches() {
+        Album album = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician = new Musician("Keith Jarrett");
+        album.setFeaturedMusicians(Lists.newArrayList(musician));
+        musician.setAlbums(Sets.newHashSet(album));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1, 1976, 1977);
+
+        assertEquals(0, musicians.size());
+    }
+
+    @Test
+    public void shouldReturnOneProlificMusicianWhenOneMusicianMatches() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        album1.setFeaturedMusicians(Lists.newArrayList(musician1));
+        musician1.setAlbums(Sets.newHashSet(album1));
+        Album album2 = new Album(1999, "ECM 1065/66", "another album");
+        Musician musician2 = new Musician("another musician");
+        album2.setFeaturedMusicians(Lists.newArrayList(musician2));
+        musician2.setAlbums(Sets.newHashSet(album2));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1, 1974, 1977);
+
+        assertEquals(1, musicians.size());
+    }
+
+    @Test
+    public void shouldReturnTwoProlificMusiciansWhenTwoMusicianMatchesTheYearAndTheyHaveSameAlbums() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        album1.setFeaturedMusicians(Lists.newArrayList(musician1));
+        musician1.setAlbums(Sets.newHashSet(album1));
+        Album album2 = new Album(1976, "ECM 1065/66", "another album");
+        Musician musician2 = new Musician("another musician");
+        album2.setFeaturedMusicians(Lists.newArrayList(musician2));
+        musician2.setAlbums(Sets.newHashSet(album2));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1, 1974, 1977);
+
+        assertEquals(2, musicians.size());
+        assertTrue(musicians.contains(musician1));
+        assertTrue(musicians.contains(musician2));
+    }
+
+    @Test
+    public void shouldReturnTheMostProlificMusiciansWhenTwoMusicianMatchesTheYear() {
+        Album album1 = new Album(1975, "ECM 1064/65", "The Köln Concert");
+        Musician musician1 = new Musician("Keith Jarrett");
+        album1.setFeaturedMusicians(Lists.newArrayList(musician1));
+        musician1.setAlbums(Sets.newHashSet(album1));
+        Album album2 = new Album(1976, "ECM 1065/66", "another album");
+        Album album3 = new Album(1977, "ECM 1066/67", "another album No.2");
+        Musician musician2 = new Musician("another musician");
+        album2.setFeaturedMusicians(Lists.newArrayList(musician2));
+        album3.setFeaturedMusicians(Lists.newArrayList(musician2));
+        musician2.setAlbums(Sets.newHashSet(album2,album3));
+        when(dao.loadAll(Musician.class)).thenReturn(Sets.newHashSet(musician1,musician2));
+
+        List<Musician> musicians = ecmMiner.mostProlificMusicians(1, 1974, 1977);
+
+        assertEquals(1, musicians.size());
+        assertTrue(musicians.contains(musician2));
+    }
+
 
     @Test
     public void findTopMusicianByInstrumentCount(){
@@ -901,4 +1018,68 @@ class ECMMinerUnitTest {
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSellingAlbums(-1));
         assertThrows(IllegalArgumentException.class, () -> ecmMiner.mostSellingAlbums(0));
     }
+
+    @Test
+    public void shouldReturnTheClosestConcertWhenThereIsOnlyOne() throws ParseException {
+        Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
+        when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert));
+
+        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+
+        assertEquals(1, concerts.size());
+        assertTrue(concerts.contains(concert));
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenThereIsNoConcert() {
+        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+
+        assertEquals(0, concerts.size());
+    }
+
+    @Test
+    public void shouldReturnEmptyListWhenThereIsNoConcertAfterNow() throws ParseException {
+        Concerts concert = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2000-10-20 09:19:29"),"test concert");
+        when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert));
+        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+
+        assertEquals(0, concerts.size());
+    }
+
+    @Test
+    public void shouldReturnEveryConcertWhenThereAreTwoAndRequiredFive() throws ParseException {
+        Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
+        Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2030-10-20 09:19:29"),"test concert No.2");
+        when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
+        List<Concerts> concerts = ecmMiner.NextConcerts(5);
+
+        assertEquals(2, concerts.size());
+        assertTrue(concerts.contains(concert1));
+        assertTrue(concerts.contains(concert2));
+    }
+
+    @Test
+    public void shouldReturnTwoConcertsWhenThereAreTwoWithTheSameTime() throws ParseException {
+        Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
+        Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert No.2");
+        when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
+        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+
+        assertEquals(2, concerts.size());
+        assertTrue(concerts.contains(concert1));
+        assertTrue(concerts.contains(concert2));
+
+    }
+
+    @Test
+    public void shouldReturnTheClosestConcertWhenRequireOne() throws ParseException {
+        Concerts concert1 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2020-10-20 09:19:29"),"test concert");
+        Concerts concert2 = new Concerts(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").parse("2023-10-20 09:19:29"),"test concert No.2");
+        when(dao.loadAll(Concerts.class)).thenReturn(Sets.newHashSet(concert1,concert2));
+        List<Concerts> concerts = ecmMiner.NextConcerts(1);
+
+        assertEquals(1, concerts.size());
+        assertTrue(concerts.contains(concert1));
+    }
+
 }
