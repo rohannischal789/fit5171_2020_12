@@ -46,20 +46,27 @@ public class TrackUnitTest {
     }
 
     @Test
+    @DisplayName("Track name cannot be more than 100")
+    public void constructorTrackNameLengthMoreThan100() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("asfhvhfvEVFHBDSSJHDAJDGHDGADHJDGSJGDJHAGDAGDSGDGSDGAHGDHGDHGDGDHSDJADGHASDGJAGDHASGDJSADHGSGSADJDGSDQYGUDYEDGJSHBDASHBDJASHBDSHBDJASDBHSAHSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS","4:11","Pop",2));
+    }
+
+    @Test
+    @DisplayName("Track name cannot have 101 characters")
+    public void constructorTrackNameLength101Check() {
+        assertThrows(IllegalArgumentException.class, () -> new Track("ljkajdjdsklasdbsdlkjbdsjgbdsjkgbdjsgbjbdskajdjkfdskaaaaalsdksksjdsskjfskdjfsskdfsdkjffjkdfnksdjfnskjd","4:11","Pop",2));
+    }
+
+    @Test
     @DisplayName("Track name in constructor cannot be empty or blank")
     public void constructorTrackNameLength101() {
         assertThrows(IllegalArgumentException.class, () -> new Track("ljkajdjdsklasdbsdlkjbdsjgbdsjkgbdjsgbjbdskajdjkfdskaaaaalsdksksjdsskjfskdjfsskdfsdkjffjkdfnksdjfnskjd", "4:11", "Jazz",500));
     }
 
     @Test
-    @DisplayName("Track name in constructor cannot be empty or blank")
-    public void constructorTrackNameLengthMoreThan100() {
-        assertThrows(IllegalArgumentException.class, () -> new Track("asfhvhfvEVFHBDSSJHDAJDGHDGADHJDGSJGDJHAGDAGDSGDGSDGAHGDHGDHGDGDHSDJADGHASDGJAGDHASGDJSADHGSGSADJDGSDQYGUDYEDGJSHBDASHBDJASHBDSHBDJASDBHSAHSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSSS", "4:11", "Jazz",500));
-    }
-
-    @Test
     @DisplayName("track name cannot be different")
     public void trackNameSameOrNot() {
+        track.setName("Track 1");
         assertEquals(track.getName(), "Track 1");
     }
 
@@ -86,6 +93,7 @@ public class TrackUnitTest {
     @Test
     @DisplayName("track genre cannot be different")
     public void trackGenreSameOrNot() {
+        track.setGenre("Jazz");
         assertEquals(track.getGenre(), "Jazz");
     }
 
@@ -104,7 +112,9 @@ public class TrackUnitTest {
 
     @Test
     @DisplayName("track duration cannot be different")
-    public void trackDurationSameOrNot() {
+    public void trackDurationSameOrNot()
+    {
+        track.setDuration("4:11");
         assertEquals(track.getDuration(), "4:11");
     }
 
@@ -123,6 +133,7 @@ public class TrackUnitTest {
     @Test
     @DisplayName("track number cannot be different")
     public void trackNumberSameOrNot() {
+        track.setTrackNumber(1);
         assertEquals(track.getTrackNumber(), 1);
     }
 
